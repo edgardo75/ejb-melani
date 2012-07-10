@@ -7,7 +7,6 @@ package com.melani.ejb;
 
 import com.melani.entity.Clientes;
 import com.melani.entity.Domicilios;
-
 import com.melani.entity.PersonasDomicilios;
 import com.melani.entity.PersonasdomiciliosPK;
 import java.text.SimpleDateFormat;
