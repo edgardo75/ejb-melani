@@ -17,5 +17,7 @@ public interface EJBHistoricoPersonaDomicilioRemote {
     long addOneHomePerson(Integer idDomicilio, Integer idPersona,Integer idUsuario);
 
     String searchAllHistPD();
+
+    String getAddressesOfPersons(Integer nrodocumento);
     
 }
