@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
@@ -25,6 +26,7 @@ import org.apache.log4j.Logger;
  */
 @Stateless(mappedName="EJBHistoricoPersonaDomicilioBean")
 @WebService(name="HistPersonasDomicilios",serviceName="ServicesHistPD")
+
 @SOAPBinding(style=SOAPBinding.Style.RPC)
 public class EJBHistoricoPersonaDomicilioBean implements EJBHistoricoPersonaDomicilioRemote {
     private static Logger logger = Logger.getLogger(EJBHistoricoPersonaDomicilioBean.class);
@@ -33,6 +35,7 @@ public class EJBHistoricoPersonaDomicilioBean implements EJBHistoricoPersonaDomi
     @Resource(name = "jdbc/_melani")
     private javax.sql.DataSource datasource;
 
+    
     public long addOneHomePerson(Integer idDomicilio, Integer idPersona,Integer idUsuario) {
         long retorno =0;
         try {
@@ -106,6 +109,68 @@ public class EJBHistoricoPersonaDomicilioBean implements EJBHistoricoPersonaDomi
         }
         
     }
+
+    public String getAddressesOfPersons(Integer nrodocumento) {
+        String xml ="";
+        OracleXMLQuery oxq=null;
+        Connection con = null;
+        try {
+            //*********************************************************************************
+            try {
+
+                con = datasource.getConnection();
+
+            } catch (Exception e) {
+                logger.error("No se pudo Obtener La Conexion con La base de Datos en metodo searchAllHistPD"+e);
+                xml = "No se pudo Obtener La Conexion con La base de Datos";
+            }
+            //*********************************************************************************
+            String sql =" SELECT p.APELLIDO,p.NOMBRE,p.NRODOCUMENTO,b.DESCRIPCION as " +
+                    "Barrio ,c.DESCRIPCION as Calle,d.AREA,d.ENTRECALLEYCALLE,d.MANZANA,d.MONOBLOCK," +
+                    "d.NUMDEPTO,d.NUMERO,d.PISO,d.SECTOR," +
+                    "pr.PROVINCIA,l.DESCRIPCION as Localidad,l.CODIGOPOSTAL,d.OBSERVACIONES  " +
+                    "FROM HISTPERSONASDOMICILIOS h INNER JOIN PERSONAS p ON  h.IDPERSONA = p.ID_PERSONA inner join " +
+                    "DOMICILIOS  d on d.ID_DOMICILIO =h.IDDOMICILIO join CALLES c on c.ID_CALLE=d.ID_CALLE JOIN  BARRIOS b " +
+                    "on b.ID_BARRIO=d.ID_BARRIO JOIN LOCALIDADES l on l.ID_LOCALIDAD = d.ID_LOCALIDAD join PROVINCIAS pr on " +
+                    "pr.ID_PROVINCIA=l.ID_PROVINCIA WHERE p.NRODOCUMENTO="+nrodocumento+" ORDER BY h.IDPERSONA,h.IDDOMICILIO";
+
+            oxq = new OracleXMLQuery(con, sql);
+
+            oxq.setRowTag("Item");
+            oxq.setRowsetTag("Lista");
+            oxq.setEncoding("ISO-8859-1");
+            xml = oxq.getXMLString();
+            oxq.close();
+
+            if (xml.contains("<Lista/>")) {
+                xml = "La Consulta no arrojó resultados!!!";
+            }
+
+
+
+
+        } catch (Exception e) {
+            logger.error("Error en Metodo getAddressesOfPersons "+e.getMessage());
+        }finally{
+
+             try {
+
+                if (con != null) {
+                    con.close();
+                }
+                if (oxq != null) {
+                    oxq.close();
+                }
+            } catch (Exception e) {
+                logger.error("Error cerrando conexiones metodo searchAllHistPD "+e);
+            }
+           
+        
+        System.out.println(xml);
+            return xml;
+        }
+    }
+
     
 
     
