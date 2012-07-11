@@ -73,7 +73,7 @@ public class EJBHistoricoPersonaDomicilioBean implements EJBHistoricoPersonaDomi
                 xml = "No se pudo Obtener La Conexion con La base de Datos";
             }
             //*********************************************************************************
-            String sql= "SELECT * FROM HISTPERSONASDOMICILIOS ORDER BY HISTPERSONASDOMICILIOS.IDHISTPERDOM";
+            String sql= "SELECT * FROM HISTPERSONASDOMICILIOS ORDER BY HISTPERSONASDOMICILIOS.IDPERSONA,HISTPERSONASDOMICILIOS.IDDOMICILIO";
 
             oxq = new OracleXMLQuery(con, sql);
 
@@ -101,6 +101,7 @@ public class EJBHistoricoPersonaDomicilioBean implements EJBHistoricoPersonaDomi
             } catch (Exception e) {
                 logger.error("Error cerrando conexiones metodo searchAllHistPD "+e);
             }
+            System.out.println(xml);
             return xml;
         }
         
