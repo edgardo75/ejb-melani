@@ -26,5 +26,7 @@ public interface EJBClientesRemote {
     long addClientes(Clientes clientes);
 
     long updateCliente(Clientes cliente);
+
+    String getCustomerDocNumber(Integer docNumber);
     
 }

@@ -15,7 +15,7 @@ import com.melani.entity.Domicilios;
 import com.melani.entity.Generos;
 import com.melani.entity.Personas;
 import com.melani.entity.PersonasDomicilios;
-import com.melani.entity.PersonasdomiciliosPK;
+
 import com.melani.entity.Personastelefonos;
 import com.melani.entity.Telefonos;
 import com.melani.entity.TelefonosPK;
@@ -603,6 +603,40 @@ public class EJBClientes implements EJBClientesRemote {
 
         }
     }
+
+    public String getCustomerDocNumber(Integer docNumber) {
+        String xml="";
+        try {
+            Query jsql=em.createQuery("SELECT p FROM Personas p WHERE p.nrodocumento = :nrodocumento and " +
+                    "p.pertype = :pertype");
+            jsql.setParameter("nrodocumento", docNumber);
+            jsql.setParameter("pertype", "CLI");
+
+            List<Clientes>lista = jsql.getResultList();
+
+           switch(lista.size()){
+               case 0:xml="Cliente no encontrado";
+               break;
+               case 1:{
+                    for (Iterator<Clientes> it = lista.iterator(); it.hasNext();) {
+                            Clientes clientes = it.next();
+                            xml=clientes.toXML();
+                     }
+               }
+           }
+            
+
+
+        } catch (Exception e) {
+            logger.error("Error en metodo getCustomerDocNumber "+e.getMessage());
+            xml="Error";
+        }finally{
+            System.out.println(xml);
+            return xml;
+        }
+    }
+
+
 
 
 
