@@ -73,3 +73,24 @@ public class Clientes extends Personas implements Serializable {
    
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
