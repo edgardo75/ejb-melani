@@ -104,7 +104,7 @@ public class EJBHistoricoPersonaDomicilioBean implements EJBHistoricoPersonaDomi
             } catch (Exception e) {
                 logger.error("Error cerrando conexiones metodo searchAllHistPD "+e);
             }
-            System.out.println(xml);
+            
             return xml;
         }
         
@@ -166,7 +166,7 @@ public class EJBHistoricoPersonaDomicilioBean implements EJBHistoricoPersonaDomi
             }
            
         
-        System.out.println(xml);
+        
             return xml;
         }
     }

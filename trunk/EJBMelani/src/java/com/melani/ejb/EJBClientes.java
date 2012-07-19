@@ -263,7 +263,7 @@ public class EJBClientes implements EJBClientesRemote {
         } catch (Exception e) {
             logger.error("Error al obtener un cliente EJBCliente", e);
         }finally{
-           System.out.println(cli);
+           
             return cli;
 
         }
@@ -468,17 +468,17 @@ public class EJBClientes implements EJBClientesRemote {
     private long guardarDomicilioyTelefonoCliente(String xmlClienteDomicilioTelefono,Clientes cliente, ClienteDomicilioTelefono todosDatos) {
         long retorno =0;
         try {
-            System.out.println("1");
             
-            System.out.println("1");
+            
+            
             if(xmlClienteDomicilioTelefono.contains("<Domicilio>")){
-                System.out.println("1");
+            
                             long idDomicilio = ejbdomici.addDomicilios(todosDatos.getDomicilio());
-                            System.out.println("1");
+            
 
                              //-------ADD RELACION--------------------------------------------------------------------------
                                 String result=null;
-                                System.out.println("1");
+            
                                 //---------------------------------------------------------------------------------------------
                                switch((int)idDomicilio){
                                    case -1:logger.error("Error No se pudo agregar domicilio Verifique ");
@@ -492,7 +492,7 @@ public class EJBClientes implements EJBClientesRemote {
                                        Query sqlPD = em.createQuery(consulta);
                                        sqlPD.setParameter("idPersona", cliente.getIdPersona());
                                        sqlPD.setParameter("iddomicilio", idDomicilio);
-                                       System.out.println("Resultado de la consulta "+sqlPD.getResultList().size());
+            
                                        switch(sqlPD.getResultList().size()){
                                            case 0:{
                                             result= ejbclidom.addRelacionClienteDomicilio(cliente.getIdPersona(), idDomicilio,todosDatos.getIdusuario());
@@ -513,10 +513,10 @@ public class EJBClientes implements EJBClientesRemote {
                                //----------------------------------------------------------------------------------------------
 
                                 if(result.contains("InyectóRelacion")){
-                                System.out.println("3");
+            
                                     //---------------------------Agregamos la Relacion con Persona Cliente y Domicilios-----------
                                     //PersonasdomiciliosPK clave = new PersonasdomiciliosPK(idDomicilio, cliente.getIdPersona());
-                                     System.out.println("4");
+            
 
                                     List<PersonasDomicilios>listaPD = em.createQuery("SELECT p FROM PersonasDomicilios p WHERE " +
                                             "p.personasdomiciliosPK.idPersona = :idPersona").setParameter("idPersona", cliente.getIdPersona()).getResultList();
@@ -524,14 +524,14 @@ public class EJBClientes implements EJBClientesRemote {
                                             + "p.personasdomiciliosPK = :clave").setParameter("clave", clave).getResultList();*/
 
                                     //-----------------------------------------------------------------------------
-                                    System.out.println("4 VALOR DE LISTA DOMICILIO DE CLIENTE "+listaPD.size());
+            
                                     cliente.setPersonasDomicilioss(listaPD);
-                                    System.out.println("5");
+            
 
                                     Domicilios domici = em.find(Domicilios.class, idDomicilio);
-                                    System.out.println("6");
+            
                                     domici.setPersonasDomicilioss(listaPD);
-                                    System.out.println("7");
+            
                                     //-----------------------------------------------------------------------------
 
                                     em.persist(domici);
@@ -544,14 +544,14 @@ public class EJBClientes implements EJBClientesRemote {
                //-------------------------------------------------------------------------------------------------
                 //---------------------------------------------------------------------------------------------
                     if(xmlClienteDomicilioTelefono.contains("<telefono>")){
-                        System.out.println("1");
+            
                            if(todosDatos.getListaTelefonos().getList().size()>0){
-                           System.out.println("1");
+            
                                Iterator iter = todosDatos.getListaTelefonos().getList().iterator();
                                //------------------------------------------------------------------------------
                                while (iter.hasNext())
                                {
-                                   System.out.println("1");
+            
 
                                    DatosTelefonos datosTel = (DatosTelefonos) iter.next();
                                     long rettelefono = ejbtele.addTelefonos(datosTel);
@@ -572,7 +572,7 @@ public class EJBClientes implements EJBClientesRemote {
                                List<Personastelefonos>listaTel = clitele.getResultList();
 
 
-                                System.out.println("1");
+            
 
                                cliente.setPersonastelefonoss(listaTel);
                                    for (Iterator<Personastelefonos> it = listaTel.iterator(); it.hasNext();) {
@@ -583,7 +583,7 @@ public class EJBClientes implements EJBClientesRemote {
 
 
                                em.persist(cliente);
-                               System.out.println("22");
+            
 
 
                            }
@@ -592,7 +592,7 @@ public class EJBClientes implements EJBClientesRemote {
                     }
             
             //---------------------------------------------------------------------------------------------
-            System.out.println("12");
+            
             retorno = cliente.getIdPersona();
 
         } catch (Exception e) {

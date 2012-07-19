@@ -68,7 +68,7 @@ public class EJBProductos implements EJBProductosRemote {
                 //BufferedImage imagin = ImageIO.read(is);
            
              // if(is.available()>65535)
-               //   System.out.println("IMAGEN DEMASIADO GRANDE!!!");
+               
               //else{
                 
                 int formDataLength = is.available();
@@ -354,7 +354,7 @@ public class EJBProductos implements EJBProductosRemote {
             result = "ERROR";
             logger.error("Error en metodo selectoneproducto "+e);
         }finally{
-        System.out.println(result);
+        
         return result;
         }
     }
@@ -405,7 +405,7 @@ public class EJBProductos implements EJBProductosRemote {
             xml = oxq.getXMLString();
             oxq.close();
 
-            System.out.println("+++++++++++++++++++"+xml);
+            
             if (xml.contains("<Lista/>")) {
                 xml = "La Consulta no arrojó resultados!!!";
             }*/
@@ -422,10 +422,12 @@ public class EJBProductos implements EJBProductosRemote {
                             Productos prod = (Productos) iter.next();
                             xml+="<producto>\n"
                                     + "<id>"+prod.getCodproducto()+"</id>\n"
+                                    + "<idproduct>"+prod.getSid()+"</idproduct>\n"
                                     + "<descripcion>"+prod.getDescripcion()+"</descripcion>\n"
                                     + "<cantidadDisponible>"+prod.getCantidadDisponible()+"</cantidadDisponible>\n"
                                     + "<cantidadInicial>"+prod.getCantidadInicial()+"</cantidadInicial>\n"
-                                    + "<fecha>"+sdf.format(prod.getFecha())+"</fecha>\n"
+                                    + "<fecha>"+sdf.format(prod.getFecha())+"</fecha>\n" 
+                                    +"<precio>"+prod.getPrecioUnitario()+"</precio>\n"
                                     + "</producto>\n";
                         
                         
