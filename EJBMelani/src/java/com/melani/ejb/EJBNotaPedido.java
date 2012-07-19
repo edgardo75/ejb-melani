@@ -96,7 +96,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             retorno = -1;
         }finally{
             
-            System.out.println("valores de retorno "+retorno);
+            
             return retorno;
         }
         
@@ -109,57 +109,57 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             GregorianCalendar gc = new GregorianCalendar();
             //---------------------------------------------------------------------------------
             Notadepedido notape = new Notadepedido();
-                            System.out.println("--");
+                            
                             notape.setAnticipo(BigDecimal.valueOf(notadepedido.getAnticipo()));
-                            System.out.println("--");
+                            
                             notape.setAnulado(notadepedido.getAnulado());
-                            System.out.println("--");
+                            
                             notape.setEnefectivo(notadepedido.getEnefectivo());
-                            System.out.println("--"+notadepedido.getEntregado());
+                            
                             notape.setEntregado(Character.valueOf(notadepedido.getEntregado()));
-                            System.out.println("--"+notadepedido.getPersonas().getId());
+                            
                             notape.setFkIdcliente(em.find(Personas.class, notadepedido.getPersonas().getId()));
-                            System.out.println("--");
+
                             notape.setFkidporcentajenotaId(em.find(Porcentajes.class, notadepedido.getPorcentajes().getId_porcentaje()));
-                            System.out.println("--");
+
                             notape.setHoracompra(gc.getTime());
-                            System.out.println("--");
+
                             notape.setIdTarjetaFk(em.find(TarjetasCreditoDebito.class, notadepedido.getTarjetacredito().getId_tarjeta()));
-                            System.out.println("--");
+
                             notape.setIdUsuarioExpidioNota(notadepedido.getUsuario_expidio_nota());
-                            System.out.println("--");
+
                             notape.setIdusuarioAnulado(notadepedido.getId_usuario_anulado());
-                            System.out.println("--");
+
                             notape.setIdusuarioEntregado(notadepedido.getUsuario_entregado());
-                            System.out.println("--");
+
                             notape.setMontoiva(BigDecimal.valueOf(notadepedido.getMontoiva()));
-                            System.out.println("--");
+
                             notape.setNumerodecupon(notadepedido.getNumerodecupon());
-                            System.out.println("--");
+
                             notape.setObservaciones(notadepedido.getObservaciones());
-                            System.out.println("--");
+
                             notape.setPendiente(Character.valueOf(notadepedido.getPendiente()));
-                            System.out.println("--");
+
                             notape.setRecargo(BigDecimal.valueOf(notadepedido.getRecargo()));
-                            System.out.println("--");
+
                             notape.setSaldo(BigDecimal.valueOf(notadepedido.getSaldo()));
-                            System.out.println("--");
+
                             notape.setStockfuturo(notadepedido.getStockfuturo());
-                            System.out.println("--");
+
                             notape.setTotal(BigDecimal.valueOf(notadepedido.getMontototal()));
-                            System.out.println("--");
+
                             notape.setFechadecompra(gc.getTime());
                             notape.setCancelado(Character.valueOf(notadepedido.getCancelado()));
-                            System.out.println("--");
+                            
 
                             em.persist(notape);
 
-                            System.out.println("--");
+                            
             
-                            System.out.println("--");
+                            
             /*
              * trato la lista de productos de la nota de pedido, a continuación*/
-                  System.out.println("Stock futuro "+notadepedido.getStockfuturo());
+                  
                   long historico =0;
                          switch(notadepedido.getStockfuturo()){
                              case 0:{retorno = almacenardetallenotaconcontrolstock(notadepedido,notape);

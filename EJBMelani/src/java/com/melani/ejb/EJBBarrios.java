@@ -80,7 +80,7 @@ public class EJBBarrios implements EJBBarriosRemote {
             try {
                 
                 con = datasource.getConnection();
-                System.out.println(con.getCatalog());
+                
             } catch (Exception e) {
                 logger.error("No se pudo Obtener La Conexion con La base de Datos en metodo searchallbarrios"+e);
                 xml = "No se pudo Obtener La Conexion con La base de Datos";
@@ -127,7 +127,7 @@ public class EJBBarrios implements EJBBarriosRemote {
         /*try {
             Query consulta =  em.createQuery("SELECT b FROM Barrios b");
             List<Barrios> lista = consulta.getResultList();
-            System.out.println(lista.size());
+            
             retorno = lista.size();
             
             
@@ -233,7 +233,7 @@ public class EJBBarrios implements EJBBarriosRemote {
         } catch (Exception e) {
             e.getMessage();
         }finally{
-         System.out.println(fBarrios.length);
+         
         return fBarrios;
         }
     }

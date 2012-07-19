@@ -76,7 +76,7 @@ public class EJBCalles implements EJBCallesRemote {
             try {
 
                 con = datasource.getConnection();
-                System.out.println("CONEXION "+con.toString());
+                
             } catch (Exception e) {
                 logger.error("No se pudo Obtener La Conexion con La base de Datos en metodo searchAllCalles"+e);
                 xml = "No se pudo Obtener La Conexion con La base de Datos";
@@ -170,7 +170,7 @@ public class EJBCalles implements EJBCallesRemote {
             Query consulta = em.createNativeQuery("SELECT FIRST "+numItems+" SKIP ("+startIndex+"*"+numItems+") c.id_calle,c.DESCRIPCION FROM CALLES c ORDER BY c.id_calle",Calles.class);
             //Query consulta = em.createNativeQuery("SELECT c.id_calle,c.descripcion FROM Calles c ORDER BY c.id_calle ASC",Calles.class).setFirstResult(startIndex).setMaxResults(numItems);
             lista = consulta.getResultList();
-            //System.out.println("tamano de la lista "+lista.size());       
+            //
            // aCalles = new ArrayList<Calles>(Arrays.asList(fCalles));
         } catch (Exception e) {
                 //e.getMessage();
@@ -233,7 +233,7 @@ public class EJBCalles implements EJBCallesRemote {
         
         for (Iterator<Calles> it = lista.iterator(); it.hasNext();) {
             Calles calles = it.next();
-            System.out.println(calles.getDescripcion());
+            
             
         }
         
@@ -252,13 +252,13 @@ public class EJBCalles implements EJBCallesRemote {
             Query consulta = em.createNativeQuery("SELECT FIRST "+numItems+" SKIP ("+startIndex+"*"+numItems+") c.id_calle,c.DESCRIPCION FROM CALLES c ORDER BY c.id_calle",Calles.class);
             //Query consulta = em.createNativeQuery("SELECT c.id_calle,c.descripcion FROM Calles c ORDER BY c.id_calle ASC",Calles.class).setFirstResult(startIndex).setMaxResults(numItems);
             List<Calles> lista = consulta.getResultList();
-            //System.out.println("tamano de la lista "+lista.size());
+            //
 
             Iterator<Calles> iter = lista.iterator();
             
             while(iter.hasNext()){
                 Calles lleca = iter.next();
-                System.out.println(lleca.getDescripcion());
+                
             
             }
             
@@ -291,7 +291,7 @@ public class EJBCalles implements EJBCallesRemote {
             
 
         }finally{
-//           System.out.println("tamano de la lista2 "+fCalles.length);
+//           
 
              return fCalles;
         }

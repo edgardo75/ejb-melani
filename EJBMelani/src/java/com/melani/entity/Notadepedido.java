@@ -399,7 +399,7 @@ public class Notadepedido implements Serializable {
 
         String item ="";
         try {
-            System.out.println("1");
+            
             item ="<?xml version='1.0' encoding='ISO-8859-1' ?>\n";
             item+="<item>\n"
 
@@ -472,6 +472,7 @@ public class Notadepedido implements Serializable {
             
         } catch (Exception e) {
 
+            
            System.out.println("Error en toXML nota de pedido"+e.getMessage());
         }
         
