@@ -42,12 +42,15 @@ public class Detallespresupuesto implements Serializable {
     private BigDecimal iva;
     @Column(name = "CANTIDAD")
     private Short cantidad;
+    @Column(name="DESC_PROD")
+    private BigDecimal descprod;
     @JoinColumn(name = "ID_DP_FK", referencedColumnName = "ID_PRESUPUESTO", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Presupuestos presupuestos;
     @JoinColumn(name = "FK_PRODUCTO", referencedColumnName = "SID", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Productos productos;
+
 
     public Detallespresupuesto() {
     }
@@ -115,6 +118,15 @@ public class Detallespresupuesto implements Serializable {
     public void setProductos(Productos productos) {
         this.productos = productos;
     }
+
+    public BigDecimal getDescprod() {
+        return descprod;
+    }
+
+    public void setDescprod(BigDecimal descprod) {
+        this.descprod = descprod;
+    }
+    
 
     @Override
     public int hashCode() {
