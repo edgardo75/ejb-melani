@@ -33,6 +33,7 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
     org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(EJBLocalidades.class);
      @PersistenceContext(unitName="EJBMelaniPU2")
      private EntityManager em;
+
      @Resource(name="jdbc/_melani")
      private DataSource datasource;
      

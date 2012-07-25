@@ -31,6 +31,9 @@
     <service name="EJBHistoricoPersonaDomicilioBean">
       <implementation-class>com.melani.ejb.EJBHistoricoPersonaDomicilioBean</implementation-class>
     </service>
+    <service name="EJBPresupuestosBean">
+      <implementation-class>com.melani.ejb.EJBPresupuestosBean</implementation-class>
+    </service>
   </services>
   <clients/>
 </jax-ws>
