@@ -57,13 +57,15 @@ public class Presupuestos implements Serializable {
     @Column(name = "VALIDEZ")
     @Temporal(TemporalType.DATE)
     private Date validez;
-    @Column(name = "TOTAL")
+    @Column(name = "TOTAL",precision=15,scale=2)
     private BigDecimal total;
     @Column(name = "OBSERVACIONES")
     private String observaciones;
     @Basic(optional = false)
     @Column(name = "ID_USUARIO_EXPIDIO_PRESUPUESTO")
     private int idUsuarioFk;    
+    @Column(name="DESCUENTOTOTAL",precision=12,scale=2)
+    private BigDecimal descuentototal;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuestos",fetch=FetchType.LAZY)
     private List<Detallespresupuesto> detallepresupuestosList;
     @JoinColumn(name = "ID_CLIENTE_FK", referencedColumnName = "ID_PERSONA")
@@ -146,6 +148,15 @@ public class Presupuestos implements Serializable {
     public void setIdClienteFk(Personas idClienteFk) {
         this.idClienteFk = idClienteFk;
     }
+
+    public BigDecimal getDescuentototal() {
+        return descuentototal;
+    }
+
+    public void setDescuentototal(BigDecimal descuentototal) {
+        this.descuentototal = descuentototal;
+    }
+
 
     
 
