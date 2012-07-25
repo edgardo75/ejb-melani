@@ -74,13 +74,7 @@ public class DatosNotaPedido {
         this.cancelado = cancelado;
     }
 
-    public DetallesNotaPedido getDetallesnotapedido() {
-        return detallesnotapedido;
-    }
-
-    public void setDetallesnotapedido(DetallesNotaPedido detallesnotapedido) {
-        this.detallesnotapedido = detallesnotapedido;
-    }
+   
     
 
     public int getId_usuario_anulado() {
