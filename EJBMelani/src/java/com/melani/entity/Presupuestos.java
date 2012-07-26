@@ -186,4 +186,15 @@ public class Presupuestos implements Serializable {
         return "entidades.Presupuestos[idPresupuesto=" + idPresupuesto + "]";
     }
 
+    public String toXML(){
+        String xml ="<presupuesto>" +
+                "<id>" +this.getIdPresupuesto()+"</id>\n" +
+                "<idcliente>"+this.getIdClienteFk()+"</idcliente>\n"+
+                "</presupuesto>\n";
+
+
+
+    return xml;
+    }
+
 }

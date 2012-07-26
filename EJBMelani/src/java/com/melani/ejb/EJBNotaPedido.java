@@ -322,16 +322,16 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             }
 
                                 Query consulta1 = em.createQuery("SELECT d FROM Detallesnotadepedido d WHERE d.detallesnotadepedidoPK.fkIdnota = :fkIdnota");
-                                System.out.println("++++");
+                                
                                 consulta1.setParameter("fkIdnota", notape.getId());
-                                System.out.println("++++");
+                                
                                 notape.setDetallesnotadepedidoList(consulta1.getResultList());
-                                System.out.println("++++");
+                                
                                 em.merge(notape);
-                                System.out.println("++++");
+                                
 
                                 retorno = notape.getId();
-                            System.out.println("++++");
+                            
 
         }catch(Exception e){
             logger.error("Error en metodo almacenardetallenotaconcontrolstock ",e.getCause().fillInStackTrace());
