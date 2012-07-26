@@ -74,23 +74,8 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             
             DatosNotaPedido notadepedido = (DatosNotaPedido) xestream.fromXML(xmlNotaPedido);
 
-
-            
-            
-                retorno = almacenarnota(notadepedido);
-
-                
-
-
-                       
-             
-                       
-
-
-
-
-            
-            
+             retorno = almacenarnota(notadepedido);
+           
         } catch (Exception e) {
             logger.error("Error en metodo agregarNotaPedido, verifique", e);
             retorno = -1;
@@ -282,56 +267,56 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 /* Idem metodo almacenar nota con la inclusion del metodo para controlar el stock llamando
  a metodo remoto de EJBPRoductosRemote, perdon por no usar reusabilidad de codigo fuente, no se me ocurria otra alternativa
  */
-            System.out.println("++++");
+    
             List<Itemdetallesnota>lista = notadepedido.getDetallesnota().getDetallesnota();
 
-            System.out.println("++++");
+    
            
             for (Iterator<Itemdetallesnota> it = lista.iterator(); it.hasNext();) {
-                System.out.println("++++");
+    
                 Itemdetallesnota itemdetallesnota = it.next();
 
-                System.out.println("++++");
+    
                 Productos productos = em.find(Productos.class,itemdetallesnota.getId_producto());
-                System.out.println("++++");
+    
                 DetallesnotadepedidoPK detallespk = new DetallesnotadepedidoPK(notape.getId(), itemdetallesnota.getId_producto());
-                System.out.println("++++");
+    
 
                 Detallesnotadepedido detalles = new Detallesnotadepedido();
 
-                System.out.println("++++");
+    
                 detalles.setCancelado(Character.valueOf(itemdetallesnota.getCancelado()));
-                System.out.println("++++");
+    
                 detalles.setCantidad(itemdetallesnota.getCantidad());
-                System.out.println("++++");
+    
                 detalles.setDescuento(BigDecimal.valueOf(itemdetallesnota.getDescuento()));
-                System.out.println("++++");
+    
                 detalles.setEntregado(Character.valueOf(itemdetallesnota.getEntregado()));
-                System.out.println("++++");
+    
                 detalles.setIva(BigDecimal.valueOf(itemdetallesnota.getIva()));
-                System.out.println("++++");
+    
                 detalles.setNotadepedido(notape);
-                System.out.println("++++");
+    
                 detalles.setPendiente(Character.valueOf(itemdetallesnota.getPendiente()));
-                System.out.println("++++");
+    
                 detalles.setPrecio(BigDecimal.valueOf(itemdetallesnota.getPrecio()));
-                System.out.println("++++");
+    
                 detalles.setProductos(productos);
-                System.out.println("++++");
+    
                 detalles.setSubtotal(BigDecimal.valueOf(itemdetallesnota.getSubtotal()));
-                System.out.println("++++");
+    
                 detalles.setDetallesnotadepedidoPK(detallespk);
-                System.out.println("++++");
+    
                 em.persist(detalles);
 
                 Query consulta = em.createQuery("SELECT d FROM Detallesnotadepedido d WHERE d.detallesnotadepedidoPK.fkIdproducto = :fkIdproducto");
-                System.out.println("++++");
+    
                 consulta.setParameter("fkIdproducto", itemdetallesnota.getId_producto());
-                System.out.println("++++");
+
                 productos.setDetallesnotadepedidoList(consulta.getResultList());
-                System.out.println("++++");
+
                 producto.controlStockProducto(itemdetallesnota.getId_producto(), itemdetallesnota.getCantidad(), notadepedido.getUsuario_expidio_nota());
-                System.out.println("++++");
+
 
 
             }

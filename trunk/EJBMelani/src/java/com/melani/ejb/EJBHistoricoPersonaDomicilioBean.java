@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.jws.WebResult;
+
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
  * @author Edgardo
  */
 @Stateless(mappedName="EJBHistoricoPersonaDomicilioBean")
-@WebService(name="HistPersonasDomicilios",serviceName="ServicesHistPD")
+@WebService(name="HistPersoDominWs",serviceName="ServicesHistPD")
 
 @SOAPBinding(style=SOAPBinding.Style.RPC)
 public class EJBHistoricoPersonaDomicilioBean implements EJBHistoricoPersonaDomicilioRemote {
