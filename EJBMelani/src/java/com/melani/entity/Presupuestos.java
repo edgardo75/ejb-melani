@@ -17,8 +17,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
+
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -33,14 +33,17 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="PRESUPUESTOS")
-@NamedQueries({
-    @NamedQuery(name = "Presupuestos.findAll", query = "SELECT p FROM Presupuestos p"),
-    @NamedQuery(name = "Presupuestos.findByIdPresupuesto", query = "SELECT p FROM Presupuestos p WHERE p.idPresupuesto = :idPresupuesto"),
-    @NamedQuery(name = "Presupuestos.findByFechapresupuesto", query = "SELECT p FROM Presupuestos p WHERE p.fechapresupuesto = :fechapresupuesto"),
-    @NamedQuery(name = "Presupuestos.findByValidez", query = "SELECT p FROM Presupuestos p WHERE p.validez = :validez"),
-    @NamedQuery(name = "Presupuestos.findByTotal", query = "SELECT p FROM Presupuestos p WHERE p.total = :total"),
-    @NamedQuery(name = "Presupuestos.findByObservaciones", query = "SELECT p FROM Presupuestos p WHERE p.observaciones = :observaciones"),
-    @NamedQuery(name = "Presupuestos.findByIdUsuarioFk", query = "SELECT p FROM Presupuestos p WHERE p.idUsuarioFk = :idUsuarioFk")})
+@NamedQueries({@NamedQuery(name = "Presupuestos.findAll", query = "SELECT p FROM Presupuestos p"),
+@NamedQuery(name = "Presupuestos.findByIdPresupuesto", query = "SELECT p FROM Presupuestos p WHERE p.idPresupuesto = :idPresupuesto"),
+@NamedQuery(name = "Presupuestos.findByObservaciones", query = "SELECT p FROM Presupuestos p WHERE p.observaciones = :observaciones"),
+@NamedQuery(name = "Presupuestos.findByIdUsuarioExpidioPresupuesto", query = "SELECT p FROM Presupuestos p WHERE p.idUsuarioFk = :idUsuarioFk"),
+@NamedQuery(name = "Presupuestos.findByValidez", query = "SELECT p FROM Presupuestos p WHERE p.validez = :validez"),
+@NamedQuery(name = "Presupuestos.findByFechapresupuesto", query = "SELECT p FROM Presupuestos p WHERE p.fechapresupuesto = :fechapresupuesto"),
+@NamedQuery(name = "Presupuestos.findByTotal", query = "SELECT p FROM Presupuestos p WHERE p.total = :total"),
+@NamedQuery(name = "Presupuestos.findByDescuentototal", query = "SELECT p FROM Presupuestos p WHERE p.descuentototal = :descuentototal"),
+@NamedQuery(name = "Presupuestos.findByIva", query = "SELECT p FROM Presupuestos p WHERE p.iva = :iva"),
+@NamedQuery(name = "Presupuestos.findByNombre", query = "SELECT p FROM Presupuestos p WHERE p.nombre = :nombre"),
+@NamedQuery(name = "Presupuestos.findByApellido", query = "SELECT p FROM Presupuestos p WHERE p.apellido = :apellido")})
 public class Presupuestos implements Serializable {
     private static final long serialVersionUID = 1L;
   @TableGenerator(name="PresupuestosIdGen", table="ID_GEN_PRE",
@@ -66,11 +69,15 @@ public class Presupuestos implements Serializable {
     private int idUsuarioFk;    
     @Column(name="DESCUENTOTOTAL",precision=12,scale=2)
     private BigDecimal descuentototal;
+    @Column(name = "IVA",precision=15,scale=2)
+    private BigDecimal iva;
+    @Column(name = "NOMBRE",length=40)
+    private String nombre;
+    @Column(name = "APELLIDO",length=20)
+    private String apellido;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuestos",fetch=FetchType.LAZY)
     private List<Detallespresupuesto> detallepresupuestosList;
-    @JoinColumn(name = "ID_CLIENTE_FK", referencedColumnName = "ID_PERSONA")
-    @ManyToOne(fetch=FetchType.LAZY)
-    private Personas idClienteFk;
+    
     
 
     public Presupuestos() {
@@ -141,14 +148,7 @@ public class Presupuestos implements Serializable {
         this.detallepresupuestosList = detallepresupuestosList;
     }
 
-    public Personas getIdClienteFk() {
-        return idClienteFk;
-    }
-
-    public void setIdClienteFk(Personas idClienteFk) {
-        this.idClienteFk = idClienteFk;
-    }
-
+    
     public BigDecimal getDescuentototal() {
         return descuentototal;
     }
@@ -156,6 +156,32 @@ public class Presupuestos implements Serializable {
     public void setDescuentototal(BigDecimal descuentototal) {
         this.descuentototal = descuentototal;
     }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    
 
 
     
@@ -189,7 +215,6 @@ public class Presupuestos implements Serializable {
     public String toXML(){
         String xml ="<presupuesto>" +
                 "<id>" +this.getIdPresupuesto()+"</id>\n" +
-                "<idcliente>"+this.getIdClienteFk()+"</idcliente>\n"+
                 "</presupuesto>\n";
 
 
