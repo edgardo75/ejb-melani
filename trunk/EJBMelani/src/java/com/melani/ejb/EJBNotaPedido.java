@@ -24,7 +24,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import javax.annotation.Resource;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
@@ -47,10 +47,10 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
     private static Logger logger = Logger.getLogger(EJBNotaPedido.class);
     @PersistenceContext
     private EntityManager em;
-    @Resource(name = "jdbc/_melani")
+    //@Resource(name = "jdbc/_melani")
     
     @EJB
-    EJBProductosRemote producto;
+      EJBProductosRemote producto;
 
     @Override
     public long agregarNotaPedido(String xmlNotaPedido) {
@@ -134,9 +134,13 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                             notape.setTotal(BigDecimal.valueOf(notadepedido.getMontototal()));
 
                             notape.setFechadecompra(gc.getTime());
+
                             notape.setCancelado(Character.valueOf(notadepedido.getCancelado()));
                             
+                            notape.setDescuentonota(BigDecimal.valueOf(notadepedido.getDescuentonota()));
 
+                            notape.setidusuariocancelo(notadepedido.getUsuario_cancelo_nota());
+                            
                             em.persist(notape);
 
                             
@@ -188,66 +192,70 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
              * asi de esa manera poder amancenarla en los lugares correspondiente como lo es en detalles
              * de pedido de la nota y sus ligaduras con la nota de pedido propiamente dicha y los productos
              * para mantener la persistencia de las lista de manera real*/
-                        System.out.println("221");
+                        
             List<Itemdetallesnota>lista = notadepedido.getDetallesnota().getDetallesnota();
-                                    System.out.println("221");
+                        
             for (Iterator<Itemdetallesnota> it = lista.iterator(); it.hasNext();) {
-                                        System.out.println("222");
+                        
                 Itemdetallesnota itemdetallesnota = it.next();
 
-                                        System.out.println("222");
+                        
                 Productos productos = em.find(Productos.class,itemdetallesnota.getId_producto());
-                                        System.out.println("222");
+                        
 
                     DetallesnotadepedidoPK detallespk = new DetallesnotadepedidoPK(notape.getId(), itemdetallesnota.getId_producto());
-                                            System.out.println("222");
+                        
                     Detallesnotadepedido detalles = new Detallesnotadepedido();
-                                            System.out.println("222");
+                        
                     detalles.setCancelado(Character.valueOf(itemdetallesnota.getCancelado()));
-                                            System.out.println("222");
+                        
                     detalles.setCantidad(itemdetallesnota.getCantidad());
-                                            System.out.println("222");
+                        
                     detalles.setDescuento(BigDecimal.valueOf(itemdetallesnota.getDescuento()));
-                                            System.out.println("222");
+                        
                     detalles.setEntregado(Character.valueOf(itemdetallesnota.getEntregado()));
-                                            System.out.println("222");
+                        
                     detalles.setIva(BigDecimal.valueOf(itemdetallesnota.getIva()));
-                                            System.out.println("222");
+                        
                     detalles.setNotadepedido(notape);
-                                            System.out.println("222");
+                        
                     detalles.setPendiente(Character.valueOf(itemdetallesnota.getPendiente()));
-                                            System.out.println("222");
+                        
                     detalles.setPrecio(BigDecimal.valueOf(itemdetallesnota.getPrecio()));
-                                            System.out.println("222");
+                        
                     detalles.setProductos(productos);
-                                            System.out.println("222");
+                        
                     detalles.setSubtotal(BigDecimal.valueOf(itemdetallesnota.getSubtotal()));
-                                            System.out.println("222");
+                        
                     detalles.setDetallesnotadepedidoPK(detallespk);
-                                            System.out.println("222");
+                        
                     detalles.setAnulado(Character.valueOf(itemdetallesnota.getAnulado()));
+
+                    detalles.setPreciocondescuento(BigDecimal.valueOf(itemdetallesnota.getPreciocondescuento()));
+
                     em.persist(detalles);
 
-                                            System.out.println("222");
+                    
                 Query consulta = em.createQuery("SELECT d FROM Detallesnotadepedido d WHERE d.detallesnotadepedidoPK.fkIdproducto = :fkIdproducto");
-                                        System.out.println("222");
+                    
                 consulta.setParameter("fkIdproducto", itemdetallesnota.getId_producto());
-                                        System.out.println("222");
+                    
 
                 productos.setDetallesnotadepedidoList(consulta.getResultList());
-                                        System.out.println("222");
+                    
             }
 
-                                                            System.out.println("221");
+                    
             Query consulta1 = em.createQuery("SELECT d FROM Detallesnotadepedido d WHERE d.detallesnotadepedidoPK.fkIdnota = :fkIdnota");
-                                    System.out.println("221");
+                    
             consulta1.setParameter("fkIdnota", notape.getId());
-                                    System.out.println("221");
+
+            
             notape.setDetallesnotadepedidoList(consulta1.getResultList());
-                                    System.out.println("221");
+            
 
             em.merge(notape);
-            System.out.println("221");
+            
 
             retorno = notape.getId();
             
@@ -290,12 +298,15 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                 detalles.setCantidad(itemdetallesnota.getCantidad());
     
                 detalles.setDescuento(BigDecimal.valueOf(itemdetallesnota.getDescuento()));
+
+                detalles.setPreciocondescuento(BigDecimal.valueOf(itemdetallesnota.getPreciocondescuento()));
     
                 detalles.setEntregado(Character.valueOf(itemdetallesnota.getEntregado()));
     
                 detalles.setIva(BigDecimal.valueOf(itemdetallesnota.getIva()));
     
                 detalles.setNotadepedido(notape);
+
     
                 detalles.setPendiente(Character.valueOf(itemdetallesnota.getPendiente()));
     
@@ -350,44 +361,45 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             //------------------------------------------------------------------------
             GregorianCalendar gc = new GregorianCalendar(Locale.getDefault());
             //------------------------------------------------------------------------
-            System.out.println("111");
+            
                     Historiconotapedido historico = new Historiconotapedido();
-                                System.out.println("111");
+            
                         historico.setAnticipo(BigDecimal.valueOf(notadepedido.getAnticipo()));
-                                    System.out.println("111");
+            
                         historico.setEntregado(Character.valueOf(notadepedido.getEntregado()));
-                                    System.out.println("111");
+            
                         historico.setFecharegistro(gc.getTime());
-                                    System.out.println("111");
+            
                         historico.setFkidnotapedido(em.find(Notadepedido.class, notape.getId()));
-                                    System.out.println("111");
+            
                         
                         
-                                    System.out.println("111");
+            
                         historico.setObservaciones(notadepedido.getObservaciones());
-                                    System.out.println("111");
+            
                         historico.setPendiente(Character.valueOf(notadepedido.getPendiente()));
-                                    System.out.println("111");
+            
                         historico.setPorcentajeaplicado(notadepedido.getPorcentajes().getId_porcentaje());
-                                    System.out.println("111");
+            
                         historico.setSaldo(BigDecimal.valueOf(notadepedido.getSaldo()));
-                                    System.out.println("111");
+            
                         historico.setTotal(BigDecimal.valueOf(notadepedido.getMontototal()));
 
                         historico.setIdusuarioanulo(notadepedido.getId_usuario_anulado());
                         historico.setIdusuariocancelo(notadepedido.getUsuario_cancelo_nota());
                         historico.setIdusuarioentrega(notadepedido.getUsuario_entregado());
-                                    System.out.println("111");
+            
                         historico.setIdusuarioexpidio(notadepedido.getUsuario_expidio_nota());
 
                         historico.setHoraregistro(gc.getTime());
-                                    System.out.println("111");
+                        historico.setAccion("Historico Almacenado con exito nota de pedido N° "+notape.getId()+" ");
+            
                         
                                     em.persist(historico);
                                     
                                     
              //-----------------------------------------------------------------------
-                                    System.out.println("111");
+            
                       try {
                             Query consulta = em.createQuery("SELECT h FROM Historiconotapedido h WHERE h.fkidnotapedido.id = :idnota");
                         consulta.setParameter("idnota", notape.getId());

@@ -7,7 +7,9 @@ package com.melani.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -213,8 +215,34 @@ public class Presupuestos implements Serializable {
     }
 
     public String toXML(){
-        String xml ="<presupuesto>" +
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String xml ="<presupuesto>\n" +
                 "<id>" +this.getIdPresupuesto()+"</id>\n" +
+                "<nombre>" +this.getNombre()+"</nombre>\n"+
+                "<apellido>" +this.getApellido()+"</apellido>\n"+
+                "<observaciones>" +this.getObservaciones()+"</observaciones>\n"+
+                "<descuentoTotal>" +this.getDescuentototal().toString()+"</descuentoTotal>\n"+
+                "<usuarioexpidio>" +this.getIdUsuarioFk()+"</usuarioexpidio>\n"+
+                "<iva>" +this.getIva().toString()+"</iva>\n"+
+                "<total>" +this.getTotal().toString()+"</total>\n"+
+                "<fechapresupuesto>" +sdf.format(this.getFechapresupuesto())+"</fechapresupuesto>\n"+
+                "<fechavalidez>" +sdf.format(this.getValidez())+"</fechavalidez>\n" +
+                "<detallepresupuesto>\n" ;
+
+                if(this.getDetallepresupuestosList().size()==0)
+                        xml+=   "</detallepresupuesto>\n";
+                else{
+                    List<Detallespresupuesto>lista = this.getDetallepresupuestosList();
+                    for (Iterator<Detallespresupuesto> it = lista.iterator(); it.hasNext();) {
+                        Detallespresupuesto detallespresupuesto = it.next();
+                        xml+=detallespresupuesto.toXML();
+
+                    }
+
+
+                }
+            xml+=   "</detallepresupuesto>\n"+
+
                 "</presupuesto>\n";
 
 

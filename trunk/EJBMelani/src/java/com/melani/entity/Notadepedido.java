@@ -82,7 +82,7 @@ public class Notadepedido implements Serializable {
     private Character enefectivo;
     @Column(name="FECHAENTREGA")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaentrega;
+    private Date fechaentrega;    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "notadepedido")
     private List<Detallesnotadepedido> detallesnotadepedidoList;
     @OneToMany(cascade= CascadeType.ALL,mappedBy = "fkidnotapedido")
@@ -104,6 +104,8 @@ public class Notadepedido implements Serializable {
     private Date fecancelado;
     @Column(name="ID_USUARIO_CANCELO")
     private Integer idusuariocancelo;
+    @Column(name="DESCUENTO_NOTA",precision=12,scale=2)
+    private BigDecimal descuentonota;
 
 
     public Notadepedido() {
@@ -176,6 +178,17 @@ public class Notadepedido implements Serializable {
         return fechaAnulado;
     }
 
+    public BigDecimal getDescuentonota() {
+        return descuentonota;
+    }
+
+    public void setDescuentonota(BigDecimal descuentonota) {
+        this.descuentonota = descuentonota;
+    }
+
+   
+
+    
     public void setFechaAnulado(Date fechaAnulado) {
         this.fechaAnulado = fechaAnulado;
     }
@@ -413,6 +426,7 @@ public class Notadepedido implements Serializable {
                 + "<efectivo>"+this.getEnefectivo()+"</efectivo>\n"
                 + "<entregado>"+this.getEntregado()+"</entregado>\n"
                 + "<fechaanulado>"+fechanulado+"</fechaanulado>\n" +
+                "<descuentonota>" +this.getDescuentonota()+"</descuentonota>\n"+
                 "<fecancel>"+fecancel+"</fecancel>\n"
                 + "<fechacompra>"+fecompra+"</fechacompra>\n"
                     + "<fechaentrega>"+feentrega+"</fechaentrega>\n"
@@ -425,7 +439,8 @@ public class Notadepedido implements Serializable {
                 + "<tarjetadecredito>"+this.getIdTarjetaFk().getDescripcion()+"</tarjetadecredito>\n"
                 + "<usuarioexpidionota>"+this.getIdUsuarioExpidioNota()+"</usuarioexpidionota>\n"
                 + "<usuarioanulonota>"+this.getIdusuarioAnulado()+"</usuarioanulonota>\n"
-                + "<usuarioentregonota>"+this.getIdusuarioEntregado()+"</usuarioentregonota>\n"
+                + "<usuarioentregonota>"+this.getIdusuarioEntregado()+"</usuarioentregonota>\n" +
+                "<usuariocancelonota>"+this.getidusuariocancelo()+"</usuariocancelonota>\n"
                 + "<montoiva>"+this.getMontoiva()+"</montoiva>\n"
                 + "<stockfuturo>"+this.getStockfuturo()+"</stockfuturo>\n"
                 + "<pendiente>"+this.getPendiente()+"</pendiente>\n"
@@ -436,20 +451,36 @@ public class Notadepedido implements Serializable {
                     if(this.getDetallesnotadepedidoList().isEmpty())
                         item+="</detallenota>\n";
                     else{
+
+                        List<Detallesnotadepedido>lista = this.getDetallesnotadepedidoList();
+                        for (Iterator<Detallesnotadepedido> it = lista.iterator(); it.hasNext();) {
+                            Detallesnotadepedido detallesnotadepedido = it.next();
+                            item+="<itemdetalle>\n"
+                                    + "<producto>"
+                                    + "<descripcion>"+detallesnotadepedido.getProductos().getDescripcion()+"</descripcion>\n"
+                                    + "</producto>\n"
+                                    + "<cantidad>"+detallesnotadepedido.getCantidad()+"</cantidad>\n"
+                                    + "<precio>"+detallesnotadepedido.getPrecio()+"</precio>\n" +
+                                    "<preciocondescuento>"+detallesnotadepedido.getPreciocondescuento()+"</preciocondescuento>\n" +
+                                    "<descuento>"+detallesnotadepedido.getDescuento()+"</descuento>\n"
+                                    + "</itemdetalle>\n";
+
+                        }
                     
-                    //Iterator iter = this.getDetallesnotadepedidoList().iterator();
                     
-                        for (Iterator<Detallesnotadepedido> it = detallesnotadepedidoList.iterator(); it.hasNext();) {
+                        /*for (Iterator<Detallesnotadepedido> it = detallesnotadepedidoList.iterator(); it.hasNext();) {
                             Detallesnotadepedido detallesnotadepedido = it.next();
                             item+="<itemdetalle>\n"
                                     + "<producto>"
                                     + "<descripcion>"+detallesnotadepedido.getProductos().getDescripcion()+"</descripcion>\n"                                    
                                     + "</producto>\n"
                                     + "<cantidad>"+detallesnotadepedido.getCantidad()+"</cantidad>\n"
-                                    + "<precio>"+detallesnotadepedido.getPrecio()+"</precio>\n"
+                                    + "<precio>"+detallesnotadepedido.getPrecio()+"</precio>\n" +
+                                    "<preciocondescuento>"+detallesnotadepedido.getPreciocondescuento().toString()+"</preciocondescuento>\n" +
+                                    "<decuento>"+detallesnotadepedido.getDescuento()+"</descuento>\n"
                                     + "</itemdetalle>\n";
                             
-                        }
+                        }*/
                         item+="</detallenota>\n";
                     
                     
