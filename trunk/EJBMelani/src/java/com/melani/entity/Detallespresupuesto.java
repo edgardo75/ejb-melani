@@ -22,24 +22,26 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "DETALLESPRESUPUESTO")
-@NamedQueries({
-    @NamedQuery(name = "Detallespresupuesto.findAll", query = "SELECT d FROM Detallespresupuesto d"),
-    @NamedQuery(name = "Detallespresupuesto.findByIdDpFk", query = "SELECT d FROM Detallespresupuesto d WHERE d.detallespresupuestoPK.idDpFk = :idDpFk"),
-    @NamedQuery(name = "Detallespresupuesto.findByFkProducto", query = "SELECT d FROM Detallespresupuesto d WHERE d.detallespresupuestoPK.fkProducto = :fkProducto"),
-    @NamedQuery(name = "Detallespresupuesto.findBySubtotal", query = "SELECT d FROM Detallespresupuesto d WHERE d.subtotal = :subtotal"),
-    @NamedQuery(name = "Detallespresupuesto.findByDescuento", query = "SELECT d FROM Detallespresupuesto d WHERE d.descuento = :descuento"),
-    @NamedQuery(name = "Detallespresupuesto.findByIva", query = "SELECT d FROM Detallespresupuesto d WHERE d.iva = :iva"),
-    @NamedQuery(name = "Detallespresupuesto.findByCantidad", query = "SELECT d FROM Detallespresupuesto d WHERE d.cantidad = :cantidad")})
+@NamedQueries({@NamedQuery(name = "Detallespresupuesto.findAll", query = "SELECT d FROM Detallespresupuesto d"),
+@NamedQuery(name = "Detallespresupuesto.findByDescuento", query = "SELECT d FROM Detallespresupuesto d WHERE d.descuento = :descuento"),
+@NamedQuery(name = "Detallespresupuesto.findByCantidad", query = "SELECT d FROM Detallespresupuesto d WHERE d.cantidad = :cantidad"),
+@NamedQuery(name = "Detallespresupuesto.findBySubtotal", query = "SELECT d FROM Detallespresupuesto d WHERE d.subtotal = :subtotal"),
+@NamedQuery(name = "Detallespresupuesto.findByFkProducto", query = "SELECT d FROM Detallespresupuesto d WHERE d.detallespresupuestoPK.fkProducto = :fkProducto"),
+@NamedQuery(name = "Detallespresupuesto.findByIdDpFk", query = "SELECT d FROM Detallespresupuesto d WHERE d.detallespresupuestoPK.idDpFk = :idDpFk"),
+@NamedQuery(name = "Detallespresupuesto.findByPrecio", query = "SELECT d FROM Detallespresupuesto d WHERE d.precio = :precio"),
+@NamedQuery(name = "Detallespresupuesto.findByPrecioDesc", query = "SELECT d FROM Detallespresupuesto d WHERE d.precioDesc = :precioDesc")})
 public class Detallespresupuesto implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected DetallespresupuestoPK detallespresupuestoPK;
-    @Column(name = "SUBTOTAL")
+    @Column(name = "SUBTOTAL",precision=15,scale=2)
     private BigDecimal subtotal;
-    @Column(name = "DESCUENTO")
+    @Column(name = "DESCUENTO",precision=15,scale=2)
     private BigDecimal descuento;
-    @Column(name = "IVA")
-    private BigDecimal iva;
+    @Column(name = "PRECIO",precision=12,scale=2)
+    private BigDecimal precio;
+    @Column(name = "PRECIO_DESC",precision=12,scale=2)
+    private BigDecimal precioDesc;
     @Column(name = "CANTIDAD")
     private Short cantidad;
     
@@ -86,13 +88,23 @@ public class Detallespresupuesto implements Serializable {
         this.descuento = descuento;
     }
 
-    public BigDecimal getIva() {
-        return iva;
+    public BigDecimal getPrecio() {
+        return precio;
     }
 
-    public void setIva(BigDecimal iva) {
-        this.iva = iva;
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
     }
+
+    public BigDecimal getPrecioDesc() {
+        return precioDesc;
+    }
+
+    public void setPrecioDesc(BigDecimal precioDesc) {
+        this.precioDesc = precioDesc;
+    }
+
+    
 
     public Short getCantidad() {
         return cantidad;
