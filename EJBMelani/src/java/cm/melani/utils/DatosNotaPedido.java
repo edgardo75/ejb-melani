@@ -31,6 +31,8 @@ public class DatosNotaPedido {
     private TarjetaCredito tarjetacredito;
     private Porcentajes porcentajes;
     private DetallesNotaPedido detallesnotapedido;
+    private Double descuentonota;
+
 
     public long getIdnota() {
         return idnota;
@@ -47,6 +49,12 @@ public class DatosNotaPedido {
     public void setUsuario_cancelo_nota(int usuario_cancelo_nota) {
         this.usuario_cancelo_nota = usuario_cancelo_nota;
     }
+
+    public Double getDescuentonota() {
+        return descuentonota;
+    }
+    
+
     //------------------------------------------------------------------------------------------------
     
 

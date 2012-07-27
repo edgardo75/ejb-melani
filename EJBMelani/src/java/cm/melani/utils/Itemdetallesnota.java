@@ -25,8 +25,19 @@ public class Itemdetallesnota {
         private long id_nota;
         private long id_producto;
         private char anulado;
+        private Double preciocondescuento;
+
+    public Double getPreciocondescuento() {
+        return preciocondescuento;
+    }
+
+
+
 
         /////////////////---------------------------------------------------------------------
+
+
+
 
 
 

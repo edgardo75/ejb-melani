@@ -157,5 +157,20 @@ public class Detallespresupuesto implements Serializable {
     public String toString() {
         return "entity.Detallespresupuesto[detallespresupuestoPK=" + detallespresupuestoPK + "]";
     }
+    public String toXML(){
+        String xml="<itemdetallepresupuesto>\n" +
+                "<idproducto>" +this.getProductos().getSid()+"</idproducto>\n" +
+                "<descripcion_prod>"+this.getProductos().getDescripcion()+"</descripcion_prod>\n" +
+                "<codigo_producto>"+this.getProductos().getCodproducto()+"</codigo_producto>\n"+
+                "<idpresupuesto>"+this.getPresupuestos().getIdPresupuesto()+"</idpresupuesto>\n" +
+                "<precio>"+this.getPrecio().toString()+"</precio>\n" +
+                "<precio_desc>"+this.getPrecioDesc().toString()+"</precio_desc>\n" +
+                "<descuento>"+this.getDescuento().toString()+"</descuento>\n" +
+                "<subtotal>"+this.getSubtotal().toString()+"</subtotal>\n" +
+                "<cantidad>"+this.getCantidad()+"</cantidad>\n"+
+                "</itemdetallepresupuesto>\n";
+
+        return xml;
+    }
 
 }

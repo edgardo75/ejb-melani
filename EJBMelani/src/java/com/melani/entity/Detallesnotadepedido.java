@@ -62,6 +62,8 @@ public class Detallesnotadepedido implements Serializable {
     private Productos productos;
     @Column(name = "ANULADO")
     private Character anulado;
+    @Column(name="PRECIO_DESC",precision=12,scale=2)
+    private BigDecimal preciocondescuento;
 
     public Detallesnotadepedido() {
     }
@@ -101,6 +103,16 @@ public class Detallesnotadepedido implements Serializable {
     public BigDecimal getSubtotal() {
         return subtotal;
     }
+
+    public BigDecimal getPreciocondescuento() {
+        return preciocondescuento;
+    }
+
+    public void setPreciocondescuento(BigDecimal preciocondescuento) {
+        this.preciocondescuento = preciocondescuento;
+    }
+
+    
 
     public Character getAnulado() {
         return anulado;
