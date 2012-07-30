@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
  *
  * @author Edgardo
  */
-@Stateless(mappedName="ejb/EJBClienteDomicilio")
+@Stateless(name="ejb/EJBClienteDomicilio")
 public class EJBClienteDomicilio implements EJBClienteDomicilioRemote {
     private static Logger logger = Logger.getLogger(EJBClienteDomicilio.class);
     @PersistenceContext

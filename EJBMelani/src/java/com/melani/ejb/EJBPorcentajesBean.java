@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
  * @author Edgardo
  */
 @Stateless(name="ejb/EJBPorcentajesBean")
-@WebService(name="PorcentajesWs",serviceName="ServicePorcentajes")
+@WebService(serviceName="ServicePorcentajes",name="PorcentajesWs")
 @SOAPBinding(style=SOAPBinding.Style.RPC)
 public class EJBPorcentajesBean implements EJBPorcentajesRemote {
     private static Logger logger = Logger.getLogger(EJBPorcentajesBean.class);

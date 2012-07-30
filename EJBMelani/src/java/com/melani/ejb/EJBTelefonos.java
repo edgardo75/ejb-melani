@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
  *
  * @author Edgardo
  */
-@Stateless(mappedName="ejb/EJBTelefonos")
+@Stateless(name="ejb/EJBTelefonos")
 public class EJBTelefonos implements EJBTelefonosRemote {
     private static Logger logger = Logger.getLogger(EJBTelefonos.class);
     @PersistenceContext
