@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
  *
  * @author Edgardo
  */
-@Stateless(mappedName="ejb/EJBDomicilios")
+@Stateless(name="ejb/EJBDomicilios")
 @WebService(serviceName="ServicesDomicilios",name="DomiciliosWs")
 @SOAPBinding(style=SOAPBinding.Style.RPC)
 public class EJBDomicilios implements EJBDomiciliosRemote {

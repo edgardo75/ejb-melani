@@ -24,8 +24,8 @@ import org.apache.log4j.Logger;
  *
  * @author Edgardo
  */
-@Stateless(mappedName="EJBHistoricoPersonaDomicilioBean")
-@WebService(name="HistPersoDominWs",serviceName="ServicesHistPD")
+@Stateless(name="ejb/EJBHistoricoPersonaDomicilioBean")
+@WebService(serviceName="ServicesHistPD",name="HistPersoDominWs")
 
 @SOAPBinding(style=SOAPBinding.Style.RPC)
 public class EJBHistoricoPersonaDomicilioBean implements EJBHistoricoPersonaDomicilioRemote {

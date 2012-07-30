@@ -41,8 +41,8 @@ import org.apache.log4j.Logger;
  * @author Edgardo
  */
 @Stateless(name="ejb/EJBNotaPedido")
-@SOAPBinding(style=SOAPBinding.Style.RPC)
 @WebService(serviceName="ServiceNotaPedido",name="NotaPedidoWs")
+@SOAPBinding(style=SOAPBinding.Style.RPC)
 public class EJBNotaPedido implements EJBNotaPedidoRemote {
     private static Logger logger = Logger.getLogger(EJBNotaPedido.class);
     @PersistenceContext
