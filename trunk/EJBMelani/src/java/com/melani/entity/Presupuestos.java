@@ -64,7 +64,7 @@ public class Presupuestos implements Serializable {
     private Date validez;
     @Column(name = "TOTAL",precision=15,scale=2)
     private BigDecimal total;
-    @Column(name = "OBSERVACIONES")
+    @Column(name = "OBSERVACIONES",length=255)
     private String observaciones;
     @Basic(optional = false)
     @Column(name = "ID_USUARIO_EXPIDIO_PRESUPUESTO")
@@ -77,6 +77,8 @@ public class Presupuestos implements Serializable {
     private String nombre;
     @Column(name = "APELLIDO",length=20)
     private String apellido;
+    @Column(name="PORC_DESC_TOTAL",precision=12,scale=2)
+    private BigDecimal porcetajedescuentoTOTAL;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuestos",fetch=FetchType.LAZY)
     private List<Detallespresupuesto> detallepresupuestosList;
     
@@ -183,6 +185,14 @@ public class Presupuestos implements Serializable {
         this.nombre = nombre;
     }
 
+    public BigDecimal getPorcetajedescuentoTOTAL() {
+        return porcetajedescuentoTOTAL;
+    }
+
+    public void setPorcetajedescuentoTOTAL(BigDecimal porcetajedescuento) {
+        this.porcetajedescuentoTOTAL = porcetajedescuento;
+    }
+
     
 
 
@@ -217,16 +227,17 @@ public class Presupuestos implements Serializable {
     public String toXML(){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String xml ="<presupuesto>\n" +
-                "<id>" +this.getIdPresupuesto()+"</id>\n" +
-                "<nombre>" +this.getNombre()+"</nombre>\n"+
-                "<apellido>" +this.getApellido()+"</apellido>\n"+
-                "<observaciones>" +this.getObservaciones()+"</observaciones>\n"+
-                "<descuentoTotal>" +this.getDescuentototal().toString()+"</descuentoTotal>\n"+
-                "<usuarioexpidio>" +this.getIdUsuarioFk()+"</usuarioexpidio>\n"+
-                "<iva>" +this.getIva().toString()+"</iva>\n"+
-                "<total>" +this.getTotal().toString()+"</total>\n"+
-                "<fechapresupuesto>" +sdf.format(this.getFechapresupuesto())+"</fechapresupuesto>\n"+
-                "<fechavalidez>" +sdf.format(this.getValidez())+"</fechavalidez>\n" +
+                "<id>" +this.getIdPresupuesto()+ "</id>\n" +
+                "<nombre>" +this.getNombre()+ "</nombre>\n"+
+                "<apellido>" +this.getApellido()+ "</apellido>\n"+
+                "<observaciones>" +this.getObservaciones()+ "</observaciones>\n"+
+                "<descuentoTotal>" +this.getDescuentototal().toString()+ "</descuentoTotal>\n"+
+                "<usuarioexpidio>" +this.getIdUsuarioFk()+ "</usuarioexpidio>\n"+
+                "<iva>" +this.getIva().toString()+ "</iva>\n"+
+                "<total>" +this.getTotal().toString()+ "</total>\n"+
+                "<fechapresupuesto>" +sdf.format(this.getFechapresupuesto())+ "</fechapresupuesto>\n"+
+                "<fechavalidez>" +sdf.format(this.getValidez())+ "</fechavalidez>\n" +
+                "<porcentajedescuentototal>" +this.getPorcetajedescuentoTOTAL().toString()+ "</porcentajedescuentototal>\n"+
                 "<detallepresupuesto>\n" ;
 
                 if(this.getDetallepresupuestosList().size()==0)
