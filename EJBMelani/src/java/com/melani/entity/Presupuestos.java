@@ -35,17 +35,22 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="PRESUPUESTOS")
-@NamedQueries({@NamedQuery(name = "Presupuestos.findAll", query = "SELECT p FROM Presupuestos p"),
-@NamedQuery(name = "Presupuestos.findByIdPresupuesto", query = "SELECT p FROM Presupuestos p WHERE p.idPresupuesto = :idPresupuesto"),
-@NamedQuery(name = "Presupuestos.findByObservaciones", query = "SELECT p FROM Presupuestos p WHERE p.observaciones = :observaciones"),
-@NamedQuery(name = "Presupuestos.findByIdUsuarioExpidioPresupuesto", query = "SELECT p FROM Presupuestos p WHERE p.idUsuarioFk = :idUsuarioFk"),
-@NamedQuery(name = "Presupuestos.findByValidez", query = "SELECT p FROM Presupuestos p WHERE p.validez = :validez"),
-@NamedQuery(name = "Presupuestos.findByFechapresupuesto", query = "SELECT p FROM Presupuestos p WHERE p.fechapresupuesto = :fechapresupuesto"),
-@NamedQuery(name = "Presupuestos.findByTotal", query = "SELECT p FROM Presupuestos p WHERE p.total = :total"),
-@NamedQuery(name = "Presupuestos.findByDescuentototal", query = "SELECT p FROM Presupuestos p WHERE p.descuentototal = :descuentototal"),
-@NamedQuery(name = "Presupuestos.findByIva", query = "SELECT p FROM Presupuestos p WHERE p.iva = :iva"),
-@NamedQuery(name = "Presupuestos.findByNombre", query = "SELECT p FROM Presupuestos p WHERE p.nombre = :nombre"),
-@NamedQuery(name = "Presupuestos.findByApellido", query = "SELECT p FROM Presupuestos p WHERE p.apellido = :apellido")})
+@NamedQueries({@NamedQuery(name = "Presupuestos.findAll",
+query = "SELECT p FROM Presupuestos p"), @NamedQuery(name = "Presupuestos.findByIdPresupuesto",
+        query = "SELECT p FROM Presupuestos p WHERE p.idPresupuesto = :idPresupuesto"), @NamedQuery(name = "Presupuestos.findByObservaciones",
+        query = "SELECT p FROM Presupuestos p WHERE p.observaciones = :observaciones"), @NamedQuery(name = "Presupuestos.findByIdUsuarioExpidioPresupuesto",
+        query = "SELECT p FROM Presupuestos p WHERE p.idUsuarioExpidioPresupuesto = :idUsuarioExpidioPresupuesto"), @NamedQuery(name = "Presupuestos.findByValidez",
+        query = "SELECT p FROM Presupuestos p WHERE p.validez = :validez"), @NamedQuery(name = "Presupuestos.findByFechapresupuesto",
+        query = "SELECT p FROM Presupuestos p WHERE p.fechapresupuesto = :fechapresupuesto"), @NamedQuery(name = "Presupuestos.findByTotalapagar",
+        query = "SELECT p FROM Presupuestos p WHERE p.totalapagar = :totalapagar"), @NamedQuery(name = "Presupuestos.findByIva",
+        query = "SELECT p FROM Presupuestos p WHERE p.iva = :iva"), @NamedQuery(name = "Presupuestos.findByNombre",
+        query = "SELECT p FROM Presupuestos p WHERE p.nombre = :nombre"), @NamedQuery(name = "Presupuestos.findByApellido",
+        query = "SELECT p FROM Presupuestos p WHERE p.apellido = :apellido"), @NamedQuery(name = "Presupuestos.findByTotal",
+        query = "SELECT p FROM Presupuestos p WHERE p.total = :total"), @NamedQuery(name = "Presupuestos.findByPorcDescTotal",
+        query = "SELECT p FROM Presupuestos p WHERE p.porcDescTotal = :porcDescTotal"), @NamedQuery(name = "Presupuestos.findByRecargototal",
+        query = "SELECT p FROM Presupuestos p WHERE p.recargototal = :recargototal"), @NamedQuery(name = "Presupuestos.findByPorcentajerecargo",
+        query = "SELECT p FROM Presupuestos p WHERE p.porcentajerecargo = :porcentajerecargo"), @NamedQuery(name = "Presupuestos.findByDescuentoresto",
+        query = "SELECT p FROM Presupuestos p WHERE p.descuentoresto = :descuentoresto")})
 public class Presupuestos implements Serializable {
     private static final long serialVersionUID = 1L;
   @TableGenerator(name="PresupuestosIdGen", table="ID_GEN_PRE",
@@ -69,8 +74,8 @@ public class Presupuestos implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_USUARIO_EXPIDIO_PRESUPUESTO")
     private int idUsuarioFk;    
-    @Column(name="DESCUENTOTOTAL",precision=12,scale=2)
-    private BigDecimal descuentototal;
+    @Column(name="TOTALAPAGAR",precision=12,scale=2)
+    private BigDecimal totalapagar;
     @Column(name = "IVA",precision=15,scale=2)
     private BigDecimal iva;
     @Column(name = "NOMBRE",length=40)
@@ -79,6 +84,12 @@ public class Presupuestos implements Serializable {
     private String apellido;
     @Column(name="PORC_DESC_TOTAL",precision=12,scale=2)
     private BigDecimal porcetajedescuentoTOTAL;
+    @Column(name = "RECARGOTOTAL",precision=12,scale=2)
+    private BigDecimal recargototal;
+    @Column(name = "PORCENTAJERECARGO",precision=12,scale=2)
+    private BigDecimal porcentajerecargo;
+     @Column(name = "DESCUENTORESTO",precision=12,scale=2)
+    private BigDecimal descuentoresto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuestos",fetch=FetchType.LAZY)
     private List<Detallespresupuesto> detallepresupuestosList;
     
@@ -153,12 +164,12 @@ public class Presupuestos implements Serializable {
     }
 
     
-    public BigDecimal getDescuentototal() {
-        return descuentototal;
+    public BigDecimal getTotalapagar() {
+        return totalapagar;
     }
 
-    public void setDescuentototal(BigDecimal descuentototal) {
-        this.descuentototal = descuentototal;
+    public void setTotalapagar(BigDecimal totalapagar) {
+        this.totalapagar = totalapagar;
     }
 
     public String getApellido() {
@@ -191,6 +202,30 @@ public class Presupuestos implements Serializable {
 
     public void setPorcetajedescuentoTOTAL(BigDecimal porcetajedescuento) {
         this.porcetajedescuentoTOTAL = porcetajedescuento;
+    }
+
+    public BigDecimal getDescuentoresto() {
+        return descuentoresto;
+    }
+
+    public void setDescuentoresto(BigDecimal descuentoresto) {
+        this.descuentoresto = descuentoresto;
+    }
+
+    public BigDecimal getPorcentajerecargo() {
+        return porcentajerecargo;
+    }
+
+    public void setPorcentajerecargo(BigDecimal porcentajerecargo) {
+        this.porcentajerecargo = porcentajerecargo;
+    }
+
+    public BigDecimal getRecargototal() {
+        return recargototal;
+    }
+
+    public void setRecargototal(BigDecimal recargototal) {
+        this.recargototal = recargototal;
     }
 
     
@@ -231,13 +266,16 @@ public class Presupuestos implements Serializable {
                 "<nombre>" +this.getNombre()+ "</nombre>\n"+
                 "<apellido>" +this.getApellido()+ "</apellido>\n"+
                 "<observaciones>" +this.getObservaciones()+ "</observaciones>\n"+
-                "<descuentoTotal>" +this.getDescuentototal().toString()+ "</descuentoTotal>\n"+
+                "<totalapagar>" +this.getTotalapagar().toString()+ "</totalapagar>\n"+
                 "<usuarioexpidio>" +this.getIdUsuarioFk()+ "</usuarioexpidio>\n"+
                 "<iva>" +this.getIva().toString()+ "</iva>\n"+
                 "<total>" +this.getTotal().toString()+ "</total>\n"+
                 "<fechapresupuesto>" +sdf.format(this.getFechapresupuesto())+ "</fechapresupuesto>\n"+
                 "<fechavalidez>" +sdf.format(this.getValidez())+ "</fechavalidez>\n" +
-                "<porcentajedescuentototal>" +this.getPorcetajedescuentoTOTAL().toString()+ "</porcentajedescuentototal>\n"+
+                "<porcentajedescuentototal>" +this.getPorcetajedescuentoTOTAL().toString()+ "</porcentajedescuentototal>\n" +
+                "<descuentoresto>"+this.getDescuentoresto().toString()+"</descuentoresto>\n" +
+                "<recargototal>"+this.getRecargototal().toString()+"</recargototal>\n" +
+                "<porcentajerecargo>"+this.getPorcentajerecargo().toString()+"</porcentajerecargo>\n"+
                 "<detallepresupuesto>\n" ;
 
                 if(this.getDetallepresupuestosList().size()==0)
