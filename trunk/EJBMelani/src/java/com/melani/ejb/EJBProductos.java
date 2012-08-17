@@ -440,7 +440,7 @@ public class EJBProductos implements EJBProductosRemote {
         } catch (Exception e) {
             logger.error("Error al buscar todos los producto EJBProducto", e);
         }finally{
-            try {
+            /*try {
                 if (con != null) {
                     con.close();
                 }
@@ -450,7 +450,7 @@ public class EJBProductos implements EJBProductosRemote {
                 
             } catch (SQLException ex) {
                logger.error("Error a cerrar conexiones EJBProducto", ex);
-            }
+            }*/
             
             return xml;
 
