@@ -430,7 +430,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
         String xml = "";
         try {
             Notadepedido nota = em.find(Notadepedido.class, idnta);
-            System.out.println(nota.getId());
+           
             xml =nota.toXML();
             
         } catch (Exception e) {
@@ -438,7 +438,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             xml = "Error no paso nada";
         }finally{
             
-            System.out.println(xml);
+           
             return xml;
         }
     }
