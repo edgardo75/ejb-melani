@@ -134,9 +134,9 @@ public class Notadepedido implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fecancelado;
     @Column(name="ID_USUARIO_CANCELO")
-    private Integer idusuariocancelo;
+    private Integer idUsuarioCancelo;
     @Column(name="DESCUENTO_NOTA",precision=12,scale=2)
-    private BigDecimal descuentonota;
+    private BigDecimal descuentoNota;
     @Column(name = "MONTOTOTALAPAGAR",precision=12,scale=2)
     private BigDecimal montototalapagar;
     @Column(name = "PORCDESCTOTAL",precision=12,scale=2)
@@ -211,11 +211,11 @@ public class Notadepedido implements Serializable {
     }
 
     public BigDecimal getDescuentonota() {
-        return descuentonota;
+        return descuentoNota;
     }
 
     public void setDescuentonota(BigDecimal descuentonota) {
-        this.descuentonota = descuentonota;
+        this.descuentoNota = descuentonota;
     }
 
    
@@ -394,11 +394,11 @@ public class Notadepedido implements Serializable {
     }
 
     public Integer getIdusuariocancelo() {
-        return idusuariocancelo;
+        return idUsuarioCancelo;
     }
 
     public void setIdusuariocancelo(Integer idusuariocancelo) {
-        this.idusuariocancelo = idusuariocancelo;
+        this.idUsuarioCancelo = idusuariocancelo;
     }
 
     public BigDecimal getMontototalapagar() {

@@ -113,7 +113,7 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
                 resultado = "No SE PUDO CONECTAR";
                 e.getMessage();
             }
-            String sql = "select * from localidades l order by l.ID_LOCALIDAD ASC;";
+            String sql = "SELECT l.ID_LOCALIDAD as ID,l.descripcion as DESCRIPCION,l.CODIGOPOSTAL from localidades l order by l.ID_LOCALIDAD ASC;";
 
              oxq = new OracleXMLQuery(con, sql);
 
@@ -198,7 +198,7 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
         try {
             con = datasource.getConnection();
             
-            String sql = "SELECT * FROM LOCALIDADES l WHERE l.id_provincia = "+idprovincia+" order by l.id_localidad";
+            String sql = "SELECT l.ID_LOCALIDAD as ID,l.descripcion as DESCRIPCION,l.CODIGOPOSTAL FROM LOCALIDADES l WHERE l.id_provincia = "+idprovincia+" order by l.id_localidad";
             
             oxq = new OracleXMLQuery(con, sql);
             
