@@ -139,7 +139,15 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                             
                             notape.setDescuentonota(BigDecimal.valueOf(notadepedido.getDescuentonota()));
 
-                            notape.setidusuariocancelo(notadepedido.getUsuario_cancelo_nota());
+                            notape.setIdusuariocancelo(notadepedido.getUsuario_cancelo_nota());
+
+                            notape.setMontototalapagar(BigDecimal.valueOf(notadepedido.getMontototalapagar()));
+
+                            notape.setPorcdesctotal(BigDecimal.valueOf(notadepedido.getPorc_descuento_total()));
+
+                            notape.setPorcrecargo(BigDecimal.valueOf(notadepedido.getPorcentajerecargo()));
+
+                            
                             
                             em.persist(notape);
 
@@ -386,12 +394,23 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                         historico.setTotal(BigDecimal.valueOf(notadepedido.getMontototal()));
 
                         historico.setIdusuarioanulo(notadepedido.getId_usuario_anulado());
+
                         historico.setIdusuariocancelo(notadepedido.getUsuario_cancelo_nota());
+
                         historico.setIdusuarioentrega(notadepedido.getUsuario_entregado());
             
                         historico.setIdusuarioexpidio(notadepedido.getUsuario_expidio_nota());
 
+                        historico.setPorcrecargo(BigDecimal.valueOf(notadepedido.getPorcentajerecargo()));
+
+                        historico.setTotalapagar(BigDecimal.valueOf(notadepedido.getMontototalapagar()));
+
+                        historico.setDescuento(BigDecimal.valueOf(notadepedido.getDescuentonota()));
+                        
+                        historico.setRecargo(BigDecimal.valueOf(notadepedido.getRecargo()));
+
                         historico.setHoraregistro(gc.getTime());
+                        
                         historico.setAccion("Historico Almacenado con exito nota de pedido N° "+notape.getId()+" ");
             
                         
@@ -495,7 +514,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             Notadepedido nota = em.find(Notadepedido.class,idnota);
                 nota.setCancelado(Character.valueOf('1'));
                 nota.setPendiente(Character.valueOf('0'));
-                nota.setidusuariocancelo(idusuariocancelo);
+                nota.setIdusuariocancelo(idusuariocancelo);
                 nota.setFecancelado(gc.getTime());
             //--------------------------------------------------------------------------
             List<Detallesnotadepedido>lista = nota.getDetallesnotadepedidoList();

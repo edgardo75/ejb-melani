@@ -18,6 +18,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
@@ -33,6 +35,35 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "NOTADEPEDIDO")
 @XmlRootElement
+@NamedQueries({@NamedQuery(name = "Notadepedido.findAll",
+query = "SELECT n FROM Notadepedido n"), @NamedQuery(name = "Notadepedido.findById",
+        query = "SELECT n FROM Notadepedido n WHERE n.id = :id"), @NamedQuery(name = "Notadepedido.findByObservaciones",
+        query = "SELECT n FROM Notadepedido n WHERE n.observaciones = :observaciones"), @NamedQuery(name = "Notadepedido.findByPendiente",
+        query = "SELECT n FROM Notadepedido n WHERE n.pendiente = :pendiente"), @NamedQuery(name = "Notadepedido.findByAnticipo",
+        query = "SELECT n FROM Notadepedido n WHERE n.anticipo = :anticipo"), @NamedQuery(name = "Notadepedido.findByMontoiva",
+        query = "SELECT n FROM Notadepedido n WHERE n.montoiva = :montoiva"), @NamedQuery(name = "Notadepedido.findByHoracompra",
+        query = "SELECT n FROM Notadepedido n WHERE n.horacompra = :horacompra"), @NamedQuery(name = "Notadepedido.findByRecargo",
+        query = "SELECT n FROM Notadepedido n WHERE n.recargo = :recargo"), @NamedQuery(name = "Notadepedido.findByIdUsuarioExpidioNota",
+        query = "SELECT n FROM Notadepedido n WHERE n.idUsuarioExpidioNota = :idUsuarioExpidioNota"), @NamedQuery(name = "Notadepedido.findByIdusuarioAnulado",
+        query = "SELECT n FROM Notadepedido n WHERE n.idusuarioAnulado = :idusuarioAnulado"), @NamedQuery(name = "Notadepedido.findByFechaAnulado",
+        query = "SELECT n FROM Notadepedido n WHERE n.fechaAnulado = :fechaAnulado"), @NamedQuery(name = "Notadepedido.findByTotal",
+        query = "SELECT n FROM Notadepedido n WHERE n.total = :total"), @NamedQuery(name = "Notadepedido.findByAnulado",
+        query = "SELECT n FROM Notadepedido n WHERE n.anulado = :anulado"), @NamedQuery(name = "Notadepedido.findByNumerodecupon",
+        query = "SELECT n FROM Notadepedido n WHERE n.numerodecupon = :numerodecupon"), @NamedQuery(name = "Notadepedido.findByEnefectivo",
+        query = "SELECT n FROM Notadepedido n WHERE n.enefectivo = :enefectivo"), @NamedQuery(name = "Notadepedido.findByEntregado",
+        query = "SELECT n FROM Notadepedido n WHERE n.entregado = :entregado"), @NamedQuery(name = "Notadepedido.findByFechaentrega",
+        query = "SELECT n FROM Notadepedido n WHERE n.fechaentrega = :fechaentrega"), @NamedQuery(name = "Notadepedido.findByIdusuarioEntregado",
+        query = "SELECT n FROM Notadepedido n WHERE n.idusuarioEntregado = :idusuarioEntregado"), @NamedQuery(name = "Notadepedido.findByStockfuturo",
+        query = "SELECT n FROM Notadepedido n WHERE n.stockfuturo = :stockfuturo"), @NamedQuery(name = "Notadepedido.findBySaldo",
+        query = "SELECT n FROM Notadepedido n WHERE n.saldo = :saldo"), @NamedQuery(name = "Notadepedido.findByFechadecompra",
+        query = "SELECT n FROM Notadepedido n WHERE n.fechadecompra = :fechadecompra"), @NamedQuery(name = "Notadepedido.findByCancelado",
+        query = "SELECT n FROM Notadepedido n WHERE n.cancelado = :cancelado"), @NamedQuery(name = "Notadepedido.findByFecancelado",
+        query = "SELECT n FROM Notadepedido n WHERE n.fecancelado = :fecancelado"), @NamedQuery(name = "Notadepedido.findByIdUsuarioCancelo",
+        query = "SELECT n FROM Notadepedido n WHERE n.idUsuarioCancelo = :idUsuarioCancelo"), @NamedQuery(name = "Notadepedido.findByDescuentoNota",
+        query = "SELECT n FROM Notadepedido n WHERE n.descuentoNota = :descuentoNota"), @NamedQuery(name = "Notadepedido.findByMontototalapagar",
+        query = "SELECT n FROM Notadepedido n WHERE n.montototalapagar = :montototalapagar"), @NamedQuery(name = "Notadepedido.findByPorcdesctotal",
+        query = "SELECT n FROM Notadepedido n WHERE n.porcdesctotal = :porcdesctotal"), @NamedQuery(name = "Notadepedido.findByPorcrecargo",
+        query = "SELECT n FROM Notadepedido n WHERE n.porcrecargo = :porcrecargo")})
 public class Notadepedido implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id        
@@ -106,6 +137,13 @@ public class Notadepedido implements Serializable {
     private Integer idusuariocancelo;
     @Column(name="DESCUENTO_NOTA",precision=12,scale=2)
     private BigDecimal descuentonota;
+    @Column(name = "MONTOTOTALAPAGAR",precision=12,scale=2)
+    private BigDecimal montototalapagar;
+    @Column(name = "PORCDESCTOTAL",precision=12,scale=2)
+    private BigDecimal porcdesctotal;
+    
+    @Column(name = "PORCRECARGO",precision=12,scale=2)
+    private BigDecimal porcrecargo;
 
 
     public Notadepedido() {
@@ -115,13 +153,7 @@ public class Notadepedido implements Serializable {
         this.id = id;
     }
 
-    public Integer getidusuariocancelo() {
-        return idusuariocancelo;
-    }
-
-    public void setidusuariocancelo(Integer idusuariocancelo) {
-        this.idusuariocancelo = idusuariocancelo;
-    }
+   
 
     
    
@@ -361,6 +393,40 @@ public class Notadepedido implements Serializable {
         this.fecancelado = fecancelado;
     }
 
+    public Integer getIdusuariocancelo() {
+        return idusuariocancelo;
+    }
+
+    public void setIdusuariocancelo(Integer idusuariocancelo) {
+        this.idusuariocancelo = idusuariocancelo;
+    }
+
+    public BigDecimal getMontototalapagar() {
+        return montototalapagar;
+    }
+
+    public void setMontototalapagar(BigDecimal montototalapagar) {
+        this.montototalapagar = montototalapagar;
+    }
+
+    public BigDecimal getPorcdesctotal() {
+        return porcdesctotal;
+    }
+
+    public void setPorcdesctotal(BigDecimal porcdesctotal) {
+        this.porcdesctotal = porcdesctotal;
+    }
+
+    public BigDecimal getPorcrecargo() {
+        return porcrecargo;
+    }
+
+    public void setPorcrecargo(BigDecimal porcrecargo) {
+        this.porcrecargo = porcrecargo;
+    }
+
+  
+
 
     @Override
     public int hashCode() {
@@ -419,7 +485,7 @@ public class Notadepedido implements Serializable {
                 + "<id>"+this.getId()+"</id>\n"
 
                 + "<numerocupon>"+this.getNumerodecupon().toString()+"</numerocupon>\n"
-                //+ "<observaciones><![CDATA["+this.getObservaciones()+"]]></observaciones>\n"
+                + "<observaciones><![CDATA["+this.getObservaciones()+"]]></observaciones>\n"
                 + "<anticipo>"+this.getAnticipo()+"</anticipo>\n"
                 + "<anulado>"+this.getAnulado()+"</anulado>\n"
                 + "<cancelado>"+this.getCancelado()+"</cancelado>\n"
@@ -440,13 +506,17 @@ public class Notadepedido implements Serializable {
                 + "<usuarioexpidionota>"+this.getIdUsuarioExpidioNota()+"</usuarioexpidionota>\n"
                 + "<usuarioanulonota>"+this.getIdusuarioAnulado()+"</usuarioanulonota>\n"
                 + "<usuarioentregonota>"+this.getIdusuarioEntregado()+"</usuarioentregonota>\n" +
-                "<usuariocancelonota>"+this.getidusuariocancelo()+"</usuariocancelonota>\n"
+                "<usuariocancelonota>"+this.getIdusuariocancelo()+"</usuariocancelonota>\n"
                 + "<montoiva>"+this.getMontoiva()+"</montoiva>\n"
                 + "<stockfuturo>"+this.getStockfuturo()+"</stockfuturo>\n"
                 + "<pendiente>"+this.getPendiente()+"</pendiente>\n"
                 + "<recargo>"+this.getRecargo()+"</recargo>\n"
                 + "<total>"+this.getTotal()+"</total>\n"
-                + "<saldo>"+this.getSaldo()+"</saldo>\n"
+                + "<saldo>"+this.getSaldo()+"</saldo>\n" +
+                "<montototalapagar>"+this.getMontototalapagar().toString()+"</montototalapagar>\n" +
+                "<porcentajedesctotal>"+this.getPorcdesctotal().toString()+"</porcentajedesctotal>\n" +
+                "<recargototal>"+this.getRecargo().toString()+"</recargototal>\n" +
+                "<porcrecargo>"+this.getPorcrecargo().toString()+"</porcrecargo>\n"
                 + "<detallenota>";
                     if(this.getDetallesnotadepedidoList().isEmpty())
                         item+="</detallenota>\n";

@@ -28,6 +28,10 @@ public class DatosNotaPedido {
     private int id_usuario_anulado;
     private String numerodecupon;
     private char enefectivo;
+    private Double montototalapagar;
+    private Double porc_descuento_total;
+    
+    private Double porcentajerecargo;
     private TarjetaCredito tarjetacredito;
     private Porcentajes porcentajes;
     private DetallesNotaPedido detallesnotapedido;
@@ -53,6 +57,26 @@ public class DatosNotaPedido {
     public Double getDescuentonota() {
         return descuentonota;
     }
+
+    public DetallesNotaPedido getDetallesnotapedido() {
+        return detallesnotapedido;
+    }
+
+    public Double getMontototalapagar() {
+        return montototalapagar;
+    }
+
+    public Double getPorc_descuento_total() {
+        return porc_descuento_total;
+    }
+
+    public Double getPorcentajerecargo() {
+        return porcentajerecargo;
+    }
+
+ 
+
+    
     
 
     //------------------------------------------------------------------------------------------------

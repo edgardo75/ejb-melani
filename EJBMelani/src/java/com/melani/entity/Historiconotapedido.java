@@ -44,7 +44,12 @@ import javax.persistence.TemporalType;
 @NamedQuery(name = "Historiconotapedido.findByIdhistorico", query = "SELECT h FROM Historiconotapedido h WHERE h.idhistorico = :idhistorico"),
 @NamedQuery(name = "Historiconotapedido.findByIdusuarioanulo", query = "SELECT h FROM Historiconotapedido h WHERE h.idusuarioanulo = :idusuarioanulo"),
 @NamedQuery(name = "Historiconotapedido.findByHoraregistro", query = "SELECT h FROM Historiconotapedido h WHERE h.horaregistro = :horaregistro"),
-@NamedQuery(name = "Historiconotapedido.findByIdusuariocancelo", query = "SELECT h FROM Historiconotapedido h WHERE h.idusuariocancelo = :idusuariocancelo")})
+@NamedQuery(name = "Historiconotapedido.findByIdusuariocancelo", query = "SELECT h FROM Historiconotapedido h WHERE h.idusuariocancelo = :idusuariocancelo"),
+@NamedQuery(name = "Historiconotapedido.findByDescuento",
+        query = "SELECT h FROM Historiconotapedido h WHERE h.descuento = :descuento"), @NamedQuery(name = "Historiconotapedido.findByTotalapagar",
+        query = "SELECT h FROM Historiconotapedido h WHERE h.totalapagar = :totalapagar"), @NamedQuery(name = "Historiconotapedido.findByRecargo",
+        query = "SELECT h FROM Historiconotapedido h WHERE h.recargo = :recargo"), @NamedQuery(name = "Historiconotapedido.findByPorcrecargo",
+        query = "SELECT h FROM Historiconotapedido h WHERE h.porcrecargo = :porcrecargo")})
 public class Historiconotapedido implements Serializable {
     private static final long serialVersionUID = 1L;
     @Column(name = "PORCENTAJEAPLICADO")
@@ -87,6 +92,15 @@ public class Historiconotapedido implements Serializable {
 
     @Column(name="ACCION",length=100)
     private String accion;
+
+    @Column(name = "DESCUENTO")
+    private BigDecimal descuento;
+    @Column(name = "TOTALAPAGAR")
+    private BigDecimal totalapagar;
+    @Column(name = "RECARGO")
+    private BigDecimal recargo;
+    @Column(name = "PORCRECARGO")
+    private BigDecimal porcrecargo;
 
     @JoinColumn(name="FKIDNOTAPEDIDO_ID",referencedColumnName="ID")
     @ManyToOne
@@ -235,6 +249,38 @@ public class Historiconotapedido implements Serializable {
         this.idusuarioanulo = idusuarioanulo;
     }
 
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
+    }
+
+    public BigDecimal getPorcrecargo() {
+        return porcrecargo;
+    }
+
+    public void setPorcrecargo(BigDecimal porcrecargo) {
+        this.porcrecargo = porcrecargo;
+    }
+
+    public BigDecimal getRecargo() {
+        return recargo;
+    }
+
+    public void setRecargo(BigDecimal recargo) {
+        this.recargo = recargo;
+    }
+
+    public BigDecimal getTotalapagar() {
+        return totalapagar;
+    }
+
+    public void setTotalapagar(BigDecimal totalapagar) {
+        this.totalapagar = totalapagar;
+    }
+
 
     @Override
     public int hashCode() {
@@ -242,6 +288,7 @@ public class Historiconotapedido implements Serializable {
         hash += (idhistorico != null ? idhistorico.hashCode() : 0);
         return hash;
     }
+
 
     @Override
     public boolean equals(Object object) {
@@ -286,6 +333,10 @@ public class Historiconotapedido implements Serializable {
                            + "<iduserentrega>"+this.getIdusuarioentrega()+"</iduserentrega>\n"
                            + "<iduserexpidio>"+this.getIdusuarioexpidio()+"</iduserexpidio>\n" +
                            "<idusuariocancelo>"+this.getIdusuariocancelo()+"</idusuariocancelo>\n" +
+                           "<recargo>"+this.getRecargo().toString()+"</recargo>\n" +
+                           "<totalapagar>"+this.getTotalapagar().toString()+"</totalapagar>\n" +
+                           "<porcrecargo>"+this.getPorcrecargo()+"</porcrecargo>\n" +
+                           "<descuento>"+this.getDescuento().toString()+"</descuento>\n" +
                            "<accion>"+this.getAccion()+"</accion>\n"
 
                            + "<saldo>"+this.getSaldo()+"</saldo>\n"
