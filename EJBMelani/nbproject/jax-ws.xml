@@ -37,6 +37,9 @@
     <service name="LogsMelaniWs">
       <implementation-class>com.melani.ejb.EJBMelaniLoggsBean</implementation-class>
     </service>
+    <service name="EJBProvinciasBean">
+      <implementation-class>com.melani.ejb.EJBProvinciasBean</implementation-class>
+    </service>
   </services>
   <clients/>
 </jax-ws>

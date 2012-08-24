@@ -106,5 +106,14 @@ public class Provincias implements Serializable {
     public String toString() {
         return "entity.Provincias[idProvincia=" + idProvincia + "]";
     }
+    public String toXML(){
+    String xml = "<provincia>\n" +
+            "<id>"+this.getIdProvincia()+"</id>\n" +
+            "<descripcion>"+this.getProvincia()+"</descripcion>\n" +
+            "<codigo>"+this.getCodigo()+"</codigo>\n" +
+            "</provincia>\n";
+
+    return xml;
+    }
 
 }
