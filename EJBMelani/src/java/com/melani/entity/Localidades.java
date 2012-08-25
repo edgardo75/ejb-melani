@@ -129,7 +129,7 @@ public class Localidades implements Serializable {
      public String toXML(){
         String item="<localidades>\n"
                 + "<id>"+this.getIdLocalidad()+"</id>\n"
-                + "<decripcion>"+this.getDescripcion()+"</decripcion>\n"
+                + "<descripcion>"+this.getDescripcion()+"</descripcion>\n"
                 + "<codigopostal>"+this.getCodigopostal()+"</codigopostal>\n"
                 + "</localidades>\n";
         return item;
