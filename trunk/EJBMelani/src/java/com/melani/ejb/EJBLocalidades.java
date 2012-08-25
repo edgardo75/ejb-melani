@@ -192,8 +192,30 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
     //--------------------------------------------------------------------------------
 
     public String searchAllLocalidadesbyidprov(Short idprovincia) {
-         String resultado = "";
-        OracleXMLQuery oxq = null;
+         String resultado = "<Lista>\n";
+         try {
+             Query consulta = em.createQuery("SELECT l FROM Localidades l WHERE l.provincias.idProvincia = :idprovincia order by l.descripcion asc");
+             consulta.setParameter("idprovincia", idprovincia);
+             List<Localidades>lista = consulta.getResultList();
+             if(lista.size()==0)
+                 resultado="NO HAY LOCALIDADES CARGADAS en "+em.find(Provincias.class, idprovincia).getProvincia();
+             else{
+                 for (Iterator<Localidades> it = lista.iterator(); it.hasNext();) {
+                     Localidades localidades = it.next();
+                     resultado+=localidades.toXML();
+
+                 }
+             resultado+="</Lista>\n";
+             }
+
+
+        } catch (Exception e) {
+            logger.error("Error en metodo searchAllLocalidadesbyidprov ",e);
+        }finally{
+        return resultado;
+
+        }
+        /*OracleXMLQuery oxq = null;
         Connection con = null;
         try {
             con = datasource.getConnection();
@@ -227,7 +249,7 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
             }finally{
              return resultado;
             }
-        }
+        }*/
     }
     
     
