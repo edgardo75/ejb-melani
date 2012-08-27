@@ -151,17 +151,23 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
         long retorno = 0;
         try {
 
-            descripcion = descripcion.toLowerCase();
+            descripcion = descripcion.toUpperCase();
+            StringBuilder sb = new StringBuilder();
+            //sb.append("%");
+            sb.append(descripcion);
+            sb.append("%");
             
-            Query consulta = em.createQuery("SELECT l FROM Localidades l WHERE lower(l.descripcion) like :descripcion and l.codigopostal = :codigopostal and " +
-                    "l.provincias.idProvincia = :idProvincia");
+            Query consulta = em.createQuery("SELECT l FROM Localidades l WHERE l.descripcion LIKE :descripcion and l.codigopostal = :codigopostal and " +
+                    " l.provincias.idProvincia = :idProvincia");
             
-            consulta.setParameter("descripcion", descripcion);
+            consulta.setParameter("descripcion",descripcion.toString());
             consulta.setParameter("codigopostal", codigopostal);
             consulta.setParameter("idProvincia", idprovincia);
 
 
             List<Localidades> lista = consulta.getResultList();
+
+           
 
             if (lista.isEmpty()) {
 
@@ -181,8 +187,12 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
                 retorno = -6;
             }
 
+           
+
         } catch (Exception e) {
-            e.getMessage();
+            retorno =-1;
+            logger.error("Error en metodo addLocalidades", e.getCause());
+            
         }finally{
             return retorno;
         }

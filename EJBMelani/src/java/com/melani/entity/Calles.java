@@ -92,7 +92,7 @@ public class Calles implements Serializable {
      public String toXML(){
         String item = "<item>\n" +
                 "<id>"+this.getId()+"</id>\n" +
-                "<nombre>"+this.getDescripcion()+"</nombre>\n" +
+                "<nombre><![CDATA["+this.getDescripcion()+"]]></nombre>\n" +
                 "</item>\n";
         return item;
 

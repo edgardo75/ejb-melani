@@ -68,12 +68,26 @@ public class EJBCalles implements EJBCallesRemote {
     }
 
     public String searchAllCalles() {
-        String xml = "fallo";
-        OracleXMLQuery oxq = null;
+        String xml = "<Lista>\n";
+        //OracleXMLQuery oxq = null;
         
-        Connection con = null;
+        //Connection con = null;
         try {
-            try {
+            Query consulta =em.createQuery("SELECT c FROM Calles c Order by c.id");
+
+            List<Calles>lista = consulta.getResultList();
+
+
+            if(lista.size()==0)
+                xml="LA CONSULTA NO ARROJÓ RESULTADOS";
+            else{
+                for (Iterator<Calles> it = lista.iterator(); it.hasNext();) {
+                    Calles calles = it.next();
+                    xml+=calles.toXML();
+                }
+            xml+="</Lista>\n";
+            }
+           /* try {
 
                 con = datasource.getConnection();
                 
@@ -82,7 +96,7 @@ public class EJBCalles implements EJBCallesRemote {
                 xml = "No se pudo Obtener La Conexion con La base de Datos";
             }
 
-            String sql = "SELECT * FROM CALLES ORDER BY CALLES.ID_CALLE";
+            String sql = "SELECT CALLES.ID_CALLE AS id,CALLES.descripcion as descripcion FROM CALLES ORDER BY CALLES.ID_CALLE";
             
                 oxq = new OracleXMLQuery(con, sql);
             
@@ -91,7 +105,7 @@ public class EJBCalles implements EJBCallesRemote {
 
             oxq.setRowsetTag("Lista");
 
-            oxq.setEncoding("ISO-8859-1");
+            //oxq.setEncoding("ISO-8859-1");
 
 
             xml = oxq.getXMLString();
@@ -100,12 +114,14 @@ public class EJBCalles implements EJBCallesRemote {
 
             if (xml.contains("<Lista/>")) {
                 xml = "La Consulta no arrojó resultados!!!";
-            }
+            }*/
 
         } catch (Exception e) {
+            xml="Error";
+            logger.error("Error en metodo searchallcalles", e.getCause());
             e.getMessage();
         } finally {
-            try {
+           /* try {
                 if (con != null) {
                     con.close();
                 }
@@ -116,7 +132,7 @@ public class EJBCalles implements EJBCallesRemote {
             } catch (Exception e) {
                 xml = "error en el servidor";
                 logger.error("Error cerrando conexiones en metodo searchAllCalles "+e);
-            }
+            }*/
             
             return xml;
 
