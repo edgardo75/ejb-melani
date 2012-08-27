@@ -72,12 +72,24 @@ public class EJBBarrios implements EJBBarriosRemote {
 
     public String searchallbarrios() {
 
-        String xml = "";
-        OracleXMLQuery oxq = null;
-        Connection con = null;
+        String xml = "<Lista>\n";
+        //OracleXMLQuery oxq = null;
+        //Connection con = null;
         try {
-            
-            try {
+            Query consulta = em.createNamedQuery("Barrios.findAll");
+            List<Barrios>lista = consulta.getResultList();
+
+            if(lista.size()==0)
+                xml="LA CONSULTA NO ARROJÓ RESULTADOS";
+            else{
+                for (Iterator<Barrios> it = lista.iterator(); it.hasNext();) {
+                    Barrios barrios = it.next();
+                    xml+=barrios.toXML();
+                }
+                xml += "</Lista>\n";
+
+            }
+           /* try {
                 
                 con = datasource.getConnection();
                 
@@ -88,25 +100,26 @@ public class EJBBarrios implements EJBBarriosRemote {
 
             //*******************************************************************
             
-            String sql = "SELECT * FROM BARRIOS b ORDER BY b.ID_BARRIO asc";
+            String sql = "SELECT b.ID_BARRIO as id,b.descripcion FROM BARRIOS b ORDER BY b.ID_BARRIO asc";
 
             oxq = new OracleXMLQuery(con, sql);
 
             oxq.setRowTag("Item");
             oxq.setRowsetTag("Lista");
-            oxq.setEncoding("ISO-8859-1");
+           // oxq.setEncoding("ISO-8859-1");
             xml = oxq.getXMLString();
             oxq.close();
 
             if (xml.contains("<Lista/>")) {
                 xml = "La Consulta no arrojó resultados!!!";
-            }
+            }*/
 
         //*********************************************************************
         } catch (Exception e) {
-            e.getCause();
+            xml="error";
+            logger.error("error en metodo searchallbarrios",e.getCause());
         } finally {
-            try {
+            /*try {
             
                 if (con != null) {
                     con.close();
@@ -116,7 +129,7 @@ public class EJBBarrios implements EJBBarriosRemote {
                 }
             } catch (Exception e) {
                 logger.error("Error cerrando conexiones metodo searchallbarrios "+e);
-            }
+            }*/
             return xml;
 
         }
