@@ -68,7 +68,7 @@ public class Presupuestos implements Serializable {
     private Date validez;
     @Column(name = "TOTAL",precision=15,scale=2)
     private BigDecimal total;
-    @Column(name = "OBSERVACIONES",length=255)
+    @Column(name = "OBSERVACIONES",length=5000)
     private String observaciones;
     @Basic(optional = false)
     @Column(name = "ID_USUARIO_EXPIDIO_PRESUPUESTO")
