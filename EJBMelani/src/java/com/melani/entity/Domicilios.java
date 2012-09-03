@@ -53,20 +53,20 @@ public class Domicilios implements Serializable {
     private Long id;
     @Column(name="NUMERO",precision = 10)
     private int numero;
-    @Column(name="SECTOR")
-    private Short sector;
-    @Column(name = "AREA")
-    private Short area;
-    @Column(name = "MONOBLOCK")
-    private Short monoblock;
-    @Column(name = "PISO")
-    private Short piso;
-    @Column(name = "NUMDEPTO")
-    private Short numdepto;
+    @Column(name="SECTOR",length=10)
+    private String sector;
+    @Column(name = "AREA",length=10)
+    private String area;
+    @Column(name = "MONOBLOCK",length=10)
+    private String monoblock;
+    @Column(name = "PISO",length=10)
+    private String piso;
+    @Column(name = "NUMDEPTO",length=10)
+    private String numdepto;
     @Column(name = "ENTRECALLEYCALLE", length = 100)
     private String entrecalleycalle;
-    @Column(name="MANZANA",length=4)
-    private Short manzana;
+    @Column(name="MANZANA",length=10)
+    private String manzana;
     @Column(name="OBSERVACIONES",length=255)
     private String observaciones;
     @JoinColumn(name="ID_BARRIO",referencedColumnName="ID_BARRIO",nullable=false,updatable=false)
@@ -94,11 +94,11 @@ public class Domicilios implements Serializable {
         this.id = id;
     }
 
-    public Short getArea() {
+    public String getArea() {
         return area;
     }
 
-    public void setArea(Short area) {
+    public void setArea(String area) {
         this.area = area;
     }
 
@@ -126,11 +126,11 @@ public class Domicilios implements Serializable {
         this.localidades = localidades;
     }
 
-    public Short getMonoblock() {
+    public String getMonoblock() {
         return monoblock;
     }
 
-    public void setMonoblock(Short monoblock) {
+    public void setMonoblock(String monoblock) {
         this.monoblock = monoblock;
     }
 
@@ -150,17 +150,17 @@ public class Domicilios implements Serializable {
         this.idorientacion = idorientacion;
     }
 
-    public short getPiso() {
+    public String getPiso() {
         return piso;
     }
 
     
 
-    public Short getSector() {
+    public String getSector() {
         return sector;
     }
 
-    public void setSector(Short sector) {
+    public void setSector(String sector) {
         this.sector = sector;
     }
 
@@ -204,19 +204,19 @@ public class Domicilios implements Serializable {
         this.idorientacion = idorientacion;
     }
 
-    public Short getManzana() {
+    public String getManzana() {
         return manzana;
     }
 
-    public void setManzana(Short manzana) {
+    public void setManzana(String manzana) {
         this.manzana = manzana;
     }
 
-    public Short getNumdepto() {
+    public String getNumdepto() {
         return numdepto;
     }
 
-    public void setNumdepto(Short numdepto) {
+    public void setNumdepto(String numdepto) {
         this.numdepto = numdepto;
     }
 
@@ -230,7 +230,7 @@ public class Domicilios implements Serializable {
 
    
 
-    public void setPiso(Short piso) {
+    public void setPiso(String piso) {
         this.piso = piso;
     }
     

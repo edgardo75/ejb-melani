@@ -17,18 +17,18 @@ package cm.melani.utils;
 public class DatosDomicilios {
 
     private long domicilioId;
-    private short piso;
-    private Short manzana;
+    private String piso;
+    private String manzana;
     private String entrecalleycalle;
-    private Short sector;
-    private Short torre;
-    private Short monoblock;
+    private String sector;
+    private String torre;
+    private String monoblock;
     private Barrioss barrios;
     private Calless calles;
-    private Short area;
+    private String area;
     private Orientacions orientacion;
     private int numero;
-    private Short numdepto;
+    private String numdepto;
     private Localidadess localidad;
     private String observaciones;
 
@@ -38,7 +38,7 @@ public class DatosDomicilios {
      public long getDomicilioId(){
         return domicilioId;
     }
-    public short getPiso(){
+    public String getPiso(){
         return piso;
     }
 
@@ -54,38 +54,38 @@ public class DatosDomicilios {
         this.observaciones = observaciones;
     }
     
-    public Short getNumDepto(){
+    public String getNumDepto(){
         return numdepto;
     }
-    public Short getManzana(){
+    public String getManzana(){
         return manzana;
     }
     public String getEntrecalleycalle(){
         return entrecalleycalle;
     }
 
-    public Short getSector(){
+    public String getSector(){
         return sector;
     }
-    public Short getTorre(){
+    public String getTorre(){
         return torre;
     }
 
-    public Short getArea() {
+    public String getArea() {
         return area;
     }
 
-    public void setArea(Short area) {
+    public void setArea(String area) {
         this.area = area;
     }
 
 
 
-    public void setNumdepto(Short numdepto) {
+    public void setNumdepto(String numdepto) {
         this.numdepto = numdepto;
     }
 
-    public Short getMonoblock(){
+    public String getMonoblock(){
         return monoblock;
     }
 
@@ -185,22 +185,22 @@ public class DatosDomicilios {
     public void setDomicilioId(int domicilioId){
         this.domicilioId = domicilioId;
     }
-    public void setPiso(short piso){
+    public void setPiso(String piso){
         this.piso = piso;
     }
-    public void setManzana(Short manzana){
+    public void setManzana(String manzana){
         this.manzana = manzana;
     }
    public void setEntrecalleycalle(String entrecalleycalle){
         this.entrecalleycalle = entrecalleycalle;
    }
-   public void setSector(Short sector){
+   public void setSector(String sector){
         this.sector = sector;
    }
-   public void setTorre(Short torre){
+   public void setTorre(String torre){
         this.torre = torre;
    }
-   public void setMonoblock(Short monoblock){
+   public void setMonoblock(String monoblock){
         this.monoblock = monoblock;
    }
 
