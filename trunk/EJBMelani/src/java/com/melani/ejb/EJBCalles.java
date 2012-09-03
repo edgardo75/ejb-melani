@@ -6,7 +6,7 @@
 package com.melani.ejb;
 
 import com.melani.entity.Calles;
-import java.sql.Connection;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.sql.DataSource;
-import oracle.xml.sql.query.OracleXMLQuery;
+
 import org.apache.log4j.Logger;
 
 
@@ -34,8 +34,8 @@ public class EJBCalles implements EJBCallesRemote {
    private static Logger logger = Logger.getLogger(EJBCalles.class);
    @PersistenceContext
    private EntityManager em;
-   @Resource(name = "jdbc/_melani")
-   private DataSource datasource;
+   //@Resource(name = "jdbc/_melani")
+   //private DataSource datasource;
 
     public long addCalles(String descripcion,int idUsuario) {
         long retorno = 0;

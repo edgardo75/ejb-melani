@@ -196,9 +196,9 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
             xstream.alias("Domicilio",DatosDomicilios.class);
             DatosDomicilios domiciXML = (DatosDomicilios) xstream.fromXML(xmlDomicilio);
             //------------------------------------------------------------------
-            long idDomicilio = existe(domiciXML);
+            long idDomicilio1 = existe(domiciXML);
 
-            switch((int)idDomicilio){
+            switch((int)idDomicilio1){
                     case 1:{
 
                         retorno=actualizarDomicilio(domiciXML);
