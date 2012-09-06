@@ -28,6 +28,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -264,7 +265,8 @@ public class Presupuestos implements Serializable {
                 "<id>" +this.getIdPresupuesto()+ "</id>\n" +
                 "<nombre>" +this.getNombre()+ "</nombre>\n"+
                 "<apellido>" +this.getApellido()+ "</apellido>\n"+
-                "<observaciones>" +this.getObservaciones()+ "</observaciones>\n"+
+                //"<observaciones><![CDATA[" +this.getObservaciones()+ "]]></observaciones>\n"+
+                "<observaciones>"+StringEscapeUtils.escapeXml(this.getObservaciones())+"</observaciones>\n"+
                 "<totalapagar>" +this.getTotalapagar().toString()+ "</totalapagar>\n"+
                 "<usuarioexpidio>" +this.getIdUsuarioFk()+ "</usuarioexpidio>\n"+
                 "<iva>" +this.getIva().toString()+ "</iva>\n"+

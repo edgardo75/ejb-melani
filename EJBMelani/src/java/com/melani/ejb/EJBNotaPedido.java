@@ -52,6 +52,9 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
     @EJB
       EJBProductosRemote producto;
 
+    @EJB
+    EJBPresupuestosRemote ejbpresupuesto;
+
     @Override
     public long agregarNotaPedido(String xmlNotaPedido) {
         long retorno =0L;
@@ -72,7 +75,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             xestream.addImplicitCollection(DetallesNotaPedido.class, "list");
 
             
-            DatosNotaPedido notadepedido = (DatosNotaPedido) xestream.fromXML(xmlNotaPedido);
+            DatosNotaPedido notadepedido = (DatosNotaPedido) xestream.fromXML(ejbpresupuesto.parsearCaracteresEspecialesXML1(xmlNotaPedido).toString());
 
              retorno = almacenarnota(notadepedido);
            
