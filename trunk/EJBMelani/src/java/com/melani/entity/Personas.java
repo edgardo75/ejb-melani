@@ -26,6 +26,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 
 
@@ -211,7 +212,7 @@ public abstract class Personas implements Serializable {
                 + "<nombre>"+this.getNombre()+"</nombre>\n"
                 + "<idtipodocu>"+this.getTipodocumento().getId()+"</idtipodocu>\n"
                 + "<nrodocu>"+this.getNrodocumento()+"</nrodocu>\n"
-                +"<observaciones>"+this.getObservaciones()+"</observaciones>\n"
+                +"<observaciones>"+StringEscapeUtils.escapeXml(this.getObservaciones())+"</observaciones>\n"
                 + "<Genero>\n"
                 + "<generoId>"+this.getGeneros().getIdGenero()+"</generoId>\n"
                 + "<generoDescripcion>"+this.getGeneros().getDescripcion()+"</generoDescripcion>\n"

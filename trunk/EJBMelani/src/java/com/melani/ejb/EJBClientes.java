@@ -61,6 +61,8 @@ public class EJBClientes implements EJBClientesRemote {
     EJBClienteDomicilioRemote ejbclidom;
     @EJB
     EJBClienteTelefonoRemote ejbclitel;
+    @EJB
+    EJBPresupuestosRemote ejbpresupuestos;
 
 
     //----------------------------------------------------------------------------
@@ -120,11 +122,12 @@ public class EJBClientes implements EJBClientesRemote {
     public long addCliente(String xmlClienteDomicilioTelefono) {
         long retorno =0L;
         long idcliente=0;
+        
         try {
             //----------------------------------------------------------------------------------------
 
 
-
+          
                     XStream  xstream = new XStream();
                     xstream.alias("ClienteDomicilioTelefono",ClienteDomicilioTelefono.class);
                     xstream.alias("item", DatosCliente.class);
@@ -140,7 +143,7 @@ public class EJBClientes implements EJBClientesRemote {
                     
                     
             //------------------------------------------------------------------------------------------
-            ClienteDomicilioTelefono todosDatos = (ClienteDomicilioTelefono) xstream.fromXML(xmlClienteDomicilioTelefono);
+            ClienteDomicilioTelefono todosDatos = (ClienteDomicilioTelefono) xstream.fromXML(ejbpresupuestos.parsearCaracteresEspecialesXML1(xmlClienteDomicilioTelefono).toString());
            
             
             //------------------------------------------------------------------------------------------

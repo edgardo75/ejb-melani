@@ -30,7 +30,7 @@ public class DatosDomicilios {
     private int numero;
     private String numdepto;
     private Localidadess localidad;
-    private String observaciones;
+    private String homeDetelles;
 
 
     ////////-------------GETTERS AND SETTERS----------------
@@ -47,11 +47,11 @@ public class DatosDomicilios {
     
 
     public String getObservaciones() {
-        return observaciones;
+        return homeDetelles;
     }
 
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
+    public void setObservaciones(String homeDetelles) {
+        this.homeDetelles = homeDetelles;
     }
     
     public String getNumDepto(){

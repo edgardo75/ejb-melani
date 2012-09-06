@@ -27,6 +27,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -485,7 +486,8 @@ public class Notadepedido implements Serializable {
                 + "<id>"+this.getId()+"</id>\n"
 
                 + "<numerocupon>"+this.getNumerodecupon().toString()+"</numerocupon>\n"
-                + "<observaciones><![CDATA["+this.getObservaciones()+"]]></observaciones>\n"
+                //+ "<observaciones><![CDATA["+this.getObservaciones()+"]]></observaciones>\n"
+                + "<observaciones>"+StringEscapeUtils.escapeXml(this.getObservaciones())+"</observaciones>\n"
                 + "<anticipo>"+this.getAnticipo()+"</anticipo>\n"
                 + "<anulado>"+this.getAnulado()+"</anulado>\n"
                 + "<cancelado>"+this.getCancelado()+"</cancelado>\n"
