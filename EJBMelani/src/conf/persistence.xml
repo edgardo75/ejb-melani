@@ -4,8 +4,6 @@
     <provider>oracle.toplink.essentials.PersistenceProvider</provider>
     <jta-data-source>jdbc/_melani</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-      <property name="toplink.target-database" value="oracle.toplink.essentials.platform.database.DB2Platform"/>
-    </properties>
+   <properties/>
   </persistence-unit>
 </persistence>

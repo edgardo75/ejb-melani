@@ -28,9 +28,9 @@ import javax.persistence.Temporal;
 public class Clientes extends Personas implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    @Column(precision = 10,name="TOTALCOMPRAS")
+    @Column(precision = 15,scale=3,name="TOTALCOMPRAS")
     private BigDecimal totalCompras;
-    @Column(precision = 10,name = "TOTALPUNTOS")
+    @Column(precision = 15,name = "TOTALPUNTOS")
     private BigInteger totalEnPuntos;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaCarga;

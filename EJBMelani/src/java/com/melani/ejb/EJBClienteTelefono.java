@@ -13,6 +13,7 @@ import com.melani.entity.TelefonosPK;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
 /**
@@ -28,10 +29,17 @@ public class EJBClienteTelefono implements EJBClienteTelefonoRemote {
     public String addClienteTelefono(String numero, String prefijo, long idcliente) {
         String retorno = "NADA";
         try {
+            System.out.println("VAlor de IDPERSONA "+idcliente);
             PersonastelefonosPK persotelpk = new PersonastelefonosPK(Long.valueOf(numero), Long.valueOf(prefijo), idcliente);
             TelefonosPK telepk = new TelefonosPK(Long.valueOf(numero), Long.valueOf(prefijo));
+            Query consulta = em.createQuery("SELECT p FROM Personastelefonos p WHERE p.personastelefonosPK.prefijo = :prefijo and " +
+                    "p.personastelefonosPK.numerotel = :numerotel and p.personastelefonosPK.idPersona = :idPersona");
+            consulta.setParameter("prefijo", Long.valueOf(prefijo));
+            consulta.setParameter("numerotel", Long.valueOf(numero));
+            consulta.setParameter("idPersona", idcliente);
 
-            if(em.find(Personastelefonos.class, persotelpk)!=null)
+
+            if(consulta.getResultList().size()==1)
                 retorno ="RelacionTelefonoExistente";
             else{
                 Personastelefonos personatel = new Personastelefonos();

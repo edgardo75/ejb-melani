@@ -13,6 +13,7 @@ import cm.melani.utils.ListaTelefonos;
 import com.melani.entity.Clientes;
 import com.melani.entity.Domicilios;
 import com.melani.entity.Generos;
+import com.melani.entity.HistoricoDatosClientes;
 import com.melani.entity.Personas;
 import com.melani.entity.PersonasDomicilios;
 
@@ -38,7 +39,9 @@ import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import org.apache.log4j.Logger;
+
 
 /**
  *
@@ -52,7 +55,6 @@ public class EJBClientes implements EJBClientesRemote {
     @PersistenceContext(unitName="EJBMelaniPU2")
     private EntityManager em;
    // private long idcliente=0;
-
     @EJB
     EJBDomiciliosRemote ejbdomici;
     @EJB
@@ -121,8 +123,10 @@ public class EJBClientes implements EJBClientesRemote {
 //-----------------------------------------------------------------------------------------------------
     public long addCliente(String xmlClienteDomicilioTelefono) {
         long retorno =0L;
-        long idcliente=0;
+        long idcliente=0L;
+
         
+
         try {
             //----------------------------------------------------------------------------------------
 
@@ -141,31 +145,56 @@ public class EJBClientes implements EJBClientesRemote {
                         xstream.addImplicitCollection(ListaTelefonos.class,"list");
                     }
                     
-                    
+            
             //------------------------------------------------------------------------------------------
             ClienteDomicilioTelefono todosDatos = (ClienteDomicilioTelefono) xstream.fromXML(ejbpresupuestos.parsearCaracteresEspecialesXML1(xmlClienteDomicilioTelefono).toString());
-           
+                   
             
             //------------------------------------------------------------------------------------------
              DatosCliente datosClientePersonales =todosDatos.getCliente();
-            //------------------------------------------------------------------------------------------
-             idcliente= existe_cliente(datosClientePersonales.getNrodocu(),datosClientePersonales.getIdtipodocu(),datosClientePersonales.getGenero().getIdgenero());
+           //------------------------------------------------------------------------------------------
+            ///++++++++++++++++++++++++++++++++++++Primero Chequeo el email y luego la persona si existene en la base de datos
+             retorno = chequearemail(datosClientePersonales.getEmail());
+             switch((int)retorno){
+                 case -5:{logger.info("Email encontrado en la base de datos");
+                 break;
+                 }
 
-                switch((int)idcliente){
-                    case 0:{
-                                //------agrego el cliente y todos sus datos desde cero
-                         logger.info("Por Agregar Datos Cliente desde Cero "+datosClientePersonales.getNrodocu()+" "+datosClientePersonales.getIdtipodocu());
-                            retorno =agregarTodosLosDatosCliente(todosDatos,datosClientePersonales,xmlClienteDomicilioTelefono);
-                            obtenerCliente(retorno);
-                        }
-                        break;
-                    case -1:logger.warn("Fallo error al buscar cliente en metodo existe ");
-                    default:{
-                        logger.info("El CLIENTE "+datosClientePersonales.getNrodocu()+" YA EXISTE!!!");
-                            retorno = actualizarDatos(todosDatos,datosClientePersonales,xmlClienteDomicilioTelefono,idcliente);
-                            obtenerCliente(retorno);
-                        }
-                }
+                 case -1:{logger.warn("Se produjo un error al buscar el email");
+                    break;
+                 }
+                 default:{
+                        //*****************************************************************************++++
+                                      idcliente= existe_cliente(datosClientePersonales.getNrodocu());
+
+                                switch((int)idcliente){
+                                    case 0:{
+                                                //------agrego el cliente y todos sus datos desde cero
+                                         logger.info("Por Agregar Datos Cliente desde Cero "+datosClientePersonales.getNrodocu()+" "+datosClientePersonales.getIdtipodocu());
+                                            retorno =agregarTodosLosDatosCliente(todosDatos,datosClientePersonales,xmlClienteDomicilioTelefono);
+                                            obtenerCliente(retorno);
+                                        }
+                                        break;
+                                    case -1:{logger.warn("Fallo error al buscar cliente en metodo existe ");
+                                        break;
+                                    }
+
+                                    default:{
+                                        logger.info("El CLIENTE "+datosClientePersonales.getNrodocu()+" YA EXISTE!!!");
+                                            retorno = actualizarDatos(todosDatos,datosClientePersonales,xmlClienteDomicilioTelefono,idcliente);
+                                            if(retorno >0)
+                                            obtenerCliente(retorno);
+                                            break;
+                                        }
+                                }
+                        //**********************************************************************************
+                                break;
+
+                 }
+
+             }
+             ///+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            
 
 
 
@@ -174,17 +203,19 @@ public class EJBClientes implements EJBClientesRemote {
         }finally{
         return retorno;
         }
+       
     }
 //---------------------------------------------------------------------------------------------
-    private long existe_cliente(int nrodocu,short idtipodocu,short idgenero) {
+    private long existe_cliente(int nrodocu) {
         long retorno =0;
         try {
-            Query consulta = em.createQuery("SELECT p FROM Personas p WHERE p.nrodocumento = :nrodocu and p.tipodocumento.id = :idtipodocu and " +
-                    "p.generos.idGenero = :idgenero");
+            Query consulta = em.createQuery("SELECT p FROM Personas p WHERE p.nrodocumento = :nrodocu");
                 consulta.setParameter("nrodocu", nrodocu);
-                consulta.setParameter("idtipodocu", idtipodocu);
-                consulta.setParameter("idgenero", idgenero);
-              logger.info("Cliente encotrado en existe_cliente "+consulta.getResultList().size())  ;
+                
+              if(consulta.getResultList().size()==1)
+                  logger.info("Cliente encotrado en metodo existe_cliente "+consulta.getResultList().size())  ;
+
+
            List<Personas>lista = consulta.getResultList();
             for (Iterator<Personas> it = lista.iterator(); it.hasNext();) {
                 Personas personas = it.next();
@@ -197,7 +228,7 @@ public class EJBClientes implements EJBClientesRemote {
             logger.error("Error al Buscar Cliente, metodo existe_cliente, EJBCliente "+e);
         }finally{
           
-        return retorno;
+                return retorno;
         }
     }
 
@@ -266,7 +297,7 @@ public class EJBClientes implements EJBClientesRemote {
         } catch (Exception e) {
             logger.error("Error al obtener un cliente EJBCliente", e);
         }finally{
-           
+           System.out.println(cli);
             return cli;
 
         }
@@ -284,25 +315,46 @@ public class EJBClientes implements EJBClientesRemote {
 
             if(cliente!=null){
 
+                HistoricoDatosClientes histcli = new HistoricoDatosClientes();
+                histcli.setApellido(cliente.getApellido());
+                
+                histcli.setIdCliente(idcliente);
+                histcli.setIdgenero(cliente.getGeneros().getIdGenero());
+                histcli.setNombre(cliente.getNombre());
+
+                if(cliente.getObservaciones().equals(datosClientePersonales.getObservaciones())){
+                    histcli.setObservaciones(cliente.getObservaciones().toUpperCase());
+                }else{
+                    cliente.setObservaciones(cliente.getObservaciones().toUpperCase());
+                    histcli.setObservaciones(datosClientePersonales.getObservaciones().toUpperCase());
+
+                }
             
             cliente.setApellido(datosClientePersonales.getApellido());
             
             cliente.setNombre(datosClientePersonales.getNombre());
             
-            cliente.setEmail(datosClientePersonales.getEmail());
+            
             
             cliente.setGeneros(em.find(Generos.class, datosClientePersonales.getGenero().getIdgenero()));
             
-            //cliente.setNrodocumento(datosClientePersonales.getNrodocu());
+            if(cliente.getEmail().equals(datosClientePersonales.getEmail()))
+                cliente.setEmail(cliente.getEmail());
+            else{
+                cliente.setEmail(cliente.getEmail());
+                histcli.setEmail(cliente.getEmail());
+            }
             
-            //cliente.setTipodocumento(em.find(Tiposdocumento.class, datosClientePersonales.getIdtipodocu()));
             
-            cliente.setObservaciones(cliente.getObservaciones().toUpperCase());
+            
             
 
             cliente.setTotalCompras(BigDecimal.valueOf(datosClientePersonales.getTotalcompras()));
             
             cliente.setTotalEnPuntos(BigInteger.valueOf(datosClientePersonales.getTotalpuntos()));
+
+            histcli.setTotalCompras(BigDecimal.valueOf(datosClientePersonales.getTotalcompras()));
+            histcli.setTotalEnPuntos(BigInteger.valueOf(datosClientePersonales.getTotalpuntos()));
             
           
 
@@ -314,11 +366,12 @@ public class EJBClientes implements EJBClientesRemote {
                 
                //-------------------------------------------------------------------------------------------------
                 em.merge(cliente);
-                
+                em.persist(histcli);
 
                 logger.info("Datos del cliente Actualizado Nº "+cliente.getIdPersona());
             }
         } catch (Exception e) {
+            retorno=-6;
             logger.error("Error al actualizar los datos, ejbClientes "+e);
         }finally{
             return retorno;
@@ -484,10 +537,10 @@ public class EJBClientes implements EJBClientesRemote {
             
                                 //---------------------------------------------------------------------------------------------
                                switch((int)idDomicilio){
-                                   case -1:logger.error("Error No se pudo agregar domicilio Verifique ");
-                                   break;
-                                   case -2:logger.error("Error No se pudo agregar domicilio Verifique ");
-                                   break;
+                                   case -1:{logger.error("Error No se pudo agregar domicilio Verifique!!!");
+                                   break;}
+                                   case -2:{logger.error("Error No se pudo agregar domicilio Verifique!!!");
+                                   break;}
     
                                    default:{
                                        String consulta="SELECT p FROM PersonasDomicilios p WHERE p.personasdomiciliosPK.idPersona = :idPersona" +
@@ -499,11 +552,13 @@ public class EJBClientes implements EJBClientesRemote {
                                        switch(sqlPD.getResultList().size()){
                                            case 0:{
                                             result= ejbclidom.addRelacionClienteDomicilio(cliente.getIdPersona(), idDomicilio,todosDatos.getIdusuario());
+                                            break;
                                            }
-                                           break;
-                                           case 1:
+                                           
+                                           case 1:{
                                                result="Relacion Encontrada PD";
                                                break;
+                                           }
 
                                        }
 
@@ -552,46 +607,85 @@ public class EJBClientes implements EJBClientesRemote {
             
                                Iterator iter = todosDatos.getListaTelefonos().getList().iterator();
                                //------------------------------------------------------------------------------
+
+                               String resultTC="";
+                               DatosTelefonos datosTel=null;
                                while (iter.hasNext())
                                {
-            
+                                datosTel = (DatosTelefonos) iter.next();
 
-                                   DatosTelefonos datosTel = (DatosTelefonos) iter.next();
-                                    long rettelefono = ejbtele.addTelefonos(datosTel);
-                                    if(rettelefono==2){
-                                        String resultTC = ejbclitel.addClienteTelefono(datosTel.getNumero(), datosTel.getPrefijo(), cliente.getIdPersona());
-                                        logger.debug("Relacion Telefono Insertada "+resultTC);
-                                    }else{
-                                        if(rettelefono==1)
-                                            logger.info("El telefono Nº"+datosTel.getNumero()+" ya se encuentra cargado para el cliente Nº "+cliente.getIdPersona());
 
-                                    }
+
+                                 
+                                            long rettelefono = ejbtele.addTelefonos(datosTel);
+
+                                            if(rettelefono==2){
+                                                resultTC = ejbclitel.addClienteTelefono(datosTel.getNumero(), datosTel.getPrefijo(), cliente.getIdPersona());
+                                                if(resultTC.indexOf("RelacionTelefonoExistente")!=-1)
+                                                    logger.info("Relacion existente para el cliente "+cliente.getNrodocumento());
+                                                else{ 
+                                                    if(resultTC.indexOf("InyectoRelacionClienteTelefono")!=-1)
+                                                        logger.info("Relacion Telefono Insertada "+resultTC+" para el cliente "+cliente.getNrodocumento());
+                                                    else
+                                                        logger.error(resultTC);
+                                                
+                                                }
+                                            }else{
+                                                if(rettelefono==1){
+                                                    logger.info("El telefono Nº"+datosTel.getNumero()+" ya se encuentra cargado");
+                                                     resultTC = ejbclitel.addClienteTelefono(datosTel.getNumero(), datosTel.getPrefijo(), cliente.getIdPersona());
+                                                     if(resultTC.indexOf("RelacionTelefonoExistente")!=-1)
+                                                             logger.info("Relacion existente para el cliente "+cliente.getNrodocumento());
+                                                            else{
+                                                                if(resultTC.indexOf("InyectoRelacionClienteTelefono")!=-1)
+                                                                    logger.info("Relacion Telefono Insertada "+resultTC+" para el cliente "+cliente.getNrodocumento());
+                                                                else
+                                                                    logger.error(resultTC);
+                                                            }
+
+                                            }
+                                   
 
                                }
-                               //------------------------------------------------------------------------------
-                               Query clitele = em.createQuery("SELECT p FROM Personastelefonos p WHERE p.personastelefonosPK.idPersona = :idpersona");
-                               clitele.setParameter("idpersona", cliente.getIdPersona());
-
-                               List<Personastelefonos>listaTel = clitele.getResultList();
-
-
-            
-
-                               cliente.setPersonastelefonoss(listaTel);
-                                   for (Iterator<Personastelefonos> it = listaTel.iterator(); it.hasNext();) {
-                                     Personastelefonos personastelefonos = it.next();
-                                     Telefonos telef = em.find(Telefonos.class, new TelefonosPK(personastelefonos.getPersonastelefonosPK().getNumerotel(), personastelefonos.getPersonastelefonosPK().getPrefijo()));
-                                     telef.setPersonastelefonosCollection(listaTel);
-                                  }
-
-
-                               em.persist(cliente);
+                               
             
 
 
                            }
-                            //logger.info("Cliente Sin Telefonos a insertar IDCliente "+cliente.getIdPersona());
+                               ///+++++++++++++++++++++++++++++++++++++++++++++++++++++++++Relaciono las Entidades****************************+++++
+                               //------------------------------------------------------------------------------
 
+                                       Query clitele = em.createQuery("SELECT p FROM Personastelefonos p WHERE p.personastelefonosPK.idPersona = :idpersona");
+
+                                       clitele.setParameter("idpersona", cliente.getIdPersona());
+
+                                       
+                                       
+
+
+
+                                       List<Personastelefonos>listaTel = clitele.getResultList();
+
+
+
+
+                                       cliente.setPersonastelefonoss(listaTel);
+
+                                        Telefonos telef=null;
+                                           for (Iterator<Personastelefonos> it = listaTel.iterator(); it.hasNext();) {
+                                             Personastelefonos personastelefonos = it.next();
+                                              telef = em.find(Telefonos.class, new TelefonosPK(personastelefonos.getPersonastelefonosPK().getNumerotel(), personastelefonos.getPersonastelefonosPK().getPrefijo()));
+                                             telef.setPersonastelefonosCollection(listaTel);
+                                          }
+
+                                            em.persist(telef);
+
+
+                                            em.persist(cliente);
+                               //*****************************************************************************************************************
+                            
+
+                        }
                     }
             
             //---------------------------------------------------------------------------------------------
@@ -636,6 +730,28 @@ public class EJBClientes implements EJBClientesRemote {
         }finally{
            
             return xml;
+        }
+    }
+
+    private long chequearemail(String email) {
+        long retorno = 0L;
+        try {
+            Query sqlemail = em.createQuery("SELECT p FROM Personas p WHERE p.email = :email");
+                sqlemail.setParameter("email", email.toLowerCase());
+
+                if(sqlemail.getResultList().size()==0)
+                    logger.info("Email no encontrado en metodo chequearemail "+sqlemail.getResultList().size());
+                    else{
+                        logger.info("Email encontrado en metodo chequearemail "+sqlemail.getResultList().size());
+               
+                             retorno=-5;
+                    }
+                 
+        } catch (Exception e) {
+            retorno = -1;
+            logger.error("Error en metodo chequear email en ejbClientes "+e);
+        }finally{
+        return retorno;
         }
     }
 

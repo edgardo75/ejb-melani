@@ -10,14 +10,14 @@ import com.melani.entity.Calles;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Resource;
+
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.sql.DataSource;
+
 
 import org.apache.log4j.Logger;
 
@@ -34,8 +34,7 @@ public class EJBCalles implements EJBCallesRemote {
    private static Logger logger = Logger.getLogger(EJBCalles.class);
    @PersistenceContext
    private EntityManager em;
-   //@Resource(name = "jdbc/_melani")
-   //private DataSource datasource;
+   
 
     public long addCalles(String descripcion,int idUsuario) {
         long retorno = 0;
@@ -69,9 +68,7 @@ public class EJBCalles implements EJBCallesRemote {
 
     public String searchAllCalles() {
         String xml = "<Lista>\n";
-        //OracleXMLQuery oxq = null;
-        
-        //Connection con = null;
+       
         try {
             Query consulta =em.createQuery("SELECT c FROM Calles c Order by c.id");
 
@@ -87,34 +84,7 @@ public class EJBCalles implements EJBCallesRemote {
                 }
             xml+="</Lista>\n";
             }
-           /* try {
-
-                con = datasource.getConnection();
-                
-            } catch (Exception e) {
-                logger.error("No se pudo Obtener La Conexion con La base de Datos en metodo searchAllCalles"+e);
-                xml = "No se pudo Obtener La Conexion con La base de Datos";
-            }
-
-            String sql = "SELECT CALLES.ID_CALLE AS id,CALLES.descripcion as descripcion FROM CALLES ORDER BY CALLES.ID_CALLE";
-            
-                oxq = new OracleXMLQuery(con, sql);
-            
-
-            oxq.setRowTag("Item");
-
-            oxq.setRowsetTag("Lista");
-
-            //oxq.setEncoding("ISO-8859-1");
-
-
-            xml = oxq.getXMLString();
-
-            oxq.close();
-
-            if (xml.contains("<Lista/>")) {
-                xml = "La Consulta no arrojó resultados!!!";
-            }*/
+          
 
         } catch (Exception e) {
             xml="Error";

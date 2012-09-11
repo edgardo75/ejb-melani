@@ -23,6 +23,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * A Entity Localidades
@@ -129,7 +130,7 @@ public class Localidades implements Serializable {
      public String toXML(){
         String item="<localidades>\n"
                 + "<id>"+this.getIdLocalidad()+"</id>\n"
-                + "<descripcion>"+this.getDescripcion()+"</descripcion>\n"
+                + "<descripcion>"+StringEscapeUtils.escapeXml(this.getDescripcion())+"</descripcion>\n"
                 + "<codigopostal>"+this.getCodigopostal()+"</codigopostal>\n"
                 + "</localidades>\n";
         return item;

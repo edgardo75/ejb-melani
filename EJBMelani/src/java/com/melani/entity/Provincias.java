@@ -17,6 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *A Entity Provincias
@@ -109,7 +110,7 @@ public class Provincias implements Serializable {
     public String toXML(){
     String xml = "<provincia>\n" +
             "<id>"+this.getIdProvincia()+"</id>\n" +
-            "<descripcion>"+this.getProvincia()+"</descripcion>\n" +
+            "<descripcion>"+StringEscapeUtils.escapeXml(this.getProvincia())+"</descripcion>\n" +
             "<codigo>"+this.getCodigo()+"</codigo>\n" +
             "</provincia>\n";
 

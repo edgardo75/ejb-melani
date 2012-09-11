@@ -73,9 +73,9 @@ public class Notadepedido implements Serializable {
     allocationSize=1) 
     @GeneratedValue(strategy=GenerationType.TABLE,generator="NoPeIdGen")
     private Long id;
-    @Column(name = "ANTICIPO",precision=12,scale=2)
+    @Column(name = "ANTICIPO",precision=15,scale=3)
     private BigDecimal anticipo;
-    @Column(name = "SALDO",precision=12,scale=2)
+    @Column(name = "SALDO",precision=15,scale=3)
     private BigDecimal saldo;
     @Column(name = "HORACOMPRA")
     @Temporal(TemporalType.TIME)
@@ -102,11 +102,11 @@ public class Notadepedido implements Serializable {
     private Character pendiente;
     @Column(name = "MONTOIVA",precision=12,scale=2)
     private BigDecimal montoiva;
-    @Column(name = "RECARGO",precision=12,scale=2)
+    @Column(name = "RECARGO",precision=15,scale=3)
     private BigDecimal recargo;
     @Column(name = "IDUSUARIO_ANULADO")
     private Integer idusuarioAnulado;
-    @Column(name = "TOTAL",precision=12,scale=2)
+    @Column(name = "TOTAL",precision=15,scale=3)
     private BigDecimal total;    
     @Column(name = "NUMERODECUPON",length=20)
     private String numerodecupon;
@@ -136,9 +136,9 @@ public class Notadepedido implements Serializable {
     private Date fecancelado;
     @Column(name="ID_USUARIO_CANCELO")
     private Integer idUsuarioCancelo;
-    @Column(name="DESCUENTO_NOTA",precision=12,scale=2)
+    @Column(name="DESCUENTO_NOTA",precision=15,scale=3)
     private BigDecimal descuentoNota;
-    @Column(name = "MONTOTOTALAPAGAR",precision=12,scale=2)
+    @Column(name = "MONTOTOTALAPAGAR",precision=15,scale=3)
     private BigDecimal montototalapagar;
     @Column(name = "PORCDESCTOTAL",precision=12,scale=2)
     private BigDecimal porcdesctotal;
@@ -529,7 +529,7 @@ public class Notadepedido implements Serializable {
                             Detallesnotadepedido detallesnotadepedido = it.next();
                             item+="<itemdetalle>\n"
                                     + "<producto>"
-                                    + "<descripcion>"+detallesnotadepedido.getProductos().getDescripcion()+"</descripcion>\n"
+                                    + "<descripcion>"+StringEscapeUtils.escapeXml(detallesnotadepedido.getProductos().getDescripcion())+"</descripcion>\n"
                                     + "</producto>\n"
                                     + "<cantidad>"+detallesnotadepedido.getCantidad()+"</cantidad>\n"
                                     + "<precio>"+detallesnotadepedido.getPrecio()+"</precio>\n" +

@@ -28,6 +28,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * A Entity Productos
@@ -199,7 +200,7 @@ public class Productos implements Serializable {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String item="<producto>\n" +
                 "<id>" +this.getSid()+"</id>\n" +
-                "<descripcion>"+this.getDescripcion()+"</descripcion>\n" +
+                "<descripcion>"+StringEscapeUtils.escapeXml(this.getDescripcion())+"</descripcion>\n" +
                 "<cantidadinicial>"+this.getCantidadInicial()+"</cantidadinicial>\n" +
                 "<cantidaddisponible>"+this.getCantidadDisponible()+"</cantidaddisponible>\n" +
                 "<fechacarga>"+sdf.format(this.getFecha())+"</fechacarga>\n" +

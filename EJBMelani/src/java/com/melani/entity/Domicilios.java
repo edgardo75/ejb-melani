@@ -21,6 +21,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * A Entity Domicilios
@@ -40,7 +41,8 @@ import javax.persistence.TableGenerator;
     @NamedQuery(name = "Domicilios.findBySector", query = "SELECT d FROM Domicilios d WHERE d.sector = :sector"),
     @NamedQuery(name = "Domicilios.findByManzana", query = "SELECT d FROM Domicilios d WHERE d.manzana = :manzana"),
     @NamedQuery(name = "Domicilios.findByNumdepto", query = "SELECT d FROM Domicilios d WHERE d.numdepto = :numdepto"),
-    @NamedQuery(name = "Domicilios.findByObservaciones", query = "SELECT d FROM Domicilios d WHERE d.observaciones = :obsrvaciones")})
+    @NamedQuery(name = "Domicilios.findByObservaciones", query = "SELECT d FROM Domicilios d WHERE d.observaciones = :obsrvaciones"),
+    @NamedQuery(name = "Domicilios.findByTorre", query = "SELECT d FROM Domicilios d WHERE d.torre = :torre")})
 public class Domicilios implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -53,22 +55,24 @@ public class Domicilios implements Serializable {
     private Long id;
     @Column(name="NUMERO",precision = 10)
     private int numero;
-    @Column(name="SECTOR",length=10)
+    @Column(name="SECTOR",columnDefinition="VARCHAR(20)")
     private String sector;
-    @Column(name = "AREA",length=10)
+    @Column(name = "AREA")
     private String area;
-    @Column(name = "MONOBLOCK",length=10)
+    @Column(name = "MONOBLOCK")
     private String monoblock;
-    @Column(name = "PISO",length=10)
+    @Column(name = "PISO")
     private String piso;
-    @Column(name = "NUMDEPTO",length=10)
-    private String numdepto;
-    @Column(name = "ENTRECALLEYCALLE", length = 100)
+    @Column(name = "NUMDEPTO")
+    private Integer numdepto;
+    @Column(name = "ENTRECALLEYCALLE",columnDefinition="VARCHAR(255) default 'DATO NO INGRESADO'")
     private String entrecalleycalle;
-    @Column(name="MANZANA",length=10)
+    @Column(name="MANZANA",columnDefinition="VARCHAR(20)")
     private String manzana;
-    @Column(name="OBSERVACIONES",length=255)
+    @Column(name="OBSERVACIONES",columnDefinition="VARCHAR(5000)")
     private String observaciones;
+    @Column(name = "TORRE",columnDefinition="VARCHAR(20)")
+    private String torre;
     @JoinColumn(name="ID_BARRIO",referencedColumnName="ID_BARRIO",nullable=false,updatable=false)
     @ManyToOne(fetch=FetchType.LAZY)
     private Barrios idbarrio;
@@ -106,6 +110,14 @@ public class Domicilios implements Serializable {
         return idbarrio;
     }
 
+     public String getTorre() {
+        return torre;
+    }
+
+    public void setTorre(String torre) {
+        this.torre = torre;
+    }
+    
     public void setBarrios(Barrios idbarrio) {
         this.idbarrio = idbarrio;
     }
@@ -212,11 +224,11 @@ public class Domicilios implements Serializable {
         this.manzana = manzana;
     }
 
-    public String getNumdepto() {
+    public Integer getNumdepto() {
         return numdepto;
     }
 
-    public void setNumdepto(String numdepto) {
+    public void setNumdepto(Integer numdepto) {
         this.numdepto = numdepto;
     }
 
@@ -264,11 +276,11 @@ public class Domicilios implements Serializable {
                 + "<id>"+this.getId()+"</id>\n"
                     + "<Barrio>\n"
                         + "<idbarrio>"+this.getBarrios().getId()+"</idbarrio>\n"
-                        + "<descbarrio>"+this.getBarrios().getDescripcion()+"</descbarrio>\n"
+                        + "<descbarrio>"+StringEscapeUtils.escapeXml(this.getBarrios().getDescripcion())+"</descbarrio>\n"
                     + "</Barrio>\n"
                 + "<Calle>\n"
                     + "<idcalle>"+this.getCalles().getId()+"</idcalle>\n"
-                    + "<desccalle>"+this.getCalles().getDescripcion()+"</desccalle>\n"
+                    + "<desccalle>"+StringEscapeUtils.escapeXml(this.getCalles().getDescripcion())+"</desccalle>\n"
                 + "</Calle>\n"
                 + "<Orientacion>\n"
                     + "<idorientacion>"+this.getOrientacion().getId()+"</idorientacion>\n"
@@ -278,16 +290,17 @@ public class Domicilios implements Serializable {
                     + "<idlocalidad>"+this.getLocalidades().getIdLocalidad()+"</idlocalidad>\n"
                     + "<codigopostal>"+this.getLocalidades().getCodigopostal()+"</codigopostal>\n"
                     + "<idprovincia>"+this.getLocalidades().getProvincias().getIdProvincia()+"</idprovincia>\n"
-                + "<desclocalidad>"+this.getLocalidades().getDescripcion()+"</desclocalidad>\n"
+                + "<desclocalidad>"+StringEscapeUtils.escapeXml(this.getLocalidades().getDescripcion())+"</desclocalidad>\n"
                 + "</Localidad>\n"
                 + "<area>"+this.getArea()+"</area>\n"
-                + "<entrecalleycalle>"+this.getEntrecalleycalle()+"</entrecalleycalle>\n"
+                + "<entrecalleycalle>"+StringEscapeUtils.escapeXml(this.getEntrecalleycalle())+"</entrecalleycalle>\n"
                 + "<manzana>"+this.getManzana()+"</manzana>\n"
                 + "<monoblock>"+this.getMonoblock()+"</monoblock>\n"
                 + "<numdepto>"+this.getNumdepto()+"</numdepto>\n"
                 + "<numero>"+this.getNumero()+"</numero>\n"
                 + "<piso>"+this.getPiso()+"</piso>\n"
-                + "<sector>"+this.getSector()+"</sector>\n"
+                + "<sector>"+this.getSector()+"</sector>\n" 
+                +"<observaciones>"+StringEscapeUtils.escapeXml(this.getObservaciones())+"</observaciones>\n"
                 + "</domicilio>\n";
     return item;
     
