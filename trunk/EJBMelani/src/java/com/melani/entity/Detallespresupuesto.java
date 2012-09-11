@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -160,7 +161,7 @@ public class Detallespresupuesto implements Serializable {
     public String toXML(){
         String xml="<itemdetallepresupuesto>\n" +
                 "<idproducto>" +this.getProductos().getSid()+"</idproducto>\n" +
-                "<descripcion_prod>"+this.getProductos().getDescripcion()+"</descripcion_prod>\n" +
+                "<descripcion_prod>"+StringEscapeUtils.escapeXml(this.getProductos().getDescripcion())+"</descripcion_prod>\n" +
                 "<codigo_producto>"+this.getProductos().getCodproducto()+"</codigo_producto>\n"+
                 "<idpresupuesto>"+this.getPresupuestos().getIdPresupuesto()+"</idpresupuesto>\n" +
                 "<precio>"+this.getPrecio().toString()+"</precio>\n" +

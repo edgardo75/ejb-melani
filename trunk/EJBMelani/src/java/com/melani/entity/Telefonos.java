@@ -21,6 +21,7 @@ import javax.persistence.OneToMany;
 
 
 import javax.persistence.Table;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * A Entity Telefonos
@@ -124,7 +125,7 @@ import javax.persistence.Table;
       public String toXML() {
         String xml = "<telefono>\n" +
                         "<idempresatelefonia>" + this.getIdEmpresatelefonia().getidEmpTelefonia() + "</idempresatelefonia>\n" +
-                            "<descripcion>" + this.getIdEmpresatelefonia().getNombre() + "</descripcion>\n"+
+                            "<descripcion>" + StringEscapeUtils.escapeXml(this.getIdEmpresatelefonia().getNombre()) + "</descripcion>\n"+
                             "<prefijo>" +this.getTelefonosPK().getIdPrefijo()+"</prefijo>\n"
                             + "<nrotelefono>"+this.getTelefonosPK().getNumero()+"</nrotelefono>\n"+
                       "</telefono>\n";

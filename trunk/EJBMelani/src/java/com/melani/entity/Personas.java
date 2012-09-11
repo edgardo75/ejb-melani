@@ -66,7 +66,7 @@ public abstract class Personas implements Serializable {
     private String email;
     @Column(name = "pertype",length=3)
     private String pertype;
-    @Column(name="OBSERVACIONES",length=255)
+    @Column(name="OBSERVACIONES",columnDefinition="VARCHAR(32000)")
     private String observaciones;
     @Column(name = "NRODOCUMENTO",precision=19,unique=true,updatable=false,nullable=false)
     protected Integer nrodocumento;

@@ -17,7 +17,7 @@ public class DatosCliente {
     private String apellido;// variable interna atribute apellido
     private String nombre;// variable interna atribute nombre
     private String email;//variable interna atribute email
-    private String observaciones;//variable interna atribute observaciones
+    private String det2allescli;//variable interna atribute observaciones
     private Integer nrodocu;//variable interna atribute nrodocu
     private Short idtipodocu;//variable interna atribute idtipodocu
     private float totalcompras;//variable interna atribute totalcompras
@@ -90,13 +90,13 @@ public class DatosCliente {
  * Este metodo devuelve las observaciones de un cliente
  */
     public String getObservaciones() {
-        return observaciones;
+        return det2allescli;
     }
 /*
  * Este metodo "setea" las observaciones del cliente
  */
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
+    public void setObservaciones(String det2allescli) {
+        this.det2allescli = det2allescli;
     }
 /*
  * Este metodo devuelve el total de compras

@@ -28,9 +28,9 @@ public class DatosDomicilios {
     private String area;
     private Orientacions orientacion;
     private int numero;
-    private String numdepto;
+    private Integer numdepto;
     private Localidadess localidad;
-    private String homeDetelles;
+    private String det1ails_homes;
 
 
     ////////-------------GETTERS AND SETTERS----------------
@@ -47,14 +47,14 @@ public class DatosDomicilios {
     
 
     public String getObservaciones() {
-        return homeDetelles;
+        return det1ails_homes;
     }
 
-    public void setObservaciones(String homeDetelles) {
-        this.homeDetelles = homeDetelles;
+    public void setObservaciones(String det1ails_homes) {
+        this.det1ails_homes = det1ails_homes;
     }
     
-    public String getNumDepto(){
+    public Integer getNumDepto(){
         return numdepto;
     }
     public String getManzana(){
@@ -81,7 +81,7 @@ public class DatosDomicilios {
 
 
 
-    public void setNumdepto(String numdepto) {
+    public void setNumdepto(Integer numdepto) {
         this.numdepto = numdepto;
     }
 

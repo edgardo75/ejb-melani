@@ -130,6 +130,7 @@ public class EJBBarrios implements EJBBarriosRemote {
             } catch (Exception e) {
                 logger.error("Error cerrando conexiones metodo searchallbarrios "+e);
             }*/
+            
             return xml;
 
         }
@@ -137,18 +138,7 @@ public class EJBBarrios implements EJBBarriosRemote {
 
     public int recordCountBarrios() {
         int retorno =0;
-        /*try {
-            Query consulta =  em.createQuery("SELECT b FROM Barrios b");
-            List<Barrios> lista = consulta.getResultList();
-            
-            retorno = lista.size();
-            
-            
-        } catch (Exception e) {
-            logger.error("Error en metodo RecordCountBarrios "+e.getMessage());
-        }finally{
-        return retorno;
-        }*/
+      
         OracleXMLQuery oxq = null;
         Connection con = null;
         String xml =null;

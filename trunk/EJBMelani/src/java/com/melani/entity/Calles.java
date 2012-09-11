@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * A Entity Calles
@@ -92,7 +93,7 @@ public class Calles implements Serializable {
      public String toXML(){
         String item = "<item>\n" +
                 "<id>"+this.getId()+"</id>\n" +
-                "<nombre><![CDATA["+this.getDescripcion()+"]]></nombre>\n" +
+                "<nombre>"+StringEscapeUtils.escapeXml(this.getDescripcion())+"</nombre>\n" +
                 "</item>\n";
         return item;
 
