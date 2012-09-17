@@ -127,7 +127,9 @@ import org.apache.commons.lang3.StringEscapeUtils;
                         "<idempresatelefonia>" + this.getIdEmpresatelefonia().getidEmpTelefonia() + "</idempresatelefonia>\n" +
                             "<descripcion>" + StringEscapeUtils.escapeXml(this.getIdEmpresatelefonia().getNombre()) + "</descripcion>\n"+
                             "<prefijo>" +this.getTelefonosPK().getIdPrefijo()+"</prefijo>\n"
-                            + "<nrotelefono>"+this.getTelefonosPK().getNumero()+"</nrotelefono>\n"+
+                            + "<nrotelefono>"+this.getTelefonosPK().getNumero()+"</nrotelefono>\n" +
+                            "<tipotelefono>"+this.getIdTipotelefono().getDescripcion()+"</tipotelefono>\n" +
+                            "<idtipotel>"+this.getIdTipotelefono().getIdTipotel()+"</idtipotel>\n"+
                       "</telefono>\n";
         return xml;
     }

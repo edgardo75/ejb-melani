@@ -18,6 +18,7 @@ public class ClienteDomicilioTelefono {
     private DatosDomicilios Domicilio;
     private ListaTelefonos listaTelefonos;
 
+    public ClienteDomicilioTelefono(){}
     public DatosCliente getCliente() {
         return item;
     }

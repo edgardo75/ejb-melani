@@ -55,23 +55,23 @@ public class Domicilios implements Serializable {
     private Long id;
     @Column(name="NUMERO",precision = 10)
     private int numero;
-    @Column(name="SECTOR",columnDefinition="VARCHAR(20)")
+    @Column(name="SECTOR",columnDefinition="VARCHAR(10)")
     private String sector;
-    @Column(name = "AREA")
+    @Column(name = "AREA",columnDefinition="VARCHAR(10)")
     private String area;
-    @Column(name = "MONOBLOCK")
+    @Column(name = "MONOBLOCK",columnDefinition="VARCHAR(10)")
     private String monoblock;
-    @Column(name = "PISO")
+    @Column(name = "PISO",columnDefinition="VARCHAR(10)")
     private String piso;
     @Column(name = "NUMDEPTO")
     private Integer numdepto;
     @Column(name = "ENTRECALLEYCALLE",columnDefinition="VARCHAR(255) default 'DATO NO INGRESADO'")
     private String entrecalleycalle;
-    @Column(name="MANZANA",columnDefinition="VARCHAR(20)")
+    @Column(name="MANZANA",columnDefinition="VARCHAR(10)")
     private String manzana;
     @Column(name="OBSERVACIONES",columnDefinition="VARCHAR(5000)")
     private String observaciones;
-    @Column(name = "TORRE",columnDefinition="VARCHAR(20)")
+    @Column(name = "TORRE",columnDefinition="VARCHAR(10)")
     private String torre;
     @JoinColumn(name="ID_BARRIO",referencedColumnName="ID_BARRIO",nullable=false,updatable=false)
     @ManyToOne(fetch=FetchType.LAZY)
@@ -292,14 +292,15 @@ public class Domicilios implements Serializable {
                     + "<idprovincia>"+this.getLocalidades().getProvincias().getIdProvincia()+"</idprovincia>\n"
                 + "<desclocalidad>"+StringEscapeUtils.escapeXml(this.getLocalidades().getDescripcion())+"</desclocalidad>\n"
                 + "</Localidad>\n"
-                + "<area>"+this.getArea()+"</area>\n"
+                + "<area>"+StringEscapeUtils.escapeXml(this.getArea())+"</area>\n"
                 + "<entrecalleycalle>"+StringEscapeUtils.escapeXml(this.getEntrecalleycalle())+"</entrecalleycalle>\n"
-                + "<manzana>"+this.getManzana()+"</manzana>\n"
-                + "<monoblock>"+this.getMonoblock()+"</monoblock>\n"
+                + "<manzana>"+StringEscapeUtils.escapeXml(this.getManzana())+"</manzana>\n"
+                + "<monoblock>"+StringEscapeUtils.escapeXml(this.getMonoblock())+"</monoblock>\n"
                 + "<numdepto>"+this.getNumdepto()+"</numdepto>\n"
                 + "<numero>"+this.getNumero()+"</numero>\n"
-                + "<piso>"+this.getPiso()+"</piso>\n"
-                + "<sector>"+this.getSector()+"</sector>\n" 
+                + "<piso>"+StringEscapeUtils.escapeXml(this.getPiso())+"</piso>\n"
+                + "<sector>"+StringEscapeUtils.escapeXml(this.getSector())+"</sector>\n" +
+                "<torre>"+StringEscapeUtils.escapeXml(this.getTorre())+"</torre>\n"
                 +"<observaciones>"+StringEscapeUtils.escapeXml(this.getObservaciones())+"</observaciones>\n"
                 + "</domicilio>\n";
     return item;

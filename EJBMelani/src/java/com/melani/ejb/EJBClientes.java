@@ -66,6 +66,7 @@ public class EJBClientes implements EJBClientesRemote {
     @EJB
     EJBPresupuestosRemote ejbpresupuestos;
 
+    private long retornoemail=0L;
 
     //----------------------------------------------------------------------------
 
@@ -154,16 +155,25 @@ public class EJBClientes implements EJBClientesRemote {
              DatosCliente datosClientePersonales =todosDatos.getCliente();
            //------------------------------------------------------------------------------------------
             ///++++++++++++++++++++++++++++++++++++Primero Chequeo el email y luego la persona si existene en la base de datos
-             retorno = chequearemail(datosClientePersonales.getEmail());
-             switch((int)retorno){
-                 case -5:{logger.info("Email encontrado en la base de datos");
+             retornoemail = chequearemail(datosClientePersonales.getEmail());
+
+             switch((int)retornoemail){
+                
+                 case -7:{logger.info("Error en metodo chequear email");
                  break;
                  }
-
-                 case -1:{logger.warn("Se produjo un error al buscar el email");
-                    break;
+                 case -5:{logger.info("Email encontrado en metodo chequearemail");
+                  
                  }
                  default:{
+                 
+           
+             /*if(retorno==-5)
+                 logger.info("Email encontrado en la base de datos");
+             else
+                if(retorno==-1)
+                 logger.warn("Se produjo un error al buscar el email");*/
+               
                         //*****************************************************************************++++
                                       idcliente= existe_cliente(datosClientePersonales.getNrodocu());
 
@@ -188,14 +198,17 @@ public class EJBClientes implements EJBClientesRemote {
                                         }
                                 }
                         //**********************************************************************************
-                                break;
+                                
 
-                 }
+                 
+
+             
+             ///+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                        break;
+                    }
+
 
              }
-             ///+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            
-
 
 
         } catch (Exception e) {
@@ -284,12 +297,12 @@ public class EJBClientes implements EJBClientesRemote {
     }
 
     public String obtenerCliente(long idCliente) {
-        String cli=null;
+        String cli="<Lista>\n";
         try {
             Clientes cliente = em.find(Clientes.class, idCliente);
 
             if(cliente!=null)
-                cli=cliente.toXML();
+                cli+=cliente.toXML();
             else
                 cli="Cliente NO ENCONTRADO!!!!";
             
@@ -297,8 +310,8 @@ public class EJBClientes implements EJBClientesRemote {
         } catch (Exception e) {
             logger.error("Error al obtener un cliente EJBCliente", e);
         }finally{
-           System.out.println(cli);
-            return cli;
+           //System.out.println(cli);
+            return cli+="</Lista>\n";
 
         }
     }
@@ -316,34 +329,32 @@ public class EJBClientes implements EJBClientesRemote {
             if(cliente!=null){
 
                 HistoricoDatosClientes histcli = new HistoricoDatosClientes();
-                histcli.setApellido(cliente.getApellido());
+                histcli.setApellido(cliente.getApellido().toUpperCase());
                 
                 histcli.setIdCliente(idcliente);
                 histcli.setIdgenero(cliente.getGeneros().getIdGenero());
-                histcli.setNombre(cliente.getNombre());
+                histcli.setNombre(cliente.getNombre().toUpperCase());
 
-                if(cliente.getObservaciones().equals(datosClientePersonales.getObservaciones())){
-                    histcli.setObservaciones(cliente.getObservaciones().toUpperCase());
-                }else{
-                    cliente.setObservaciones(cliente.getObservaciones().toUpperCase());
-                    histcli.setObservaciones(datosClientePersonales.getObservaciones().toUpperCase());
+                cliente.setObservaciones(datosClientePersonales.getObservaciones());
+            
+                cliente.setApellido(datosClientePersonales.getApellido().toUpperCase());
+            
+                cliente.setNombre(datosClientePersonales.getNombre().toUpperCase());
+            
+            
+            
+                cliente.setGeneros(em.find(Generos.class, datosClientePersonales.getGenero().getIdgenero()));
 
-                }
+
+
             
-            cliente.setApellido(datosClientePersonales.getApellido());
+                    
+                    if((datosClientePersonales.getEmail().toLowerCase().toString() == cliente.getEmail().toLowerCase().toString())&&retornoemail!=-5){
+                            histcli.setEmail(cliente.getEmail());
+                            cliente.setEmail(datosClientePersonales.getEmail());
+                    }
+                
             
-            cliente.setNombre(datosClientePersonales.getNombre());
-            
-            
-            
-            cliente.setGeneros(em.find(Generos.class, datosClientePersonales.getGenero().getIdgenero()));
-            
-            if(cliente.getEmail().equals(datosClientePersonales.getEmail()))
-                cliente.setEmail(cliente.getEmail());
-            else{
-                cliente.setEmail(cliente.getEmail());
-                histcli.setEmail(cliente.getEmail());
-            }
             
             
             
@@ -734,7 +745,7 @@ public class EJBClientes implements EJBClientesRemote {
     }
 
     private long chequearemail(String email) {
-        long retorno = 0L;
+        long retorno = -6;
         try {
             Query sqlemail = em.createQuery("SELECT p FROM Personas p WHERE p.email = :email");
                 sqlemail.setParameter("email", email.toLowerCase());
@@ -748,7 +759,7 @@ public class EJBClientes implements EJBClientesRemote {
                     }
                  
         } catch (Exception e) {
-            retorno = -1;
+            retorno = -7;
             logger.error("Error en metodo chequear email en ejbClientes "+e);
         }finally{
         return retorno;
