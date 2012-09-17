@@ -35,6 +35,7 @@ public class DatosDomicilios {
 
     ////////-------------GETTERS AND SETTERS----------------
     ////----------------------------------
+    public DatosDomicilios(){}
      public long getDomicilioId(){
         return domicilioId;
     }
@@ -113,7 +114,7 @@ public class DatosDomicilios {
     /////////////////////--------------------------------------------------
     public class Barrioss{
         private int barrioId;
-
+        public Barrioss(){}
         public int getBarrioId(){
             return barrioId;
         }
@@ -121,6 +122,12 @@ public class DatosDomicilios {
 
     }
     public class Calless{
+
+        public Calless(){}
+        public Calless(int calleId) {
+            this.calleId = calleId;
+        }
+        
         private int calleId;
 
         public int getCalleId(){
@@ -132,7 +139,14 @@ public class DatosDomicilios {
 
     }
     public class Orientacions{
+
         private long idOrientacion;
+
+        public Orientacions(){}
+        public Orientacions(long idOrientacion) {
+            this.idOrientacion = idOrientacion;
+        }
+        
 
         public long getOrientacion(){
             return idOrientacion;
@@ -151,6 +165,14 @@ public class DatosDomicilios {
         private long idlocalidad;
         private short idProvincia;
         private int codigoPostal;
+
+        public Localidadess(){}
+        
+        public Localidadess(long idlocalidad, short idProvincia, int codigoPostal) {
+            this.idlocalidad = idlocalidad;
+            this.idProvincia = idProvincia;
+            this.codigoPostal = codigoPostal;
+        }
 
         public int getCodigoPostal(){
                 return codigoPostal;

@@ -28,6 +28,7 @@ public class DatosCliente {
     /*
      * Este metodo devuelve el apellido de un cliente
      */
+    public DatosCliente(){}
     public String getApellido() {
         return apellido;
     }
@@ -135,6 +136,14 @@ public class DatosCliente {
         this.idcliente = idcliente;
     }
 
+    public String getDet2allescli() {
+        return det2allescli;
+    }
+
+    public void setDet2allescli(String det2allescli) {
+        this.det2allescli = det2allescli;
+    }
+
     public Generos getGenero() {
         return genero;
     }
@@ -143,9 +152,20 @@ public class DatosCliente {
         this.genero = genero;
     }
 
+   
+
     
 public class Generos{
     private short idgenero;
+
+   
+    public Generos(){
+
+    }
+
+        public Generos(short idgenero) {
+            this.idgenero = idgenero;
+        }
 
         public short getIdgenero() {
             return idgenero;

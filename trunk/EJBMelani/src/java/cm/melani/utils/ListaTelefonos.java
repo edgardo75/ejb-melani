@@ -16,6 +16,7 @@ import java.util.List;
 public class ListaTelefonos {
     private List<DatosTelefonos>list;
 
+    public ListaTelefonos(){}
     public List<DatosTelefonos> getList() {
         return list;
     }
