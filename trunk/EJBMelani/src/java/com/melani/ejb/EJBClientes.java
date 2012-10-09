@@ -345,15 +345,15 @@ public class EJBClientes implements EJBClientesRemote {
             
                 cliente.setGeneros(em.find(Generos.class, datosClientePersonales.getGenero().getIdgenero()));
 
-
+System.out.println(datosClientePersonales.getEmail()+" "+cliente.getEmail()+" "+retornoemail);
 
             
                     
-                    if((datosClientePersonales.getEmail().toLowerCase().toString() == cliente.getEmail().toLowerCase().toString())&&retornoemail!=-5){
+                    if(retornoemail != -5){
                             histcli.setEmail(cliente.getEmail());
                             cliente.setEmail(datosClientePersonales.getEmail());
                     }
-                
+            
             
             
             
@@ -534,13 +534,14 @@ public class EJBClientes implements EJBClientesRemote {
 
     private long guardarDomicilioyTelefonoCliente(String xmlClienteDomicilioTelefono,Clientes cliente, ClienteDomicilioTelefono todosDatos) {
         long retorno =0;
+        long idDomicilio=0L;
         try {
             
             
             
             if(xmlClienteDomicilioTelefono.contains("<Domicilio>")){
             
-                            long idDomicilio = ejbdomici.addDomicilios(todosDatos.getDomicilio());
+                            idDomicilio = ejbdomici.addDomicilios(todosDatos.getDomicilio());
             
 
                              //-------ADD RELACION--------------------------------------------------------------------------
@@ -549,10 +550,14 @@ public class EJBClientes implements EJBClientesRemote {
                                 //---------------------------------------------------------------------------------------------
                                switch((int)idDomicilio){
                                    case -1:{logger.error("Error No se pudo agregar domicilio Verifique!!!");
+                                   retorno = -1;
                                    break;}
                                    case -2:{logger.error("Error No se pudo agregar domicilio Verifique!!!");
+                                   retorno = -2;
                                    break;}
-    
+                                   case 0:{logger.error("Error no se pudo agregar domicilio Verifique!!!");
+                                   retorno = 0;
+                                   break;}
                                    default:{
                                        String consulta="SELECT p FROM PersonasDomicilios p WHERE p.personasdomiciliosPK.idPersona = :idPersona" +
                                                " and p.personasdomiciliosPK.iddomicilio = :iddomicilio";
@@ -572,11 +577,7 @@ public class EJBClientes implements EJBClientesRemote {
                                            }
 
                                        }
-
-                               /*        if(sqlPD.getResultList().size()==0)
-                                            result= ejbclidom.addRelacionClienteDomicilio(cliente.getIdPersona(), idDomicilio,todosDatos.getIdusuario());
-                                       else
-                                           result ="Relacion Encontrada";*/
+                                       break;
                                    }
                                }
                                //----------------------------------------------------------------------------------------------
@@ -695,18 +696,21 @@ public class EJBClientes implements EJBClientesRemote {
                                             em.persist(cliente);
                                //*****************************************************************************************************************
                             
-
+                             
                         }
+                         
                     }
-            
+          //  if(retorno > 0)
+                retorno = cliente.getIdPersona();
             //---------------------------------------------------------------------------------------------
             
-            retorno = cliente.getIdPersona();
+            
 
         } catch (Exception e) {
             retorno =-3;
             logger.error("ERROR EN METODO GUARDAR DOMICILIO Y TELEFONO CLIENTE "+e.getMessage());
         }finally{
+            logger.info("Valor de retorno "+retorno);
             return retorno;
 
         }
@@ -755,7 +759,7 @@ public class EJBClientes implements EJBClientesRemote {
                     else{
                         logger.info("Email encontrado en metodo chequearemail "+sqlemail.getResultList().size());
                
-                             retorno=-5;
+                             retorno = -5;
                     }
                  
         } catch (Exception e) {
@@ -763,6 +767,40 @@ public class EJBClientes implements EJBClientesRemote {
             logger.error("Error en metodo chequear email en ejbClientes "+e);
         }finally{
         return retorno;
+        }
+    }
+
+    public String searchClientForNameAndLastName(String name,String lastname) {
+        String xml = "<Lista>\n";
+        try {
+            StringBuilder sbname = new StringBuilder();
+                sbname.append(name);
+                sbname.append("%");
+                    StringBuilder sblastname = new StringBuilder();
+                        sblastname.append(lastname);
+                        sblastname.append("%");
+
+            String sql = "SELECT p FROM Personas p WHERE p.nombre LIKE :nombre and p.apellido LIKE :apellido";
+            Query consulta = em.createQuery(sql);
+            consulta.setParameter("nombre", sbname.toString().toUpperCase());
+            consulta.setParameter("apellido", sblastname.toString().toUpperCase());
+            List<Personas>lista = consulta.getResultList();
+
+            for (Iterator<Personas> it = lista.iterator(); it.hasNext();) {
+                Personas personas = it.next();
+                xml+="<item>\n"
+                + "<id>"+personas.getIdPersona()+"</id>\n"
+                + "<apellido>"+personas.getApellido()+"</apellido>\n"
+                + "<nombre>"+personas.getNombre()+"</nombre>\n"
+                + "<idtipodocu>"+personas.getTipodocumento().getId()+"</idtipodocu>\n"
+                + "<nrodocu>"+personas.getNrodocumento()+"</nrodocu>\n" +
+                        "</item>\n";
+            }
+
+        } catch (Exception e) {
+            logger.error("Error en metodo searchClientForNameAndLastName "+e.getCause());
+        }finally{
+        return xml+="</Lista>\n";
         }
     }
 

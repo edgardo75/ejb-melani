@@ -39,7 +39,7 @@ public class EJBBarrios implements EJBBarriosRemote {
    private DataSource datasource;
    
 
-   // @SuppressWarnings("CallToThreadDumpStack")
+       // @SuppressWarnings("CallToThreadDumpStack")
     public long addBarrio(String descripcion,int idUsuario) {
         long retorno = 0;
         try {

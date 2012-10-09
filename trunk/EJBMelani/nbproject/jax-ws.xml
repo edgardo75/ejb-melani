@@ -40,6 +40,9 @@
     <service name="EJBProvinciasBean">
       <implementation-class>com.melani.ejb.EJBProvinciasBean</implementation-class>
     </service>
+    <service name="EJBTarjetasBean">
+      <implementation-class>com.melani.ejb.EJBTarjetasBean</implementation-class>
+    </service>
   </services>
   <clients/>
 </jax-ws>
