@@ -12,14 +12,19 @@ import com.melani.entity.Domicilios;
 import com.melani.entity.Localidades;
 import com.melani.entity.Orientacion;
 import com.thoughtworks.xstream.XStream;
+import java.sql.Connection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.sql.DataSource;
+import oracle.xml.sql.query.OracleXMLQuery;
 import org.apache.log4j.Logger;
 /**
  *
@@ -33,6 +38,8 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
     @PersistenceContext
     private EntityManager em;
     private long idDomicilio=0;
+    @Resource(name = "jdbc/_melani")
+   private DataSource datasource;
 
     public long addDomicilios(DatosDomicilios datosDomici) {
         long retorno =0;
@@ -56,6 +63,7 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
                     break;
                 default:{
                     retorno=idDomicilio;
+                    break;
                 }
             }
 
@@ -77,39 +85,43 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
 
         
         
-        try {          
+        try {
+          
                 Domicilios domicilioss = new Domicilios();
-               
+          
                 domicilioss.setPiso(domiciXML.getPiso());
-              
+          
           
 
             if (domiciXML.getEntrecalleycalle().length()>0) 
-                  domicilioss.setEntrecalleycalle(domiciXML.getEntrecalleycalle().toUpperCase());
+                  domicilioss.setEntrecalleycalle(domiciXML.getEntrecalleycalle().toUpperCase(Locale.getDefault()));
             else
                   domicilioss.setEntrecalleycalle("NO INGRESADO");
 
 
-
-                domicilioss.setSector(domiciXML.getSector());
+          
+                domicilioss.setSector(domiciXML.getSector().toUpperCase(Locale.getDefault()));
 
                 
               
-                    domicilioss.setMonoblock(domiciXML.getMonoblock());
-              
+                    domicilioss.setMonoblock(domiciXML.getMonoblock().toUpperCase(Locale.getDefault()));
+
           
             barrios = em.find(Barrios.class,(long) domiciXML.getBarrio().getBarrioId());
+
             calles = em.find(Calles.class,(long) domiciXML.getCalle().getCalleId());
+
             orientacion = em.find(Orientacion.class,(long) domiciXML.getOrientacion().getOrientacion());
+
        
                 domicilioss.setLocalidades(em.find(Localidades.class,(long) domiciXML.getLocalidad().getIdLocalidad()));
-       
+
                 domicilioss.setBarrios(barrios);
-       
+
                 domicilioss.setCalles(calles);
-       
+
                 domicilioss.setOrientacion(orientacion);
-       
+
                 domicilioss.setNumero(domiciXML.getNumero());
 
               
@@ -117,24 +129,26 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
                
 
                
-                domicilioss.setArea(domiciXML.getArea());
+                domicilioss.setArea(domiciXML.getArea().toUpperCase(Locale.getDefault()));
                
 
 
-                  domicilioss.setManzana(domiciXML.getManzana());
+                  domicilioss.setManzana(domiciXML.getManzana().toUpperCase(Locale.getDefault()));
 
 
                
-                domicilioss.setPiso(domiciXML.getPiso());
-               
-                    domicilioss.setTorre(domiciXML.getTorre());
-                
+                domicilioss.setPiso(domiciXML.getPiso().toUpperCase(Locale.getDefault()));
 
-            if(domiciXML.getObservaciones().length()>0)
-                domicilioss.setObservaciones(domiciXML.getObservaciones());
-            else
+                    domicilioss.setTorre(domiciXML.getTorre().toUpperCase(Locale.getDefault()));
+
+
+            if(domiciXML.getObservaciones().length()>0){
+                domicilioss.setObservaciones(domiciXML.getObservaciones().toUpperCase(Locale.getDefault()));
+
+            }else{
                 domicilioss.setObservaciones("NO INGRESADO");
-                
+
+            }
             
                 em.persist(domicilioss);
                 em.flush();
@@ -154,7 +168,36 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
 
     private long existe(DatosDomicilios domiciXML) {
         long retorno =0;
+        OracleXMLQuery oxq = null;
+        Connection con = null;
+        String xml =null;
         try {
+             try {
+
+                con = datasource.getConnection();
+
+            } catch (Exception e) {
+                logger.error("No se pudo Obtener La Conexion con La base de Datos en metodo recordCountBarrios"+e);
+
+            }
+               String sql = "SELECT * FROM DOMICILIOS d WHERE d.entrecalleycalle like '"+domiciXML.getEntrecalleycalle()+"' and d.manzana like '"+domiciXML.getManzana()+"' and d.numero = "+domiciXML.getNumero()+" and d.area like '"+domiciXML.getArea()+"' and d.torre like '"+domiciXML.getTorre()+"' and d.piso like '"+domiciXML.getPiso()+"' and d.sector like '"+domiciXML.getSector()+"' and d.monoblock like '"+domiciXML.getMonoblock()+"' and d.numdepto = "+domiciXML.getNumDepto()+" and d.ID_BARRIO = "+domiciXML.getBarrio().getBarrioId()+" and d.ID_CALLE = "+domiciXML.getCalle().getCalleId()+" and d.ID_ORIENTACION = "+domiciXML.getOrientacion().getOrientacion()+" and d.ID_LOCALIDAD = "+domiciXML.getLocalidad().getIdLocalidad();
+
+             oxq = new OracleXMLQuery(con, sql);
+
+
+            oxq.setRowTag("Item");
+            oxq.setRowsetTag("Lista");
+            oxq.setEncoding("ISO-8859-1");
+            xml = oxq.getXMLString();
+            
+            oxq.close();
+              if (xml.contains("<Lista/>")) {
+                logger.info("La Consulta no arrojó resultados!!!");
+                retorno =0;
+            }else{
+                logger.info("Domicilio encontrado!!!");
+                retorno = Integer.valueOf(xml.substring(xml.indexOf("<ID_DOMICILIO>")+14,xml.indexOf("</ID_DOMICILIO>")));
+            }
          /*   String xml="";
         int numero=666;
         int numdepto=1;
@@ -165,8 +208,8 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
         int idorientacion=3;
         short idprovincia=12;*/
 
-        System.out.println("RESULTADO DE LOS DOMICI "+domiciXML.getArea()+" "+domiciXML.getEntrecalleycalle()+" "+domiciXML.getManzana()+" "+domiciXML.getMonoblock()+" "+domiciXML.getObservaciones()
-                +" "+domiciXML.getPiso()+" "+domiciXML.getSector()+" "+domiciXML.getTorre()+" "+domiciXML.getNumDepto()+" "+domiciXML.getNumero()+" "+domiciXML.getOrientacion().getOrientacion());
+        //System.out.println("RESULTADO DE LOS DOMICI "+domiciXML.getArea()+" "+domiciXML.getEntrecalleycalle()+" "+domiciXML.getManzana()+" "+domiciXML.getMonoblock()+" "+domiciXML.getObservaciones()
+          //      +" "+domiciXML.getPiso()+" "+domiciXML.getSector()+" "+domiciXML.getTorre()+" "+domiciXML.getNumDepto()+" "+domiciXML.getNumero()+" "+domiciXML.getOrientacion().getOrientacion());
             
              //select * from domicilios where DOMICILIOS.NUMERO = 123 AND LOWER(DOMICILIOS.MANZANA) LIKE LOWER('NO INGRESADO') AND LOWER(DOMICILIOS.SECTOR) LIKE LOWER('0') AND LOWER(DOMICILIOS.MONOBLOCK) LIKE LOWER('0') AND DOMICILIOS.AREA LIKE LOWER('0') AND LOWER(DOMICILIOS.NUMDEPTO) LIKE LOWER('0') AND LOWER(DOMICILIOS.TORRE) LIKE LOWER('0') AND LOWER(DOMICILIOS.PISO) LIKE LOWER('0') AND LOWER(DOMICILIOS.ENTRECALLEYCALLE) LIKE LOWER('no ingresado')
             /*String sql = "SELECT * FROM DOMICILIOS WHERE DOMICILIOS.NUMERO = numero AND DOMICILIOS.ID_BARRIO = barrioid";/* AND DOMICILIOS.ID_BARRIO = 2 AND DOMICILIOS.ID_CALLE = 3" AND DOMICILIOS.ID_LOCALIDAD = idlocalidad AND DOMICILIOS.ID_ORIENTACION = idorientacion AND LOWER(DOMICILIOS.MANZANA) " +
@@ -236,19 +279,20 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
             consulta.setParameter("idprovincia", domiciXML.getLocalidad().getIdProvincia());
             /*consulta.setParameter("torre", domiciXML.getTorre().toUpperCase());*/
 
-             Query consulta=em.createQuery("SELECT d FROM Domicilios d WHERE d.entrecalleycalle = :entrecalleycalle and " +
+             /*Query consulta=em.createQuery("SELECT d FROM Domicilios d WHERE d.entrecalleycalle = :entrecalleycalle and " +
                 "d.manzana = :manzana and d.numero = :numero and d.area = :area and d.torre = :torre and d.piso = :piso and d.sector = :sector and " +
                 "d.monoblock = :monoblock and d.numdepto = :numdepto and d.idbarrio.id = :idbarrio and d.idcalle.id = :idcalle and d.localidades.idLocalidad = :idlocalidad and " +
-                "d.idorientacion.id = :idorientacion and d.localidades.provincias.idProvincia = :idprovincia");
-        consulta.setParameter("entrecalleycalle", domiciXML.getEntrecalleycalle());
+                "d.idorientacion.id = :idorientacion and d.localidades.provincias.idProvincia = :idprovincia");*/
+  /* Query consulta=em.createNativeQuery("SELECT * FROM DOMICILIOS d WHERE d.entrecalleycalle like 'entrecalleycalle' and d.manzana like 'manzana' and d.numero = numero and d.area like 'area' and d.torre like 'torre' and d.piso like 'piso' and d.sector like 'sector' and d.monoblock like 'monoblock' and d.numdepto = numdepto");
 
-        consulta.setParameter("manzana", domiciXML.getManzana().toUpperCase());
+        consulta.setParameter("entrecalleycalle", domiciXML.getEntrecalleycalle().toUpperCase(Locale.getDefault()));
+        consulta.setParameter("manzana", domiciXML.getManzana().toUpperCase(Locale.getDefault()));
         consulta.setParameter("numero", domiciXML.getNumero());
-        consulta.setParameter("area", domiciXML.getArea().toUpperCase());
-        consulta.setParameter("torre", domiciXML.getTorre().toUpperCase());
-        consulta.setParameter("piso", domiciXML.getPiso().toUpperCase());
-        consulta.setParameter("sector", domiciXML.getSector().toUpperCase());
-        consulta.setParameter("monoblock", domiciXML.getMonoblock().toUpperCase());
+        consulta.setParameter("area", domiciXML.getArea().toUpperCase(Locale.getDefault()));
+        consulta.setParameter("torre", domiciXML.getTorre().toUpperCase(Locale.getDefault()));
+        consulta.setParameter("piso", domiciXML.getPiso().toUpperCase(Locale.getDefault()));
+        consulta.setParameter("sector", domiciXML.getSector().toUpperCase(Locale.getDefault()));
+        consulta.setParameter("monoblock", domiciXML.getMonoblock().toUpperCase(Locale.getDefault()));
         consulta.setParameter("numdepto", domiciXML.getNumDepto());
         consulta.setParameter("idbarrio", domiciXML.getBarrio().getBarrioId());
         consulta.setParameter("idcalle", domiciXML.getCalle().getCalleId());
@@ -268,8 +312,7 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
                 }
                 //retorno =1;
                 logger.info("Domicilio Encontrado!!!");
-            }
-
+            }*/
 
 
         } catch (Exception e) {
@@ -277,6 +320,18 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
             logger.error("Error en metodo existe de EJBDomicilio "+e);
         }finally{
             logger.info("Valor devuelto de existe "+retorno);
+             try {
+
+                if (con != null) {
+                    con.close();
+                }
+                if (oxq != null) {
+                    oxq.close();
+                }
+
+            } catch (Exception e) {
+                logger.error("Error cerrando conexiones metodo recordCountBarrios "+e);
+            }
 
             return retorno;
 

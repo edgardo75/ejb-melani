@@ -29,7 +29,7 @@ public class EJBClienteTelefono implements EJBClienteTelefonoRemote {
     public String addClienteTelefono(String numero, String prefijo, long idcliente) {
         String retorno = "NADA";
         try {
-            System.out.println("VAlor de IDPERSONA "+idcliente);
+            
             PersonastelefonosPK persotelpk = new PersonastelefonosPK(Long.valueOf(numero), Long.valueOf(prefijo), idcliente);
             TelefonosPK telepk = new TelefonosPK(Long.valueOf(numero), Long.valueOf(prefijo));
             Query consulta = em.createQuery("SELECT p FROM Personastelefonos p WHERE p.personastelefonosPK.prefijo = :prefijo and " +

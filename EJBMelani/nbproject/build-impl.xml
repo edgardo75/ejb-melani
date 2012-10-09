@@ -332,19 +332,19 @@ exists or setup the property manually. For example like this:
     </target>
     <target depends="compile" name="library-inclusion-in-archive">
         <copyfiles files="${libs.LOG4J.classpath}" todir="${build.classes.dir}"/>
-        <copyfiles files="${libs.Xtream143.classpath}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.xmlparserv2.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${libs.XSTREAM.classpath}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.xsu12.jar}" todir="${build.classes.dir}"/>
         <copyfiles files="${file.reference.commons-lang3-3.1.jar}" todir="${build.classes.dir}"/>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
         <copyfiles files="${libs.LOG4J.classpath}" manifestproperty="manifest.libs.LOG4J.classpath" todir="${dist.ear.dir}"/>
-        <copyfiles files="${libs.Xtream143.classpath}" manifestproperty="manifest.libs.Xtream143.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${file.reference.xmlparserv2.jar}" manifestproperty="manifest.file.reference.xmlparserv2.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${libs.XSTREAM.classpath}" manifestproperty="manifest.libs.XSTREAM.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${file.reference.xsu12.jar}" manifestproperty="manifest.file.reference.xsu12.jar" todir="${dist.ear.dir}"/>
         <copyfiles files="${file.reference.commons-lang3-3.1.jar}" manifestproperty="manifest.file.reference.commons-lang3-3.1.jar" todir="${dist.ear.dir}"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.libs.LOG4J.classpath} ${manifest.libs.Xtream143.classpath} ${manifest.file.reference.xmlparserv2.jar} ${manifest.file.reference.xsu12.jar} ${manifest.file.reference.commons-lang3-3.1.jar} "/>
+            <attribute name="Class-Path" value="${manifest.libs.LOG4J.classpath} ${manifest.file.reference.xmlparserv2.jar} ${manifest.libs.XSTREAM.classpath} ${manifest.file.reference.xsu12.jar} ${manifest.file.reference.commons-lang3-3.1.jar} "/>
         </manifest>
     </target>
     <target name="-copy-meta-inf">

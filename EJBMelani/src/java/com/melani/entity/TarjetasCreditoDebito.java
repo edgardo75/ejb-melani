@@ -18,6 +18,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -106,6 +107,15 @@ public TarjetasCreditoDebito() {
     @Override
     public String toString() {
         return "com.melani.entity.TarjetasCreditoDebito[ idtarjeta=" + idtarjeta + " ]";
+    }
+    public String toXML(){
+        String item ="<item>\n" +
+                "<id>"+this.getIdtarjeta()+"</id>\n" +
+                "<descripcion>"+StringEscapeUtils.escapeXml(this.getDescripcion())+"</descripcion>\n" +
+                "</item>\n";
+
+
+    return item;
     }
     
 }
