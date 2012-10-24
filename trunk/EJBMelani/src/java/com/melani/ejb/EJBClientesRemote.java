@@ -30,5 +30,7 @@ public interface EJBClientesRemote {
     String getCustomerDocNumber(Integer docNumber);
 
     String searchClientForNameAndLastName(String name,String lastname);
+
+    String addClienteDatosPersonales(String datospersonalescliente);
     
 }
