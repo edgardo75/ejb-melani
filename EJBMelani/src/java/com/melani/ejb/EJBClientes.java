@@ -78,7 +78,8 @@ public class EJBClientes implements EJBClientesRemote {
           
         try {             
             
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+           
+              GregorianCalendar calendario = new GregorianCalendar(Locale.getDefault());
             //----------------------------------------------------------------------------------------
             Clientes cliente = new Clientes();
              
@@ -88,7 +89,7 @@ public class EJBClientes implements EJBClientesRemote {
              
             cliente.setEmail(email);
              
-            cliente.setFechaCarga(sdf.parse(sdf.format(new Date())));
+            cliente.setFechaCarga(calendario.getTime());
              
             cliente.setNrodocumento(numerodocu);
              
@@ -121,6 +122,7 @@ public class EJBClientes implements EJBClientesRemote {
             return retorno;
         }
     }
+
 //-----------------------------------------------------------------------------------------------------
     public long addCliente(String xmlClienteDomicilioTelefono) {
         long retorno =0L;
@@ -148,7 +150,7 @@ public class EJBClientes implements EJBClientesRemote {
                     
             
             //------------------------------------------------------------------------------------------
-            ClienteDomicilioTelefono todosDatos = (ClienteDomicilioTelefono) xstream.fromXML(ejbpresupuestos.parsearCaracteresEspecialesXML1(xmlClienteDomicilioTelefono).toString());
+            ClienteDomicilioTelefono todosDatos = (ClienteDomicilioTelefono) xstream.fromXML(ejbpresupuestos.parsearCaracteresEspecialesXML1(xmlClienteDomicilioTelefono));
                    
             
             //------------------------------------------------------------------------------------------
@@ -163,16 +165,12 @@ public class EJBClientes implements EJBClientesRemote {
                  break;
                  }
                  case -5:{logger.info("Email encontrado en metodo chequearemail");
-                  
+                  break;
                  }
                  default:{
                  
            
-             /*if(retorno==-5)
-                 logger.info("Email encontrado en la base de datos");
-             else
-                if(retorno==-1)
-                 logger.warn("Se produjo un error al buscar el email");*/
+            
                
                         //*****************************************************************************++++
                                       idcliente= existe_cliente(datosClientePersonales.getNrodocu());
@@ -429,6 +427,7 @@ System.out.println(datosClientePersonales.getEmail()+" "+cliente.getEmail()+" "+
                 logger.warn("Objeto Cliente es invalido");
                 resultCode = -1;
                 throw new IllegalArgumentException("Objeto Cliente es invalido");
+
             }
             //--------------------------------------------------------------------------
             Query consulta = em.createQuery("SELECT c FROM Clientes c WHERE c.nrodocumento = :nrodocumento");
@@ -802,6 +801,51 @@ System.out.println(datosClientePersonales.getEmail()+" "+cliente.getEmail()+" "+
         }finally{
         return xml+="</Lista>\n";
         }
+    }
+
+    public String addClienteDatosPersonales(String datospersonalescliente) {
+        String xml="<Lista>\n";
+        try {
+
+                    XStream  xstream = new XStream();
+                    xstream.alias("ClienteDomicilioTelefono",ClienteDomicilioTelefono.class);
+                    xstream.alias("item", DatosCliente.class);
+
+                    ClienteDomicilioTelefono datoscliente = (ClienteDomicilioTelefono) xstream.fromXML(ejbpresupuestos.parsearCaracteresEspecialesXML1(datospersonalescliente).toString());
+                    DatosCliente getcliente = datoscliente.getCliente();
+
+                     retornoemail = chequearemail(getcliente.getEmail());
+
+             switch((int)retornoemail){
+
+                 case -7:{logger.info("Error en metodo chequear email");
+                    xml+="<error>Error en metodo chequear email</error>\n";
+                 break;
+                 }
+                 case -5:{logger.info("Email encontrado en metodo chequearemail");
+                    xml+="<info>Email encontrado en metodo chequearemail<info>\n";
+                  break;
+                 }
+                 default:{
+
+                     long idcliente = addDatosCliente(getcliente.getApellido(), getcliente.getNombre(), getcliente.getIdtipodocu(), getcliente.getNrodocu(), getcliente.getEmail(), getcliente.getObservaciones(), getcliente.getGenero().getIdgenero());
+                     if(idcliente>0){
+                             Clientes cliem = em.find(Clientes.class, idcliente);
+
+                             xml+=cliem.toXML();
+                     }
+
+
+                 }
+             }
+
+        } catch (Exception e) {
+            xml+="<error>se produjo un error</error>\n";
+            logger.error("Error en metodo addclientepersonales en ejbcliente", e.getCause());
+        }finally{
+            return xml+="</Lista>\n";
+        }
+
     }
 
 
