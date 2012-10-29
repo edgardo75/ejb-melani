@@ -222,14 +222,24 @@ public class EJBProductos implements EJBProductosRemote {
         }
     }
 
-    public long addProducto(String xmlProducto) {
-        long retorno = 0L;
+    public String addProducto(String xmlProducto) {
+        String retorno = "0L";
         Productos producto = null;
+        long idproduct;
         try {
 
            
-        retorno =agregarProducto(producto, xmlProducto);
-          
+        idproduct =agregarProducto(producto, xmlProducto);
+
+        if(idproduct>0){
+            retorno=searchAllProductos();
+        }else{
+            retorno="<Lista>\n" +
+                    "<producto>\n" +
+                    "<id>"+idproduct+"</id>\n" +
+                    "</producto>\n"+
+                    "</Lista>\n";
+        }
 
 
 
@@ -421,8 +431,8 @@ public class EJBProductos implements EJBProductosRemote {
                         while(iter.hasNext()){
                             Productos prod = (Productos) iter.next();
                             xml+="<producto>\n"
-                                    + "<id>"+prod.getCodproducto()+"</id>\n"
-                                    + "<idproduct>"+prod.getSid()+"</idproduct>\n"
+                                    + "<id>"+prod.getSid()+"</id>\n"
+                                    + "<idproduct>"+prod.getCodproducto()+"</idproduct>\n"
                                     + "<descripcion>"+prod.getDescripcion()+"</descripcion>\n"
                                     + "<cantidadDisponible>"+prod.getCantidadDisponible()+"</cantidadDisponible>\n"
                                     + "<cantidadInicial>"+prod.getCantidadInicial()+"</cantidadInicial>\n"

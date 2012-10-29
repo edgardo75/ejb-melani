@@ -21,7 +21,7 @@ public interface EJBProductosRemote {
 
     String leerImagenBaseDatos(int idProducto);
 
-    long addProducto(String xmlProducto);
+    String addProducto(String xmlProducto);
 
     String selectoneproducto(long idproducto);
 
