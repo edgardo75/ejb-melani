@@ -34,6 +34,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -64,19 +65,26 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             //---------------------------------------------------------------------------------
             
             //---------------------------------------------------------------------------------
-
+            
             XStream xestream = new XStream();
+            
             xestream.alias("notapedido", DatosNotaPedido.class);
+            
             xestream.alias("personas", DatosNotaPedido.Personas.class);
+            
             xestream.alias("tarjetacredito", DatosNotaPedido.TarjetaCredito.class);
+            
             xestream.alias("porcentajes", DatosNotaPedido.Porcentajes.class);
+            
             xestream.alias("itemdetallesnota", Itemdetallesnota.class);
+            
             xestream.alias("detallesnotapedido", DetallesNotaPedido.class);
+            
             xestream.addImplicitCollection(DetallesNotaPedido.class, "list");
 
             
-            DatosNotaPedido notadepedido = (DatosNotaPedido) xestream.fromXML(ejbpresupuesto.parsearCaracteresEspecialesXML1(xmlNotaPedido).toString());
-
+            DatosNotaPedido notadepedido = (DatosNotaPedido) xestream.fromXML(parsearCaracteresEspecialesXML(xmlNotaPedido).toString());
+            
              retorno = almacenarnota(notadepedido);
            
         } catch (Exception e) {
@@ -93,63 +101,71 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
     private long almacenarnota(DatosNotaPedido notadepedido) {
         long retorno =0L;
         try {
+            
             //---------------------------------------------------------------------------------
             GregorianCalendar gc = new GregorianCalendar();
             //---------------------------------------------------------------------------------
+            
             Notadepedido notape = new Notadepedido();
-                            
+            
                             notape.setAnticipo(BigDecimal.valueOf(notadepedido.getAnticipo()));
-                            
+            
                             notape.setAnulado(notadepedido.getAnulado());
-                            
+            
                             notape.setEnefectivo(notadepedido.getEnefectivo());
-                            
+            
                             notape.setEntregado(Character.valueOf(notadepedido.getEntregado()));
-                            
+            
                             notape.setFkIdcliente(em.find(Personas.class, notadepedido.getPersonas().getId()));
-
+            
                             notape.setFkidporcentajenotaId(em.find(Porcentajes.class, notadepedido.getPorcentajes().getId_porcentaje()));
-
+            
                             notape.setHoracompra(gc.getTime());
-
+            
                             notape.setIdTarjetaFk(em.find(TarjetasCreditoDebito.class, notadepedido.getTarjetacredito().getId_tarjeta()));
-
+            
                             notape.setIdUsuarioExpidioNota(notadepedido.getUsuario_expidio_nota());
-
+            
                             notape.setIdusuarioAnulado(notadepedido.getId_usuario_anulado());
-
+            
                             notape.setIdusuarioEntregado(notadepedido.getUsuario_entregado());
-
+            
                             notape.setMontoiva(BigDecimal.valueOf(notadepedido.getMontoiva()));
-
+            
                             notape.setNumerodecupon(notadepedido.getNumerodecupon());
-
+            
                             notape.setObservaciones(notadepedido.getObservaciones());
-
+            
                             notape.setPendiente(Character.valueOf(notadepedido.getPendiente()));
-
+            
                             notape.setRecargo(BigDecimal.valueOf(notadepedido.getRecargo()));
-
+            
                             notape.setSaldo(BigDecimal.valueOf(notadepedido.getSaldo()));
-
+            
                             notape.setStockfuturo(notadepedido.getStockfuturo());
-
+            
                             notape.setTotal(BigDecimal.valueOf(notadepedido.getMontototal()));
-
+            
                             notape.setFechadecompra(gc.getTime());
+            
 
                             notape.setCancelado(Character.valueOf(notadepedido.getCancelado()));
-                            
+            
                             notape.setDescuentonota(BigDecimal.valueOf(notadepedido.getDescuentonota()));
-
+            
                             notape.setIdusuariocancelo(notadepedido.getUsuario_cancelo_nota());
-
+            
+                            try {
                             notape.setMontototalapagar(BigDecimal.valueOf(notadepedido.getMontototalapagar()));
-
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            
+            
                             notape.setPorcdesctotal(BigDecimal.valueOf(notadepedido.getPorc_descuento_total()));
-
+            
                             notape.setPorcrecargo(BigDecimal.valueOf(notadepedido.getPorcentajerecargo()));
-
+            
                             
                             
                             em.persist(notape);
@@ -162,7 +178,9 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                   
                   long historico =0;
                          switch(notadepedido.getStockfuturo()){
-                             case 0:{retorno = almacenardetallenotaconcontrolstock(notadepedido,notape);
+                             case 0:{
+            
+                                 retorno = almacenardetallenotaconcontrolstock(notadepedido,notape);
                                              /*Almacenar el historico en el método para que quede bien registrada la operacion*/
                                            historico =  almacenarhistorico(notadepedido,notape);
                                        
@@ -172,7 +190,8 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                     }
                              break;
                              default :
-                                    {retorno = almacenardetallenota(notadepedido,notape);
+                                    {
+                                        retorno = almacenardetallenota(notadepedido,notape);
                                       /*Almacenar el historico en el método para que quede bien registrada la operacion*/
                                        historico =  almacenarhistorico(notadepedido,notape);
                                        
@@ -203,7 +222,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
              * asi de esa manera poder amancenarla en los lugares correspondiente como lo es en detalles
              * de pedido de la nota y sus ligaduras con la nota de pedido propiamente dicha y los productos
              * para mantener la persistencia de las lista de manera real*/
-                        
+             
             List<Itemdetallesnota>lista = notadepedido.getDetallesnota().getDetallesnota();
                         
             for (Iterator<Itemdetallesnota> it = lista.iterator(); it.hasNext();) {
@@ -275,7 +294,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             logger.error("Error en metdodo almacenardetallenota",e.getCause());
             retorno=-1;
         }finally{
-            
+    
             return retorno;
         }
     }
@@ -359,7 +378,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             logger.error("Error en metodo almacenardetallenotaconcontrolstock ",e.getCause().fillInStackTrace());
             retorno =-1;
         }finally{
-            
+    
             return retorno;
         }
     }
@@ -381,10 +400,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             
                         historico.setFecharegistro(gc.getTime());
             
-                        historico.setFkidnotapedido(em.find(Notadepedido.class, notape.getId()));
-            
-                        
-                        
+                        historico.setFkidnotapedido(em.find(Notadepedido.class, notape.getId()));                       
             
                         historico.setObservaciones(notadepedido.getObservaciones());
             
@@ -449,19 +465,19 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
     }
 
     public String selectUnaNota(long idnta) {
-        String xml = "";
+        String xml = "<Lista>\n";
         try {
             Notadepedido nota = em.find(Notadepedido.class, idnta);
            
-            xml =nota.toXML();
+            xml +=nota.toXML();
             
         } catch (Exception e) {
             logger.error("Error en metodo selectUnaNota "+e.getCause());
-            xml = "Error no paso nada";
+            xml += "Error no paso nada";
         }finally{
             
            
-            return xml;
+            return xml+="</Lista>\n";
         }
     }
 
@@ -635,7 +651,26 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
     }
    
 //-----------------------------------------------------------------------------------------------
-    
+public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
+    String xml = "No paso Nada";
+    StringBuilder sb=null;
+    try {
+        sb=new StringBuilder(xmlNota);
+
+            xml=StringEscapeUtils.escapeXml(xmlNota.substring(xmlNota.indexOf("es>")+3,xmlNota.indexOf("</ob")));
+
+
+            sb.replace(sb.indexOf("es>")+3, sb.indexOf("</ob"), xml);
+
+    } catch (Exception e) {
+        xml = "Error";
+        logger.error("Error en metodo parsearCaracteresEspecialesXML ",e.getCause());
+    }finally{
+
+    return sb;
+    }
+
+}
 
 
 

@@ -40,9 +40,9 @@ public class Detallesnotadepedido implements Serializable {
     protected DetallesnotadepedidoPK detallesnotadepedidoPK;
     @Column(name = "CANTIDAD")
     private Integer cantidad;
-    @Column(name = "PRECIO")
+    @Column(name = "PRECIO",precision=15,scale=2)
     private BigDecimal precio;
-    @Column(name = "SUBTOTAL")
+    @Column(name = "SUBTOTAL",precision=15,scale=3)
     private BigDecimal subtotal;
     @Column(name = "ENTREGADO")
     private Character entregado;
@@ -50,7 +50,7 @@ public class Detallesnotadepedido implements Serializable {
     private Character cancelado;
     @Column(name = "PENDIENTE")
     private Character pendiente;
-    @Column(name = "DESCUENTO")
+    @Column(name = "DESCUENTO",precision=15,scale=2)
     private BigDecimal descuento;
     @Column(name = "IVA")
     private BigDecimal iva;
@@ -62,7 +62,7 @@ public class Detallesnotadepedido implements Serializable {
     private Productos productos;
     @Column(name = "ANULADO")
     private Character anulado;
-    @Column(name="PRECIO_DESC",precision=12,scale=2)
+    @Column(name="PRECIO_DESC",precision=15,scale=2)
     private BigDecimal preciocondescuento;
 
     public Detallesnotadepedido() {

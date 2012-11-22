@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
-import java.sql.SQLException;
+
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -470,11 +470,13 @@ public class EJBProductos implements EJBProductosRemote {
     public int controlStockProducto(long idProducto, int cantidad, int idUsuario) {
         int resultado = 0;
         try {
+
+           
                         GregorianCalendar gc = new GregorianCalendar(Locale.getDefault());
 
                         Productos producto = em.find(Productos.class, idProducto);
                         producto.setCantidadDisponible(producto.getCantidadDisponible().subtract(BigInteger.valueOf(cantidad)));
-                        em.merge(producto);
+     
                         //-----------------------------------------------------------------------------------------------------
                             ExistenciasProductos existencias = new ExistenciasProductos();
 
@@ -485,6 +487,17 @@ public class EJBProductos implements EJBProductosRemote {
                                     existencias.setPreciounitario(producto.getPrecioUnitario());
                                     existencias.setProductos(em.find(Productos.class, idProducto));
                                     em.persist(existencias);
+
+
+                               Query consulta = em.createQuery("SELECT e FROM ExistenciasProductos e WHERE e.productos.sid = :idproducto");
+                               consulta.setParameter("idproducto", producto.getSid());
+                               List<ExistenciasProductos>lista = consulta.getResultList();
+
+                                   producto.setExistenciasProductoss(lista);
+                               em.persist(producto);
+                                    
+
+
                                     resultado = (int) existencias(producto);
 
         } catch (Exception e) {

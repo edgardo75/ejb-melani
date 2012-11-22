@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -58,11 +59,11 @@ public class Historiconotapedido implements Serializable {
     private Character pendiente;
     @Column(name = "ENTREGADO")
     private Character entregado;
-    @Column(name = "TOTAL",scale=2,precision=12)
+    @Column(name = "TOTAL",scale=3,precision=15)
     private BigDecimal total;
     @Column(name = "IDUSUARIOEXPIDIO")
     private Integer idusuarioexpidio;
-    @Column(name = "SALDO",scale=2,precision=12)
+    @Column(name = "SALDO",scale=3,precision=15)
     private BigDecimal saldo;
     @Column(name = "IDUSUARIOENTREGA")
     private Integer idusuarioentrega;
@@ -71,7 +72,7 @@ public class Historiconotapedido implements Serializable {
     private Date fecharegistro;
     @Column(name = "OBSERVACIONES",length=32000)
     private String observaciones;
-    @Column(name = "ANTICIPO",scale=2,precision=12)
+    @Column(name = "ANTICIPO",scale=3,precision=15)
     private BigDecimal anticipo;
     @Column(name = "IDUSUARIOCANCELO")
     private Integer idusuariocancelo;
@@ -337,7 +338,7 @@ public class Historiconotapedido implements Serializable {
                            "<totalapagar>"+this.getTotalapagar().toString()+"</totalapagar>\n" +
                            "<porcrecargo>"+this.getPorcrecargo()+"</porcrecargo>\n" +
                            "<descuento>"+this.getDescuento().toString()+"</descuento>\n" +
-                           "<accion>"+this.getAccion()+"</accion>\n"
+                           "<accion>"+StringEscapeUtils.escapeXml(this.getAccion())+"</accion>\n"
 
                            + "<saldo>"+this.getSaldo()+"</saldo>\n"
                            + "<total>"+this.getTotal()+"</total>\n" +

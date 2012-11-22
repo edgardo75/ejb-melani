@@ -29,11 +29,10 @@ public class DatosNotaPedido {
     private String numerodecupon;
     private char enefectivo;
     private Double montototalapagar;
-    private Double porc_descuento_total;
-    
+    private Double porc_descuento_total;    
     private Double porcentajerecargo;
     private TarjetaCredito tarjetacredito;
-    private Porcentajes porcentajes;
+    private Porcentajes porcentaje;
     private DetallesNotaPedido detallesnotapedido;
     private Double descuentonota;
 
@@ -188,7 +187,7 @@ public class DatosNotaPedido {
    //------------------------------------------------------------------------------------------
 
     public Porcentajes getPorcentajes() {
-        return porcentajes;
+        return porcentaje;
     }
 
     public TarjetaCredito getTarjetacredito() {

@@ -15,12 +15,12 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 public class Itemdetallesnota {
 
         private int cantidad;
-        private long precio;
-        private long subtotal;
+        private Double precio;
+        private Double subtotal;
         private char entregado;
         private char cancelado;
         private char pendiente;
-        private long descuento;
+        private Double descuento;
         private long iva;
         private long id_nota;
         private long id_producto;
@@ -49,7 +49,7 @@ public class Itemdetallesnota {
             return cantidad;
         }
 
-        public long getDescuento() {
+        public Double getDescuento() {
             return descuento;
         }
 
@@ -78,11 +78,11 @@ public class Itemdetallesnota {
             return pendiente;
         }
 
-        public long getPrecio() {
+        public Double getPrecio() {
             return precio;
         }
 
-        public long getSubtotal() {
+        public Double getSubtotal() {
             return subtotal;
         }
     //------------------------------------------------------------------------------------

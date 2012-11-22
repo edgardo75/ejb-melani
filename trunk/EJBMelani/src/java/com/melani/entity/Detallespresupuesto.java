@@ -35,7 +35,7 @@ public class Detallespresupuesto implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected DetallespresupuestoPK detallespresupuestoPK;
-    @Column(name = "SUBTOTAL",precision=15,scale=2)
+    @Column(name = "SUBTOTAL",precision=15,scale=3)
     private BigDecimal subtotal;
     @Column(name = "DESCUENTO",precision=15,scale=2)
     private BigDecimal descuento;
