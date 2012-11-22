@@ -67,28 +67,28 @@ public class Presupuestos implements Serializable {
     @Column(name = "VALIDEZ")
     @Temporal(TemporalType.DATE)
     private Date validez;
-    @Column(name = "TOTAL",precision=15,scale=2)
+    @Column(name = "TOTAL",precision=15,scale=3)
     private BigDecimal total;
     @Column(name = "OBSERVACIONES",length=5000)
     private String observaciones;
     @Basic(optional = false)
     @Column(name = "ID_USUARIO_EXPIDIO_PRESUPUESTO")
     private int idUsuarioFk;    
-    @Column(name="TOTALAPAGAR",precision=12,scale=2)
+    @Column(name="TOTALAPAGAR",precision=15,scale=3)
     private BigDecimal totalapagar;
-    @Column(name = "IVA",precision=15,scale=2)
+    @Column(name = "IVA",precision=15,scale=3)
     private BigDecimal iva;
     @Column(name = "NOMBRE",length=40)
     private String nombre;
     @Column(name = "APELLIDO",length=20)
     private String apellido;
-    @Column(name="PORC_DESC_TOTAL",precision=12,scale=2)
+    @Column(name="PORC_DESC_TOTAL",precision=15,scale=2)
     private BigDecimal porcetajedescuentoTOTAL;
-    @Column(name = "RECARGOTOTAL",precision=12,scale=2)
+    @Column(name = "RECARGOTOTAL",precision=15,scale=2)
     private BigDecimal recargototal;
-    @Column(name = "PORCENTAJERECARGO",precision=12,scale=2)
+    @Column(name = "PORCENTAJERECARGO",precision=15,scale=2)
     private BigDecimal porcentajerecargo;
-     @Column(name = "DESCUENTORESTO",precision=12,scale=2)
+     @Column(name = "DESCUENTORESTO",precision=15,scale=3)
     private BigDecimal descuentoresto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuestos",fetch=FetchType.LAZY)
     private List<Detallespresupuesto> detallepresupuestosList;

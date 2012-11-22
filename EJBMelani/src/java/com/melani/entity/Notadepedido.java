@@ -480,13 +480,12 @@ public class Notadepedido implements Serializable {
         String item ="";
        
             
-            item ="<?xml version='1.0' encoding='ISO-8859-1' ?>\n";
+            
             item+="<item>\n"
 
                 + "<id>"+this.getId()+"</id>\n"
 
-                + "<numerocupon>"+this.getNumerodecupon().toString()+"</numerocupon>\n"
-                //+ "<observaciones><![CDATA["+this.getObservaciones()+"]]></observaciones>\n"
+                + "<numerocupon>"+this.getNumerodecupon().toString()+"</numerocupon>\n"               
                 + "<observaciones>"+StringEscapeUtils.escapeXml(this.getObservaciones())+"</observaciones>\n"
                 + "<anticipo>"+this.getAnticipo()+"</anticipo>\n"
                 + "<anulado>"+this.getAnulado()+"</anulado>\n"
@@ -540,19 +539,7 @@ public class Notadepedido implements Serializable {
                         }
                     
                     
-                        /*for (Iterator<Detallesnotadepedido> it = detallesnotadepedidoList.iterator(); it.hasNext();) {
-                            Detallesnotadepedido detallesnotadepedido = it.next();
-                            item+="<itemdetalle>\n"
-                                    + "<producto>"
-                                    + "<descripcion>"+detallesnotadepedido.getProductos().getDescripcion()+"</descripcion>\n"                                    
-                                    + "</producto>\n"
-                                    + "<cantidad>"+detallesnotadepedido.getCantidad()+"</cantidad>\n"
-                                    + "<precio>"+detallesnotadepedido.getPrecio()+"</precio>\n" +
-                                    "<preciocondescuento>"+detallesnotadepedido.getPreciocondescuento().toString()+"</preciocondescuento>\n" +
-                                    "<decuento>"+detallesnotadepedido.getDescuento()+"</descuento>\n"
-                                    + "</itemdetalle>\n";
-                            
-                        }*/
+                        
                         item+="</detallenota>\n";
                     
                     
