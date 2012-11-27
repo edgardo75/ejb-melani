@@ -518,7 +518,7 @@ public class Notadepedido implements Serializable {
                 "<porcentajedesctotal>"+this.getPorcdesctotal().toString()+"</porcentajedesctotal>\n" +
                 "<recargototal>"+this.getRecargo().toString()+"</recargototal>\n" +
                 "<porcrecargo>"+this.getPorcrecargo().toString()+"</porcrecargo>\n"
-                + "<detallenota>";
+                + "<detallenota>\n";
                     if(this.getDetallesnotadepedidoList().isEmpty())
                         item+="</detallenota>\n";
                     else{
@@ -527,13 +527,21 @@ public class Notadepedido implements Serializable {
                         for (Iterator<Detallesnotadepedido> it = lista.iterator(); it.hasNext();) {
                             Detallesnotadepedido detallesnotadepedido = it.next();
                             item+="<itemdetalle>\n"
-                                    + "<producto>"
+                                    + "<producto>" +
+                                        "<id>"+detallesnotadepedido.getProductos().getSid()+"</id>\n"
                                     + "<descripcion>"+StringEscapeUtils.escapeXml(detallesnotadepedido.getProductos().getDescripcion())+"</descripcion>\n"
                                     + "</producto>\n"
                                     + "<cantidad>"+detallesnotadepedido.getCantidad()+"</cantidad>\n"
                                     + "<precio>"+detallesnotadepedido.getPrecio()+"</precio>\n" +
                                     "<preciocondescuento>"+detallesnotadepedido.getPreciocondescuento()+"</preciocondescuento>\n" +
-                                    "<descuento>"+detallesnotadepedido.getDescuento()+"</descuento>\n"
+                                    "<descuento>"+detallesnotadepedido.getDescuento()+"</descuento>\n" +
+                                    "<subtotal>"+detallesnotadepedido.getSubtotal().toString()+"</subtotal>\n" +
+                                    "<entregado>"+detallesnotadepedido.getEntregado()+"</entregado>\n" +
+                                    "<iva>"+detallesnotadepedido.getIva().toString()+"</iva>\n" +
+                                    "<cancelado>"+detallesnotadepedido.getCancelado()+"</cancelado>\n" +
+                                    "<anulado>"+detallesnotadepedido.getAnulado()+"</anulado>\n" 
+
+
                                     + "</itemdetalle>\n";
 
                         }
