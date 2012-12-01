@@ -527,7 +527,7 @@ public class Notadepedido implements Serializable {
                         for (Iterator<Detallesnotadepedido> it = lista.iterator(); it.hasNext();) {
                             Detallesnotadepedido detallesnotadepedido = it.next();
                             item+="<itemdetalle>\n"
-                                    + "<producto>" +
+                                    + "<producto>\n" +
                                         "<id>"+detallesnotadepedido.getProductos().getSid()+"</id>\n"
                                     + "<descripcion>"+StringEscapeUtils.escapeXml(detallesnotadepedido.getProductos().getDescripcion())+"</descripcion>\n"
                                     + "</producto>\n"

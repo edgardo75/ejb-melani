@@ -37,44 +37,7 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
      @Resource(name="jdbc/_melani")
      private DataSource datasource;
      
-    public String searchAllLocalidades() {
-        String xml ="<Lista>\n";
-        Query jpql=null;
-        try {
-            int maxRecord = 20;
-            int startPosition = 0;
-
-            
-            while(true){
-            jpql =em.createQuery("SELECT l FROM Localidades l");
-            jpql.setMaxResults(maxRecord);
-            jpql.setFirstResult(startPosition);
-                    
-
-            List<Localidades>localidad = jpql.getResultList();
-           
-
-            if(localidad.isEmpty())
-                break;
-            else{
-                for (Iterator<Localidades> it = localidad.iterator(); it.hasNext();) {
-                Localidades localidades = it.next();
-                xml += localidades.toXML();
-
-            }
-
-            }
-            
-            em.clear();
-            startPosition = startPosition + localidad.size();
-            }
-        } catch (Exception e) {
-            e.getMessage();
-        }finally{
-            
-            return xml+="</Lista>\n";
-        }
-    }
+    
 
     public String searchLocXProvincia(short provincia) {
         String xml ="<Lista>\n";
