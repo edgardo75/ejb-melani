@@ -35,6 +35,9 @@ public class DatosNotaPedido {
     private Porcentajes porcentaje;
     private DetallesNotaPedido detallesnotapedido;
     private Double descuentonota;
+    private String fechaentrega;
+    private String fechaanulada;
+    private String fechacancelada;
 
 
     public long getIdnota() {
@@ -56,6 +59,24 @@ public class DatosNotaPedido {
     public Double getDescuentonota() {
         return descuentonota;
     }
+
+    public String getFechaanulada() {
+        return fechaanulada;
+    }
+
+    public String getFechacancelada() {
+        return fechacancelada;
+    }
+
+    public String getFechaentrega() {
+        return fechaentrega;
+    }
+
+    public Porcentajes getPorcentaje() {
+        return porcentaje;
+    }
+
+    
 
     public DetallesNotaPedido getDetallesnotapedido() {
         return detallesnotapedido;

@@ -6,7 +6,6 @@
 package com.melani.ejb;
 
 import cm.melani.utils.DatosNotaPedido;
-
 import cm.melani.utils.DetallesNotaPedido;
 import cm.melani.utils.Itemdetallesnota;
 import com.melani.entity.Detallesnotadepedido;
@@ -19,21 +18,18 @@ import com.melani.entity.Productos;
 import com.melani.entity.TarjetasCreditoDebito;
 import com.thoughtworks.xstream.XStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
@@ -104,6 +100,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             
             //---------------------------------------------------------------------------------
             GregorianCalendar gc = new GregorianCalendar();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             //---------------------------------------------------------------------------------
             
             Notadepedido notape = new Notadepedido();
@@ -147,7 +144,9 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                             notape.setTotal(BigDecimal.valueOf(notadepedido.getMontototal()));
             
                             notape.setFechadecompra(gc.getTime());
-            
+
+                            notape.setFechaentrega(sdf.parse(notadepedido.getFechaentrega()));
+                            
 
                             notape.setCancelado(Character.valueOf(notadepedido.getCancelado()));
             
@@ -156,7 +155,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                             notape.setIdusuariocancelo(notadepedido.getUsuario_cancelo_nota());
             
                             try {
-                            notape.setMontototalapagar(BigDecimal.valueOf(notadepedido.getMontototalapagar()));
+                                notape.setMontototalapagar(BigDecimal.valueOf(notadepedido.getMontototalapagar()));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -164,9 +163,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             
                             notape.setPorcdesctotal(BigDecimal.valueOf(notadepedido.getPorc_descuento_total()));
             
-                            notape.setPorcrecargo(BigDecimal.valueOf(notadepedido.getPorcentajerecargo()));
-            
-                            
+                            notape.setPorcrecargo(BigDecimal.valueOf(notadepedido.getPorcentajerecargo()));                           
                             
                             em.persist(notape);
 
@@ -208,7 +205,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
         } catch (Exception e) {
             logger.error("Error en metodo almacenarnota, EJBNotaPedido ",e.getCause());
-            retorno =-1;
+            retorno =-2;
         }finally{
             
             return retorno;
@@ -292,7 +289,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
         } catch (Exception e) {
             logger.error("Error en metdodo almacenardetallenota",e.getCause());
-            retorno=-1;
+            retorno=-3;
         }finally{
     
             return retorno;
@@ -456,7 +453,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
         }catch(Exception e){
             logger.error("Error en metodo almacenarhistorico", e.getCause());
-            resultado =-1;
+            resultado =-4;
         }finally{
             
             return resultado;

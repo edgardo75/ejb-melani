@@ -14,7 +14,7 @@ import javax.ejb.Remote;
 @Remote
 public interface EJBLocalidadesRemote {
 
-    String searchAllLocalidades();
+   
 
     String searchLocXProvincia(short provincia);
 
