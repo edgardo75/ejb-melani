@@ -13,8 +13,7 @@ import com.melani.entity.Localidades;
 import com.melani.entity.Orientacion;
 import com.thoughtworks.xstream.XStream;
 import java.sql.Connection;
-import java.util.Iterator;
-import java.util.List;
+
 import java.util.Locale;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -22,7 +21,7 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+
 import javax.sql.DataSource;
 import oracle.xml.sql.query.OracleXMLQuery;
 import org.apache.log4j.Logger;

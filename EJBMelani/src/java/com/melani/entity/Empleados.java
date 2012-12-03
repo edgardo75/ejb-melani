@@ -5,6 +5,7 @@
 
 package com.melani.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -25,7 +26,7 @@ import javax.persistence.Temporal;
 @DiscriminatorValue("EMP")
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="emptype",discriminatorType=DiscriminatorType.STRING)
-public class Empleados extends Personas{
+public class Empleados extends Personas {
     @Column(precision=16,name="NUMEROEMPLEADO")
     private Integer numeroEmpleado;
     @Column(name="PASSWORD",nullable=false)
@@ -70,6 +71,15 @@ public class Empleados extends Personas{
     public void setEmptype(String emptype) {
         this.emptype = emptype;
     }
-    
+    public String toXMLEmpleado(){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        String item="<numeroempleado>"+this.getNumeroEmpleado()+"</numeroempleado>\n" +
+                "<clave>"+this.getPassword()+"</clave>\n" +
+                "<fechacarga>"+sdf.format(this.getFechacarga())+"</fechacarga>\n";
+        return item;
+
+
+    }
 
 }

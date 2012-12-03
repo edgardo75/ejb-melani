@@ -24,9 +24,9 @@ import com.melani.entity.Tiposdocumento;
 import com.thoughtworks.xstream.XStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
 
-import java.util.Date;
+
+
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -299,9 +299,12 @@ public class EJBClientes implements EJBClientesRemote {
         try {
             Clientes cliente = em.find(Clientes.class, idCliente);
 
-            if(cliente!=null)
+            if(cliente!=null){
+                cli+="<item>\n";
                 cli+=cliente.toXML();
-            else
+                cli+=cliente.toXMLCLI();
+                cli+="</item>\n";
+            }else
                 cli="Cliente NO ENCONTRADO!!!!";
             
 
@@ -400,7 +403,9 @@ System.out.println(datosClientePersonales.getEmail()+" "+cliente.getEmail()+" "+
             if(!lisPer.isEmpty()){
                 for (Iterator<Personas> it = lisPer.iterator(); it.hasNext();) {
                     Personas personas = it.next();
+                    result+="<item>\n";
                     result+=personas.toXML();
+                    result+="<item>\n";
                 }
 
             }else
@@ -731,7 +736,10 @@ System.out.println(datosClientePersonales.getEmail()+" "+cliente.getEmail()+" "+
                case 1:{
                     for (Iterator<Clientes> it = lista.iterator(); it.hasNext();) {
                             Clientes clientes = it.next();
-                            xml=clientes.toXML();
+                            xml+="<item>\n";
+                            xml+=clientes.toXML();
+                            xml+=clientes.toXMLCLI();
+                            xml+="</item>\n";
                      }
                }
            }
@@ -831,8 +839,11 @@ System.out.println(datosClientePersonales.getEmail()+" "+cliente.getEmail()+" "+
                      long idcliente = addDatosCliente(getcliente.getApellido(), getcliente.getNombre(), getcliente.getIdtipodocu(), getcliente.getNrodocu(), getcliente.getEmail(), getcliente.getObservaciones(), getcliente.getGenero().getIdgenero());
                      if(idcliente>0){
                              Clientes cliem = em.find(Clientes.class, idcliente);
-
+                             xml+="<item>\n";
                              xml+=cliem.toXML();
+                             xml+=cliem.toXMLCLI();
+                             xml+="</item>\n";
+
                      }
 
 
