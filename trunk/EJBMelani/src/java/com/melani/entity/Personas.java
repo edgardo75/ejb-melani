@@ -206,8 +206,7 @@ public abstract class Personas implements Serializable {
     }
    
     public String toXML(){
-        String item="<item>\n"
-                + "<id>"+this.getIdPersona()+"</id>\n"
+        String item= "<id>"+this.getIdPersona()+"</id>\n"
                 + "<apellido>"+this.getApellido()+"</apellido>\n"
                 + "<nombre>"+this.getNombre()+"</nombre>\n"
                 + "<idtipodocu>"+this.getTipodocumento().getId()+"</idtipodocu>\n"
@@ -247,7 +246,7 @@ public abstract class Personas implements Serializable {
                     
                     }
                         
-                item+= "</item>\n";
+               
     
                 return item;
     }
