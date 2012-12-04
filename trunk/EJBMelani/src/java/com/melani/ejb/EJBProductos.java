@@ -222,6 +222,8 @@ public class EJBProductos implements EJBProductosRemote {
         }
     }
 
+
+
     public String addProducto(String xmlProducto) {
         String retorno = "0L";
         Productos producto = null;
@@ -268,9 +270,9 @@ public class EJBProductos implements EJBProductosRemote {
                 Query consulta = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.DESCRIPCION) LIKE LOWER('"+datosprod.getDescripcion()+"%')");
 
                     if(consulta1.getResultList().isEmpty()){
-                    if(consulta.getResultList().isEmpty()){
+                        if(consulta.getResultList().isEmpty()){
 
-                        if(producto==null){
+                            if(producto==null){
                             //----------------------------Producto Nuevo-------------------------------------------
                                     producto = new Productos();
 
@@ -302,6 +304,7 @@ public class EJBProductos implements EJBProductosRemote {
                         //-----------------------------------------------------------------------
 
             }else{
+                            if(producto.getCantidadDisponible().intValue()!=datosprod.getCantidaddisponible()&&producto.getPrecioUnitario()!=BigDecimal.valueOf(datosprod.getPreciounitario())){
                 //--------------------------------Actualizo Producto Los CamposNecesarios-------------------------------
                                         producto.setCantidadDisponible(BigInteger.valueOf(producto.getCantidadDisponible().intValue()+datosprod.getCantidaddisponible()));
                                         producto.setPrecioUnitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
@@ -319,6 +322,8 @@ public class EJBProductos implements EJBProductosRemote {
                 //---------------------------------------------------------------------------------
                                     retorno = existencias(producto);
                 //---------------------------------------------------------------------------------
+                            }else
+                                retorno = producto.getSid();
 
             }
             }else
@@ -507,6 +512,128 @@ public class EJBProductos implements EJBProductosRemote {
             return resultado;
         }
 
+    }
+
+    public String actualizarProducto(String xmlProducto) {
+          String retorno = "0L";
+        Productos producto = null;
+        long idproduct;
+        try {
+
+
+        idproduct =updateProducto(producto, xmlProducto);
+
+        
+            retorno="<Lista>\n" +
+                    "<producto>\n" +
+                    "<id>"+idproduct+"</id>\n" +
+                    "</producto>\n"+
+                    "</Lista>\n";
+        
+
+
+
+
+        } catch (Exception e) {
+            logger.error("Error en metodo addProducto "+e);
+        }finally{
+        return retorno;
+        }
+    }
+
+    private long updateProducto(Productos producto, String xmlProducto) {
+         long retorno = 0L;
+        try {
+            
+            //-----------------------------------------------------------------------
+             XStream xstream = new XStream();
+            
+                xstream.alias("producto", DatosProductos.class);
+                DatosProductos datosprod = (DatosProductos) xstream.fromXML(xmlProducto);
+            //-----------------------------------------------------------------------
+                GregorianCalendar calendario = new GregorianCalendar(Locale.getDefault());
+            //-----------------------------------------------------------------------
+            
+                if(datosprod.getIdproducto()>0)
+                    producto =em.find(Productos.class, datosprod.getIdproducto());
+
+                   
+
+                        Query consulta1 = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.CODPRODUCTO) LIKE LOWER('"+datosprod.getCodproducto()+"%')");
+                        Query consulta = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.DESCRIPCION) LIKE LOWER('"+datosprod.getDescripcion()+"%')");
+            
+
+
+                            if(producto==null){
+                            //----------------------------Producto Nuevo-------------------------------------------
+            
+                                    producto = new Productos();
+
+                                    producto.setCantidadDisponible(BigInteger.valueOf(datosprod.getCantidaddisponible()));
+
+                                    producto.setCantidadInicial(BigInteger.valueOf(datosprod.getCantidadinicial()));
+
+                                    producto.setPrecioUnitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
+
+                                    if(consulta.getResultList().isEmpty())
+                                        producto.setDescripcion(datosprod.getDescripcion().toUpperCase());
+
+                                    producto.setFecha(calendario.getTime());
+
+                                    if(consulta1.getResultList().isEmpty())
+                                        producto.setCodproducto(datosprod.getCodproducto().toUpperCase());
+
+                                    em.persist(producto);
+
+                                        ExistenciasProductos existencias = new ExistenciasProductos();
+
+                                        existencias.setCantidadactual(Integer.valueOf(datosprod.getCantidaddisponible()));
+                                        existencias.setCantidadinicial(datosprod.getCantidadinicial());
+                                        existencias.setFechaagregado(calendario.getTime());
+                                        existencias.setPreciounitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
+                                        existencias.setIdUsuario(datosprod.getIdusuario());
+                                        existencias.setProductos(em.find(Productos.class, producto.getSid()));
+                                        em.persist(existencias);
+
+                                    retorno = existencias(producto);
+            
+                        //-----------------------------------------------------------------------
+
+                         }else{
+                            if(producto.getCantidadDisponible().intValue()!=datosprod.getCantidaddisponible()||producto.getPrecioUnitario()!=BigDecimal.valueOf(datosprod.getPreciounitario())){
+                                
+                //--------------------------------Actualizo Producto Los CamposNecesarios-------------------------------
+                                        producto.setCantidadDisponible(BigInteger.valueOf(producto.getCantidadDisponible().intValue()+datosprod.getCantidaddisponible()));
+                                        producto.setPrecioUnitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
+                                        if(consulta.getResultList().isEmpty())
+                                            producto.setDescripcion(datosprod.getDescripcion().toUpperCase());
+                                        if(consulta1.getResultList().isEmpty())
+                                            producto.setCodproducto(datosprod.getCodproducto());
+                                        em.persist(producto);
+                //---------------------------------------------------------------------------------
+                                        ExistenciasProductos existencias = new ExistenciasProductos();
+                                        existencias.setCantidadactual(datosprod.getCantidaddisponible());
+                                        existencias.setCantidadinicial(0);
+                                        existencias.setFechaagregado(calendario.getTime());
+                                        existencias.setPreciounitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
+                                        existencias.setProductos(em.find(Productos.class, producto.getSid()));
+                                        em.persist(existencias);
+                //---------------------------------------------------------------------------------
+                                    retorno = existencias(producto);
+            
+                //---------------------------------------------------------------------------------
+                            }else
+                                retorno = producto.getSid();
+
+            }
+
+
+        } catch (Exception e) {
+            retorno =-2;
+            logger.error("Error en metodo updateProducto, ejbProducto "+e);
+        }finally{
+            return retorno;
+        }
     }
 //---------------------------------------------------------------------------------------------------
 
