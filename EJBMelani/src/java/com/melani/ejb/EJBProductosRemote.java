@@ -30,5 +30,7 @@ public interface EJBProductosRemote {
     String searchAllProductos();
 
     int controlStockProducto(long idProducto, int cantidad, int idUsuario);
+
+    String actualizarProducto(String xmlProducto);
     
 }
