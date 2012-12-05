@@ -35,6 +35,10 @@ public class Empleados extends Personas {
     private Date fechacarga;
      @Column(name = "emptype",length = 10)
     private String emptype;
+     @Column(name="NAME_USER",length=10,unique=true)
+     private String nameuser;
+     @Column(name="ESTADO")
+     private Short estado;
 
     public Empleados(){}
     
@@ -71,11 +75,31 @@ public class Empleados extends Personas {
     public void setEmptype(String emptype) {
         this.emptype = emptype;
     }
+
+    public String getNameuser() {
+        return nameuser;
+    }
+
+    public void setNameuser(String nameuser) {
+        this.nameuser = nameuser;
+    }
+
+    public Short getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Short estado) {
+        this.estado = estado;
+    }
+
+    
     public String toXMLEmpleado(){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        String item="<numeroempleado>"+this.getNumeroEmpleado()+"</numeroempleado>\n" +
+        String item="<nameuser>" +this.getNameuser()+"</nameuser>\n"+
+                "<numeroempleado>"+this.getNumeroEmpleado()+"</numeroempleado>\n" +
                 "<clave>"+this.getPassword()+"</clave>\n" +
+                "<estado>" +this.getEstado()+"</estado>\n"+
                 "<fechacarga>"+sdf.format(this.getFechacarga())+"</fechacarga>\n";
         return item;
 
