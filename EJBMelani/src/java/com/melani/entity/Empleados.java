@@ -27,11 +27,10 @@ import javax.persistence.Temporal;
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="emptype",discriminatorType=DiscriminatorType.STRING)
 public class Empleados extends Personas {
-    @Column(precision=16,name="NUMEROEMPLEADO")
-    private Integer numeroEmpleado;
+    
     @Column(name="PASSWORD",nullable=false)
     private String password;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechacarga;
      @Column(name = "emptype",length = 10)
     private String emptype;
@@ -46,14 +45,7 @@ public class Empleados extends Personas {
         return fechacarga;
     }
 
-    public Integer getNumeroEmpleado() {
-        return numeroEmpleado;
-    }
-
-    public void setNumeroEmpleado(Integer numeroEmpleado) {
-        this.numeroEmpleado = numeroEmpleado;
-    }
-
+  
     
 
     public void setFechacarga(Date fechacarga) {
@@ -96,8 +88,7 @@ public class Empleados extends Personas {
     public String toXMLEmpleado(){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        String item="<nameuser>" +this.getNameuser()+"</nameuser>\n"+
-                "<numeroempleado>"+this.getNumeroEmpleado()+"</numeroempleado>\n" +
+        String item="<nameuser>" +this.getNameuser()+"</nameuser>\n"+               
                 "<clave>"+this.getPassword()+"</clave>\n" +
                 "<estado>" +this.getEstado()+"</estado>\n"+
                 "<fechacarga>"+sdf.format(this.getFechacarga())+"</fechacarga>\n";

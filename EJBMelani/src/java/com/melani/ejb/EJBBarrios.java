@@ -54,7 +54,7 @@ public class EJBBarrios implements EJBBarriosRemote {
                 bario.setDescripcion(descripcion.toUpperCase());
                 em.persist(bario);
                 em.flush();
-                logger.info("SE cargó la descripcion del barrio");
+               
                 retorno = bario.getId();
             } else {
                 retorno = -4;
