@@ -53,7 +53,7 @@ public class EJBTelefonos implements EJBTelefonosRemote {
                 em.persist(telefono);
                 em.flush();
                 retorno = 2;
-                logger.info("Telefono agregado con exito "+datosTel.getNumero()+" "+datosTel.getPrefijo());
+               
             }
             //--------------------------------------------------------------------------------------
 

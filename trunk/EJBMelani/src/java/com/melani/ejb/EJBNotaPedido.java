@@ -8,6 +8,7 @@ package com.melani.ejb;
 import cm.melani.utils.DatosNotaPedido;
 import cm.melani.utils.DetallesNotaPedido;
 import cm.melani.utils.Itemdetallesnota;
+import com.melani.entity.Clientes;
 import com.melani.entity.Detallesnotadepedido;
 import com.melani.entity.DetallesnotadepedidoPK;
 import com.melani.entity.Historiconotapedido;
@@ -102,6 +103,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             GregorianCalendar gc = new GregorianCalendar();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             //---------------------------------------------------------------------------------
+            Clientes cliente = em.find(Clientes.class, notadepedido.getPersonas().getId());
             
             Notadepedido notape = new Notadepedido();
             
@@ -195,6 +197,14 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                     }
 
                          }
+
+                         Query consulta =em.createQuery("SELECT n FROM Notadepedido n WHERE n.fkIdcliente.idPersona = :id");
+                         consulta.setParameter("id", cliente.getIdPersona());
+                         List<Notadepedido>lista=consulta.getResultList();
+                         cliente.setNotadepedidoList(lista);
+                         em.persist(cliente);
+                         em.flush();
+                         
                  if(historico<0)
                      retorno = historico;
                  else
@@ -447,7 +457,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                         em.persist(notape);
                         em.flush();
 
-               logger.info("Historico Almacenado con exito nota de pedido N° "+notape.getId()+" ");
+               
                resultado = historico.getIdhistorico();
 
 

@@ -311,7 +311,7 @@ public class EJBClientes implements EJBClientesRemote {
         } catch (Exception e) {
             logger.error("Error al obtener un cliente EJBCliente", e);
         }finally{
-           //System.out.println(cli);
+           
             return cli+="</Lista>\n";
 
         }
@@ -346,7 +346,7 @@ public class EJBClientes implements EJBClientesRemote {
             
                 cliente.setGeneros(em.find(Generos.class, datosClientePersonales.getGenero().getIdgenero()));
 
-System.out.println(datosClientePersonales.getEmail()+" "+cliente.getEmail()+" "+retornoemail);
+
 
             
                     
@@ -405,7 +405,7 @@ System.out.println(datosClientePersonales.getEmail()+" "+cliente.getEmail()+" "+
                     Personas personas = it.next();
                     result+="<item>\n";
                     result+=personas.toXML();
-                    result+="<item>\n";
+                    result+="</item>\n";
                 }
 
             }else
@@ -415,6 +415,7 @@ System.out.println(datosClientePersonales.getEmail()+" "+cliente.getEmail()+" "+
         } catch (Exception e) {
             logger.info("Error en metodo obtenerClienteXTipoAndNumeroDocu en EJBClientes "+e);
         }finally{
+          
         return result+"</Lista>";
 
         }
@@ -750,12 +751,12 @@ System.out.println(datosClientePersonales.getEmail()+" "+cliente.getEmail()+" "+
             logger.error("Error en metodo getCustomerDocNumber "+e.getMessage());
             xml="Error";
         }finally{
-           
+          
             return xml;
         }
     }
 
-    private long chequearemail(String email) {
+    public long chequearemail(String email) {
         long retorno = -6;
         try {
             Query sqlemail = em.createQuery("SELECT p FROM Personas p WHERE p.email = :email");
