@@ -11,6 +11,7 @@ import cm.melani.utils.Itemdetallesnota;
 import com.melani.entity.Clientes;
 import com.melani.entity.Detallesnotadepedido;
 import com.melani.entity.DetallesnotadepedidoPK;
+import com.melani.entity.Empleados;
 import com.melani.entity.Historiconotapedido;
 import com.melani.entity.Notadepedido;
 import com.melani.entity.Personas;
@@ -473,17 +474,67 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
     public String selectUnaNota(long idnta) {
         String xml = "<Lista>\n";
+        long idusuarioexpidio=0L;
+        String usuarioexpidio ="";
+        long idusuarioanulonota=0L;
+        String usuarioanulonota ="";
+        long idusuarioentregonota=0L;
+        String usuarioentregonota ="";
+        long idusuariocancelonota =0L;
+        String usuariocancelonota="";
         try {
             Notadepedido nota = em.find(Notadepedido.class, idnta);
+            StringBuilder sb =new StringBuilder(nota.toXML());
+
+            if(nota.getIdUsuarioExpidioNota()>0){
+                 idusuarioexpidio = nota.getIdUsuarioExpidioNota();
+                Personas persona = em.find(Personas.class, idusuarioexpidio);
+                usuarioexpidio=persona.getApellido()+" "+persona.getNombre();
+                sb.replace(sb.indexOf("dionota>")+8, sb.indexOf("</usuarioex"), usuarioexpidio);
+            }
+                    if(nota.getIdusuarioAnulado()>0){
+                        idusuarioanulonota = nota.getIdusuarioAnulado();
+                        Personas persona = em.find(Personas.class, idusuarioanulonota);
+                        usuarioanulonota=persona.getApellido()+" "+persona.getNombre();
+                        sb.replace(sb.indexOf("anulonota>")+10, sb.indexOf("</usuarioanul"), usuarioanulonota);
+
+                    }
+                            if(nota.getIdusuarioEntregado()>0){
+                                idusuarioentregonota=nota.getIdusuarioEntregado();
+                                Personas persona = em.find(Personas.class, idusuarioentregonota);
+                                usuarioentregonota=persona.getApellido()+" "+persona.getNombre();
+                                sb.replace(sb.indexOf("oentregonota>")+13, sb.indexOf("</usuarioent"), usuarioentregonota);
+                            }
+                                if(nota.getIdusuariocancelo()>0){
+                                        idusuariocancelonota=nota.getIdusuariocancelo();
+                                        Personas persona = em.find(Personas.class, idusuariocancelonota);
+                                        usuariocancelonota=persona.getApellido()+" "+persona.getNombre();
+                                        sb.replace(sb.indexOf("ocancelonota>")+13, sb.indexOf("</usuariocan"), usuariocancelonota);
+                                }
+                            
+
+                    
+
+            
+            xml+=sb.toString();
            
-            xml +=nota.toXML();
+            
+            
+
+            
+            
+            
+            
+            
+
+
             
         } catch (Exception e) {
             logger.error("Error en metodo selectUnaNota "+e.getCause());
             xml += "Error no paso nada";
         }finally{
             
-           
+           System.out.println(xml+="</Lista>\n");
             return xml+="</Lista>\n";
         }
     }
