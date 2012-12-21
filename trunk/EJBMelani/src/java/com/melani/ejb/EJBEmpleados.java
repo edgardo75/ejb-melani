@@ -193,6 +193,7 @@ public class EJBEmpleados implements EJBEmpleadosRemote {
 
     }
 
+    
     public int deshabilitarEmpleado(int idEmpleado, int idEmpleadoDesabilito) {
         int retorno =0;
         try {
@@ -258,6 +259,34 @@ public class EJBEmpleados implements EJBEmpleadosRemote {
         }finally{
 
         return retorno;
+        }
+    }
+
+    public int habilitarEmpleado(int idEmpleado, int idEmpleadohabilito) {
+            int retorno =0;
+        try {
+            GregorianCalendar gc = new GregorianCalendar();
+            StringBuilder sb =new StringBuilder();
+
+                Empleados empleadoHabilitado = em.find(Empleados.class, (long)idEmpleado);
+                Empleados empleadohabilito = em.find(Empleados.class, (long)idEmpleadohabilito);
+
+                empleadoHabilitado.setEstado((short)1);
+
+                    sb.append(empleadohabilito.getNombre());
+                    sb.append(" ");
+                    sb.append(empleadohabilito.getApellido());
+
+                    logger.info("EMPLEADO HABILITADO EL DIA DE LA FECHA "+gc.getTime()+", EL EMPLEADO QUE REALIZÓ LA OPERACION FUE "+sb.toString());
+
+             retorno=Integer.valueOf(String.valueOf(empleadohabilito.getIdPersona()));
+
+
+        } catch (Exception e) {
+            retorno=-1;
+            logger.error("Error en metodo deshabilitarEmpleado", e.getCause());
+        }finally{
+            return retorno;
         }
     }
 

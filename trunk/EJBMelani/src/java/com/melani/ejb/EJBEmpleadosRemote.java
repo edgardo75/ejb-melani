@@ -23,5 +23,7 @@ public interface EJBEmpleadosRemote {
     String selectAllEmpleados();
 
     int deshabilitarEmpleado(int idEmpleado, int idEmpleadoDesabilito);
+
+    int habilitarEmpleado(int idEmpleado, int idEmpleadohabilito);
     
 }
