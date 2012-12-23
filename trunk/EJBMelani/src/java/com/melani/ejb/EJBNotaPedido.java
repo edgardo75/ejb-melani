@@ -11,7 +11,6 @@ import cm.melani.utils.Itemdetallesnota;
 import com.melani.entity.Clientes;
 import com.melani.entity.Detallesnotadepedido;
 import com.melani.entity.DetallesnotadepedidoPK;
-import com.melani.entity.Empleados;
 import com.melani.entity.Historiconotapedido;
 import com.melani.entity.Notadepedido;
 import com.melani.entity.Personas;
@@ -438,7 +437,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
                         historico.setHoraregistro(gc.getTime());
                         
-                        historico.setAccion("Historico Almacenado con exito nota de pedido N° "+notape.getId()+" ");
+                        historico.setAccion("Historico Almacenado con exito nota de pedido N "+notape.getId());
             
                         
                                     em.persist(historico);
@@ -496,20 +495,20 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                         idusuarioanulonota = nota.getIdusuarioAnulado();
                         Personas persona = em.find(Personas.class, idusuarioanulonota);
                         usuarioanulonota=persona.getApellido()+" "+persona.getNombre();
-                        sb.replace(sb.indexOf("anulonota>")+10, sb.indexOf("</usuarioanul"), usuarioanulonota);
+                        sb.replace(sb.indexOf("anulonota>")+10, sb.indexOf("</usuarioanul"), usuarioanulonota.toUpperCase());
 
                     }
                             if(nota.getIdusuarioEntregado()>0){
                                 idusuarioentregonota=nota.getIdusuarioEntregado();
                                 Personas persona = em.find(Personas.class, idusuarioentregonota);
                                 usuarioentregonota=persona.getApellido()+" "+persona.getNombre();
-                                sb.replace(sb.indexOf("oentregonota>")+13, sb.indexOf("</usuarioent"), usuarioentregonota);
+                                sb.replace(sb.indexOf("oentregonota>")+13, sb.indexOf("</usuarioent"), usuarioentregonota.toUpperCase());
                             }
                                 if(nota.getIdusuariocancelo()>0){
                                         idusuariocancelonota=nota.getIdusuariocancelo();
                                         Personas persona = em.find(Personas.class, idusuariocancelonota);
                                         usuariocancelonota=persona.getApellido()+" "+persona.getNombre();
-                                        sb.replace(sb.indexOf("ocancelonota>")+13, sb.indexOf("</usuariocan"), usuariocancelonota);
+                                        sb.replace(sb.indexOf("ocancelonota>")+13, sb.indexOf("</usuariocan"), usuariocancelonota.toUpperCase());
                                 }
                             
 
@@ -534,7 +533,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             xml += "Error no paso nada";
         }finally{
             
-           System.out.println(xml+="</Lista>\n");
+           
             return xml+="</Lista>\n";
         }
     }
@@ -602,7 +601,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             }
             //--------------------------------------------------------------------------
                             Historiconotapedido historico = new Historiconotapedido();
-                                historico.setAccion("NOTA DE PEDIDO N° "+nota.getId()+" CANCELADA POR EL USUARIO "+idusuariocancelo);
+                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" CANCELADA POR EL USUARIO "+idusuariocancelo);
                                 historico.setAnticipo(BigDecimal.ZERO);
                                 historico.setEntregado(Character.valueOf(nota.getEntregado()));
                                 historico.setFecharegistro(gc.getTime());
@@ -679,7 +678,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                             detallesnotadepedido.setEntregado(Character.valueOf('1'));
                     }
                 Historiconotapedido historico = new Historiconotapedido();
-                                historico.setAccion("NOTA DE PEDIDO N° "+nota.getId()+" ENTREGADA POR EL USUARIO "+idusuarioentrega);
+                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" ENTREGADA POR EL USUARIO "+idusuarioentrega);
                                 historico.setAnticipo(BigDecimal.ZERO);
                                 historico.setEntregado(Character.valueOf('1'));
                                 historico.setFecharegistro(gc.getTime());

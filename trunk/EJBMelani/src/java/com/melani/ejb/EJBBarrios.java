@@ -7,6 +7,7 @@ package com.melani.ejb;
 
 import com.melani.entity.Barrios;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -70,6 +71,8 @@ public class EJBBarrios implements EJBBarriosRemote {
         }
     }
 
+
+
     public String searchallbarrios() {
 
         String xml = "<Lista>\n";
@@ -89,52 +92,20 @@ public class EJBBarrios implements EJBBarriosRemote {
                 xml += "</Lista>\n";
 
             }
-           /* try {
-                
-                con = datasource.getConnection();
-                
-            } catch (Exception e) {
-                logger.error("No se pudo Obtener La Conexion con La base de Datos en metodo searchallbarrios"+e);
-                xml = "No se pudo Obtener La Conexion con La base de Datos";
-            }
-
-            //*******************************************************************
-            
-            String sql = "SELECT b.ID_BARRIO as id,b.descripcion FROM BARRIOS b ORDER BY b.ID_BARRIO asc";
-
-            oxq = new OracleXMLQuery(con, sql);
-
-            oxq.setRowTag("Item");
-            oxq.setRowsetTag("Lista");
-           // oxq.setEncoding("ISO-8859-1");
-            xml = oxq.getXMLString();
-            oxq.close();
-
-            if (xml.contains("<Lista/>")) {
-                xml = "La Consulta no arrojó resultados!!!";
-            }*/
+           
 
         //*********************************************************************
         } catch (Exception e) {
             xml="error";
             logger.error("error en metodo searchallbarrios",e.getCause());
         } finally {
-            /*try {
             
-                if (con != null) {
-                    con.close();
-                }
-                if (oxq != null) {
-                    oxq.close();
-                }
-            } catch (Exception e) {
-                logger.error("Error cerrando conexiones metodo searchallbarrios "+e);
-            }*/
             
             return xml;
 
         }
     }
+
 
     public int recordCountBarrios() {
         int retorno =0;
@@ -238,6 +209,49 @@ public class EJBBarrios implements EJBBarriosRemote {
         }finally{
          
         return fBarrios;
+        }
+    }
+
+    public String selectAllBarrios() {
+        String xml = "";
+        OracleXMLQuery oxq = null;
+        Connection con = null;
+        try{
+        try {
+                        con = datasource.getConnection();
+                    } catch (Exception e) {
+                        logger.error("No se pudo Obtener La Conexion con La base de Datos en metodo searchallbarrios"+e);
+                        xml = "No se pudo Obtener La Conexion con La base de Datos";
+                    }
+
+            String sql =   "SELECT * FROM BARRIOS";
+             //----------------------------------------------------------------------------
+                        oxq = new OracleXMLQuery(con, sql);
+                        oxq.setRowTag("Item");
+                        oxq.setRowsetTag("Lista");
+                        oxq.setEncoding("ISO-8859-1");
+                        oxq.setDateFormat("dd/MM/yyyy");
+
+
+                        xml = oxq.getXMLString();
+
+                        oxq.close();
+               //----------------------------------------------------------------------------
+        }catch(Exception e) {
+
+        }finally{
+            try {
+                if (con != null) {
+                    con.close();
+                }
+                if (oxq != null) {
+                    oxq.close();
+                }
+               
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(EJBBarrios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            }
+             return xml;
         }
     }
 

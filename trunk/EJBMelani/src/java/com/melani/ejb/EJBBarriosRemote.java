@@ -25,6 +25,8 @@ public interface EJBBarriosRemote {
 
     Barrios[] barrios_paging(int startindex, int numitems);
 
+    String selectAllBarrios();
+
    
     
 }
