@@ -27,10 +27,13 @@ import java.math.BigInteger;
 
 
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
@@ -40,6 +43,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import javax.sql.DataSource;
+import oracle.xml.sql.query.OracleXMLQuery;
 import org.apache.log4j.Logger;
 
 
@@ -54,7 +59,7 @@ public class EJBClientes implements EJBClientesRemote {
     private static Logger logger = Logger.getLogger(EJBClientes.class);
     @PersistenceContext(unitName="EJBMelaniPU2")
     private EntityManager em;
-   // private long idcliente=0;
+   
     @EJB
     EJBDomiciliosRemote ejbdomici;
     @EJB
@@ -69,6 +74,8 @@ public class EJBClientes implements EJBClientesRemote {
     private long retornoemail=0L;
 
     //----------------------------------------------------------------------------
+    @Resource(name = "jdbc/_melani")
+   private DataSource datasource;
 
 
     //------------------------------------------------------------------------------------------------------
@@ -858,6 +865,49 @@ public class EJBClientes implements EJBClientesRemote {
             return xml+="</Lista>\n";
         }
 
+    }
+
+    public String ShowReportClient() {
+        String xml = "";
+        OracleXMLQuery oxq = null;
+        Connection con = null;
+        try {
+
+
+            
+
+
+            try {
+
+                con = datasource.getConnection();
+            } catch (Exception e) {
+                logger.error("No se pudo Obtener La Conexion con La base de Datos en metodo searchallbarrios"+e);
+                xml = "No se pudo Obtener La Conexion con La base de Datos";
+            }
+            String sql = "SELECT * FROM PERSONAS p WHERE p.pertype like 'CLI' Order BY p.id_persona asc";
+            oxq = new OracleXMLQuery(con, sql);
+
+            oxq.setRowTag("Item");
+            oxq.setRowsetTag("Lista");
+            oxq.setEncoding("ISO-8859-1");
+            xml = oxq.getXMLString();
+            oxq.close();
+        }catch(Exception e){
+
+        }finally{
+            try {
+                if (con != null) {
+                    con.close();
+                }
+                if (oxq != null) {
+                    oxq.close();
+                }
+                } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(EJBBarrios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            }
+
+        return xml;
+        }
     }
 
 

@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -634,6 +635,49 @@ public class EJBProductos implements EJBProductosRemote {
         }finally{
             return retorno;
         }
+    }
+
+    public String ShowReportProduct() {
+
+        String xml = "";
+        OracleXMLQuery oxq = null;
+        Connection con = null;
+        try {
+             try {
+                con = datasource.getConnection();
+
+            } catch (Exception e) {
+                logger.error("Error al conectar a base de datos", e);
+            }
+            String consulta = "SELECT p.sid,p.DESCRIPCION,p.codproducto,p.PRECIOUNITARIO,p.CANTIDADINICIAL,p.CANTIDADDISPONIBLE" +
+                    ",p.FECHA FROM PRODUCTOS p Order by p.sid";
+
+            oxq = new OracleXMLQuery(con, consulta);
+
+            oxq.setRowTag("producto");
+            oxq.setRowsetTag("Lista");
+            oxq.setEncoding("ISO-8859-1");
+            oxq.setDateFormat("dd/MM/yyyy");
+            xml = oxq.getXMLString();
+            oxq.close();
+    }catch(Exception e){
+
+
+    }finally{
+        try {
+                        if (con != null) {
+
+                                con.close();
+
+                        }
+                        if (oxq != null) {
+                            oxq.close();
+                        }
+                 } catch (SQLException ex) {
+                        logger.error("error al cerrar conexion", ex);
+                    }
+        return xml;
+    }
     }
 //---------------------------------------------------------------------------------------------------
 

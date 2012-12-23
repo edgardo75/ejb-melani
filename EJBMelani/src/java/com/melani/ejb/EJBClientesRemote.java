@@ -32,5 +32,7 @@ public interface EJBClientesRemote {
     String searchClientForNameAndLastName(String name,String lastname);
 
     String addClienteDatosPersonales(String datospersonalescliente);
+
+    String ShowReportClient();
     
 }
