@@ -661,7 +661,7 @@ public class EJBProductos implements EJBProductosRemote {
             xml = oxq.getXMLString();
             oxq.close();
     }catch(Exception e){
-
+            logger.error("Error en metodo ShowReportProduct");
 
     }finally{
         try {

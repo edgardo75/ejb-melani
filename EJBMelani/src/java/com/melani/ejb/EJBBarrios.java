@@ -238,6 +238,7 @@ public class EJBBarrios implements EJBBarriosRemote {
                         oxq.close();
                //----------------------------------------------------------------------------
         }catch(Exception e) {
+            logger.error("Error en metodo selectAllBarrios", e.getCause());
 
         }finally{
             try {
