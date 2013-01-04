@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -742,9 +742,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
         
         try {
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date dia1 = sdf.parse(fecha1);
-            Date dia2 = sdf.parse(fecha2);
+            
 
             Query jpasql=em.createNativeQuery("SELECT * from NOTADEPEDIDO n where CAST(n.FECHADECOMPRA as date)  between CAST('"+fecha1+"' as DATE) and cast('"+fecha2+"' as date)", Notadepedido.class);
                 lista= jpasql.getResultList();
@@ -754,10 +752,14 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                              Notadepedido notadepedido = it.next();
                              xml+=notadepedido.toXML();
                     }
+                    fecha1=fecha1.substring(3, 5)+"/"+fecha1.substring(0, 2)+"/"+fecha1.substring(6, 10);
+                    fecha2=fecha2.substring(3, 5)+"/"+fecha2.substring(0, 2)+"/"+fecha2.substring(6, 10);
                     StringBuilder sb =new StringBuilder(xml);
-                    String periodoconsultado = "<fechainicio>"+sdf.format(dia1)+"</fechainicio>\n" +
-                            "<fechafinal>"+sdf.format(dia2)+"</fechafinal>\n";
-                     sb.append(sb.replace(sb.indexOf("</numerocupon>")+14, sb.indexOf("<observaciones>"), "\n"+periodoconsultado));
+                    
+                    String periodoconsultado = "<fechainicio>"+fecha1+"</fechainicio>\n" +
+                            "<fechafinal>"+fecha2+"</fechafinal>\n";
+                    
+                     sb.replace(sb.indexOf("</numerocupon>")+14, sb.indexOf("<observaciones>"), "\n"+periodoconsultado);
                      xml=sb.toString();
                     Empleados empleado = em.find(Empleados.class,(long) idvendedor);
                     logger.info("Informe entre fechas generado por el vendedor "+empleado.getApellido()+" "+empleado.getNombre());
@@ -774,7 +776,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
         }finally{
 
 
-            System.out.println(xml);
+           
                 return xml+="</Lista>\n";
         }
 
