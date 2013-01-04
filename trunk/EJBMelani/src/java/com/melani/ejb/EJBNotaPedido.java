@@ -11,6 +11,7 @@ import cm.melani.utils.Itemdetallesnota;
 import com.melani.entity.Clientes;
 import com.melani.entity.Detallesnotadepedido;
 import com.melani.entity.DetallesnotadepedidoPK;
+import com.melani.entity.Empleados;
 import com.melani.entity.Historiconotapedido;
 import com.melani.entity.Notadepedido;
 import com.melani.entity.Personas;
@@ -19,11 +20,15 @@ import com.melani.entity.Productos;
 import com.melani.entity.TarjetasCreditoDebito;
 import com.thoughtworks.xstream.XStream;
 import java.math.BigDecimal;
+
+
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
@@ -31,6 +36,8 @@ import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
@@ -45,7 +52,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
     private static Logger logger = Logger.getLogger(EJBNotaPedido.class);
     @PersistenceContext
     private EntityManager em;
-    //@Resource(name = "jdbc/_melani")
+    
     
     @EJB
       EJBProductosRemote producto;
@@ -728,6 +735,50 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
     }
 
 }
+
+    public String selectNotaEntreFechas(String fecha1, String fecha2,int idvendedor) {
+        String xml="<Lista>\n";
+        List<Notadepedido>lista = null;
+        
+        try {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date dia1 = sdf.parse(fecha1);
+            Date dia2 = sdf.parse(fecha2);
+
+            Query jpasql=em.createNativeQuery("SELECT * from NOTADEPEDIDO n where CAST(n.FECHADECOMPRA as date)  between CAST('"+fecha1+"' as DATE) and cast('"+fecha2+"' as date)", Notadepedido.class);
+                lista= jpasql.getResultList();
+
+                if(lista.size()>0){
+                    for (Iterator<Notadepedido> it = lista.iterator(); it.hasNext();) {
+                             Notadepedido notadepedido = it.next();
+                             xml+=notadepedido.toXML();
+                    }
+                    StringBuilder sb =new StringBuilder(xml);
+                    String periodoconsultado = "<fechainicio>"+sdf.format(dia1)+"</fechainicio>\n" +
+                            "<fechafinal>"+sdf.format(dia2)+"</fechafinal>\n";
+                     sb.append(sb.replace(sb.indexOf("</numerocupon>")+14, sb.indexOf("<observaciones>"), "\n"+periodoconsultado));
+                     xml=sb.toString();
+                    Empleados empleado = em.find(Empleados.class,(long) idvendedor);
+                    logger.info("Informe entre fechas generado por el vendedor "+empleado.getApellido()+" "+empleado.getNombre());
+                }else
+                    xml+="<result>lista vacia</result>\n";
+
+        
+            
+
+                
+        } catch (Exception e) {
+            xml+="<error>Error</error>\n";
+            logger.error("Error en metodo selectnotaEntreFechas",e.fillInStackTrace());
+        }finally{
+
+
+            System.out.println(xml);
+                return xml+="</Lista>\n";
+        }
+
+    }
 
 
 

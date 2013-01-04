@@ -24,6 +24,8 @@ public interface EJBNotaPedidoRemote {
 
     long entregarNotaPedido(long idnota, int idusuario);
 
+    String selectNotaEntreFechas(String fecha1, String fecha2,int idvendedor);
+
    
     
 }
