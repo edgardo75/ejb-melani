@@ -26,6 +26,12 @@ public interface EJBNotaPedidoRemote {
 
     String selectNotaEntreFechas(String fecha1, String fecha2,int idvendedor);
 
+    int getRecorCountNotas();
+
+    String selectAllNotas();
+
+    String verNotasPedidoPaginadas(int index, int recordCount);
+
    
     
 }
