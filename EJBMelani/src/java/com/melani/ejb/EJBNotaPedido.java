@@ -60,36 +60,42 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
     @EJB
     EJBPresupuestosRemote ejbpresupuesto;
 
+    DatosNotaPedido notadepedido;
+
+    
+
+    private DatosNotaPedido xestreaNotapedido(String xmlNotapedido){
+            XStream xestream = new XStream();
+
+            xestream.alias("notapedido", DatosNotaPedido.class);
+
+            xestream.alias("personas", DatosNotaPedido.Personas.class);
+
+            xestream.alias("tarjetacredito", DatosNotaPedido.TarjetaCredito.class);
+
+            xestream.alias("porcentajes", DatosNotaPedido.Porcentajes.class);
+
+            xestream.alias("itemdetallesnota", Itemdetallesnota.class);
+
+            xestream.alias("detallesnotapedido", DetallesNotaPedido.class);
+
+            xestream.addImplicitCollection(DetallesNotaPedido.class, "list");
+
+            return notadepedido = (DatosNotaPedido) xestream.fromXML(parsearCaracteresEspecialesXML(xmlNotapedido).toString());
+    }
     @Override
     public long agregarNotaPedido(String xmlNotaPedido) {
         long retorno =0L;
 
         try {
-
-            //---------------------------------------------------------------------------------
+             //---------------------------------------------------------------------------------
             
-            //---------------------------------------------------------------------------------
-            
-            XStream xestream = new XStream();
-            
-            xestream.alias("notapedido", DatosNotaPedido.class);
-            
-            xestream.alias("personas", DatosNotaPedido.Personas.class);
-            
-            xestream.alias("tarjetacredito", DatosNotaPedido.TarjetaCredito.class);
-            
-            xestream.alias("porcentajes", DatosNotaPedido.Porcentajes.class);
-            
-            xestream.alias("itemdetallesnota", Itemdetallesnota.class);
-            
-            xestream.alias("detallesnotapedido", DetallesNotaPedido.class);
-            
-            xestream.addImplicitCollection(DetallesNotaPedido.class, "list");
+            //---------------------------------------------------------------------------------     
 
             
-            DatosNotaPedido notadepedido = (DatosNotaPedido) xestream.fromXML(parsearCaracteresEspecialesXML(xmlNotaPedido).toString());
+             
             
-             retorno = almacenarnota(notadepedido);
+             retorno = almacenarnota(xestreaNotapedido(xmlNotaPedido));
            
         } catch (Exception e) {
             logger.error("Error en metodo agregarNotaPedido, verifique", e);
@@ -209,6 +215,8 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                          consulta.setParameter("id", cliente.getIdPersona());
                          List<Notadepedido>lista=consulta.getResultList();
                          cliente.setNotadepedidoList(lista);
+                         Double totalCompras = cliente.getTotalCompras().doubleValue()+notape.getMontototalapagar().doubleValue();
+                         cliente.setTotalCompras(BigDecimal.valueOf(totalCompras));
                          em.persist(cliente);
                          em.flush();
                          
@@ -480,49 +488,18 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
     public String selectUnaNota(long idnta) {
         String xml = "<Lista>\n";
-        long idusuarioexpidio=0L;
-        String usuarioexpidio ="";
-        long idusuarioanulonota=0L;
-        String usuarioanulonota ="";
-        long idusuarioentregonota=0L;
-        String usuarioentregonota ="";
-        long idusuariocancelonota =0L;
-        String usuariocancelonota="";
+
         try {
             Notadepedido nota = em.find(Notadepedido.class, idnta);
-            StringBuilder sb =new StringBuilder(nota.toXML());
 
-            if(nota.getIdUsuarioExpidioNota()>0){
-                 idusuarioexpidio = nota.getIdUsuarioExpidioNota();
-                Personas persona = em.find(Personas.class, idusuarioexpidio);
-                usuarioexpidio=persona.getApellido()+" "+persona.getNombre();
-                sb.replace(sb.indexOf("dionota>")+8, sb.indexOf("</usuarioex"), usuarioexpidio);
-            }
-                    if(nota.getIdusuarioAnulado()>0){
-                        idusuarioanulonota = nota.getIdusuarioAnulado();
-                        Personas persona = em.find(Personas.class, idusuarioanulonota);
-                        usuarioanulonota=persona.getApellido()+" "+persona.getNombre();
-                        sb.replace(sb.indexOf("anulonota>")+10, sb.indexOf("</usuarioanul"), usuarioanulonota.toUpperCase());
 
-                    }
-                            if(nota.getIdusuarioEntregado()>0){
-                                idusuarioentregonota=nota.getIdusuarioEntregado();
-                                Personas persona = em.find(Personas.class, idusuarioentregonota);
-                                usuarioentregonota=persona.getApellido()+" "+persona.getNombre();
-                                sb.replace(sb.indexOf("oentregonota>")+13, sb.indexOf("</usuarioent"), usuarioentregonota.toUpperCase());
-                            }
-                                if(nota.getIdusuariocancelo()>0){
-                                        idusuariocancelonota=nota.getIdusuariocancelo();
-                                        Personas persona = em.find(Personas.class, idusuariocancelonota);
-                                        usuariocancelonota=persona.getApellido()+" "+persona.getNombre();
-                                        sb.replace(sb.indexOf("ocancelonota>")+13, sb.indexOf("</usuariocan"), usuariocancelonota.toUpperCase());
-                                }
+
                             
 
                     
 
             
-            xml+=sb.toString();
+            xml+=devolverNotaProcesadaSB(nota).toString();
            
             
             
@@ -749,8 +726,8 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
                 if(lista.size()>0){
                     for (Iterator<Notadepedido> it = lista.iterator(); it.hasNext();) {
-                             Notadepedido notadepedido = it.next();
-                             xml+=notadepedido.toXML();
+                             Notadepedido notadepedido1 = it.next();
+                             xml+=notadepedido1.toXML();
                     }
                     fecha1=fecha1.substring(3, 5)+"/"+fecha1.substring(0, 2)+"/"+fecha1.substring(6, 10);
                     fecha2=fecha2.substring(3, 5)+"/"+fecha2.substring(0, 2)+"/"+fecha2.substring(6, 10);
@@ -781,6 +758,121 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
         }
 
     }
+
+    public int getRecorCountNotas() {
+        int retorno =0;
+        try {
+            Query notas = em.createQuery("SELECT n FROM Notadepedido n");
+
+            retorno =notas.getResultList().size();
+
+        } catch (Exception e) {
+            retorno =-1;
+            logger.error("Error en metodo getRecorCountNotas");
+        }finally{
+            return retorno;
+        }
+        
+    }
+
+
+    public String selectAllNotas() {
+        String lista = "<Lista>\n";
+        try {
+            Query consulta = em.createNativeQuery("SELECT * FROM NOTADEPEDIDO n ORDER BY n.ID DESC, n.FECHADECOMPRA DESC",Notadepedido.class);
+            List<Notadepedido>result = consulta.getResultList();
+
+            if(result.size()==0)
+                lista="LA CONSULTA NO ARROJÓ RESULTADOS";
+            else{
+                    for (Iterator<Notadepedido> it = result.iterator(); it.hasNext();) {
+                    Notadepedido notape = it.next();
+                    lista+=devolverNotaProcesadaSB(notape).toString();
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            lista ="ERROR EN METODO selectAllNotas";
+            logger.error("Error en metodo selecAllNotas");
+        }finally{
+        return lista+"</Lista>\n";
+        }
+    }
+
+    private StringBuilder devolverNotaProcesadaSB(Notadepedido nota) {
+                long idusuarioexpidio=0L;
+                String usuarioexpidio ="";
+                long idusuarioanulonota=0L;
+                String usuarioanulonota ="";
+                long idusuarioentregonota=0L;
+                String usuarioentregonota ="";
+                long idusuariocancelonota =0L;
+                String usuariocancelonota="";
+                StringBuilder sb=null;
+        try {
+                         sb=new StringBuilder(nota.toXML());
+
+            if(nota.getIdUsuarioExpidioNota()>0){
+                 idusuarioexpidio = nota.getIdUsuarioExpidioNota();
+                Personas persona = em.find(Personas.class, idusuarioexpidio);
+                usuarioexpidio=persona.getApellido().toUpperCase()+" "+persona.getNombre().toUpperCase();
+                sb.replace(sb.indexOf("dionota>")+8, sb.indexOf("</usuarioex"), usuarioexpidio);
+            }
+                    if(nota.getIdusuarioAnulado()>0){
+                        idusuarioanulonota = nota.getIdusuarioAnulado();
+                        Personas persona = em.find(Personas.class, idusuarioanulonota);
+                        usuarioanulonota=persona.getApellido().toUpperCase()+" "+persona.getNombre().toUpperCase();
+                        sb.replace(sb.indexOf("anulonota>")+10, sb.indexOf("</usuarioanul"), usuarioanulonota.toUpperCase());
+
+                    }
+                            if(nota.getIdusuarioEntregado()>0){
+                                idusuarioentregonota=nota.getIdusuarioEntregado();
+                                Personas persona = em.find(Personas.class, idusuarioentregonota);
+                                usuarioentregonota=persona.getApellido().toUpperCase()+" "+persona.getNombre().toUpperCase();
+                                sb.replace(sb.indexOf("oentregonota>")+13, sb.indexOf("</usuarioent"), usuarioentregonota.toUpperCase());
+                            }
+                                if(nota.getIdusuariocancelo()>0){
+                                        idusuariocancelonota=nota.getIdusuariocancelo();
+                                        Personas persona = em.find(Personas.class, idusuariocancelonota);
+                                        usuariocancelonota=persona.getApellido().toUpperCase()+" "+persona.getNombre().toUpperCase();
+                                        sb.replace(sb.indexOf("ocancelonota>")+13, sb.indexOf("</usuariocan"), usuariocancelonota.toUpperCase());
+                                }
+
+        } catch (Exception e) {
+        }finally{
+            return sb;
+        }
+    }
+
+    public String verNotasPedidoPaginadas(int index, int recordCount) {
+        String result="<Lista>\n";
+        try {
+            Query consulta = em.createNativeQuery("SELECT FIRST "+recordCount+" SKIP ("+index+"*"+recordCount+") n.ID  FROM NOTADEPEDIDO n ORDER BY n.ID DESC, n.FECHADECOMPRA DESC", Notadepedido.class);
+            List<Notadepedido>lista = consulta.getResultList();
+
+            if(lista.size()==0)
+                result="LA CONSULTA NO ARROJÓ RESULTADOS!!!";
+            else{
+                for (Iterator<Notadepedido> it = lista.iterator(); it.hasNext();) {
+                    Notadepedido notape = it.next();
+                    result+=devolverNotaProcesadaSB(notape).toString();
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            result = "Error en metodo vernotaspedidopaginadas";
+            logger.error("Error en metodo vernotasPedidoPaginadas");
+        }finally{
+        return result+"</Lista>\n";
+        }
+
+    }
+
+
 
 
 

@@ -50,11 +50,11 @@ public class EJBEmpleados implements EJBEmpleadosRemote {
             
             FullTimeEmpleado empfulltime = new FullTimeEmpleado();
             
-                 empfulltime.setApellido(apellido);
+                 empfulltime.setApellido(apellido.toUpperCase());
             
                  empfulltime.setEmail(email.toLowerCase());
             
-                 empfulltime.setNombre(nombre);
+                 empfulltime.setNombre(nombre.toUpperCase());
             
                  empfulltime.setNameuser(StringEscapeUtils.escapeXml(nameuser.toLowerCase()));
             
@@ -121,9 +121,9 @@ public class EJBEmpleados implements EJBEmpleadosRemote {
                 GregorianCalendar gc = new GregorianCalendar();
                 if(retorno==0){
                         EmpleadoParttime empparttime = new EmpleadoParttime();
-                        empparttime.setApellido(apellido);
+                        empparttime.setApellido(apellido.toUpperCase());
                         empparttime.setNameuser(StringEscapeUtils.escapeXml(nameuser.toLowerCase()));
-                        empparttime.setNombre(nombre);
+                        empparttime.setNombre(nombre.toUpperCase());
                         empparttime.setFechacarga(gc.getTime());
                         
                         empparttime.setPassword(StringEscapeUtils.escapeXml(password));
