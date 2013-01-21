@@ -721,7 +721,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
             
 
-            Query jpasql=em.createNativeQuery("SELECT * from NOTADEPEDIDO n where CAST(n.FECHADECOMPRA as date)  between CAST('"+fecha1+"' as DATE) and cast('"+fecha2+"' as date)", Notadepedido.class);
+            Query jpasql=em.createNativeQuery("SELECT * from NOTADEPEDIDO n where CAST(n.FECHADECOMPRA as date)  between CAST('"+fecha1+"' as DATE) and cast('"+fecha2+"' as date) order by n.id desc", Notadepedido.class);
                 lista= jpasql.getResultList();
 
                 if(lista.size()>0){
