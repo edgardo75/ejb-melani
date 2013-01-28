@@ -439,6 +439,8 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                         historico.setIdusuariocancelo(notadepedido.getUsuario_cancelo_nota());
 
                         historico.setIdusuarioentrega(notadepedido.getUsuario_entregado());
+
+                        
             
                         historico.setIdusuarioexpidio(notadepedido.getUsuario_expidio_nota());
 
@@ -451,6 +453,11 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                         historico.setRecargo(BigDecimal.valueOf(notadepedido.getRecargo()));
 
                         historico.setHoraregistro(gc.getTime());
+
+                        historico.setCancelado(notadepedido.getCancelado());
+
+                        historico.setAnulado(notadepedido.getAnulado());
+
                         
                         historico.setAccion("Historico Almacenado con exito nota de pedido N "+notape.getId());
             
@@ -505,7 +512,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             
 
             
-            
+            System.out.println(xml+="</Lista>\n");
             
             
             
@@ -564,40 +571,76 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
         }
     }
 
-    public long cancelarNotaPedido(long idnota,int idusuariocancelo) {
+    public long cancelarNotaPedido(long idnota,int idusuariocancelo,int estado) {
         long result = 0L;
+        
+        char cancelado ='0';
         try {
             //--------------------------------------------------------------------------
                        GregorianCalendar gc = new GregorianCalendar(Locale.getDefault());
             //--------------------------------------------------------------------------
             //--------------------------------------------------------------------------
             Notadepedido nota = em.find(Notadepedido.class,idnota);
-                nota.setCancelado(Character.valueOf('1'));
-                nota.setPendiente(Character.valueOf('0'));
+            Empleados empleado = em.find(Empleados.class,(long) idusuariocancelo);
+            if(estado==1){
+                cancelado ='1';
+                nota.setCancelado(Character.valueOf(cancelado));
+                
                 nota.setIdusuariocancelo(idusuariocancelo);
                 nota.setFecancelado(gc.getTime());
+            }else{
+                nota.setCancelado(Character.valueOf(cancelado));
+        
+                nota.setIdusuariocancelo(idusuariocancelo);
+                nota.setFecancelado(gc.getTime());
+            }
             //--------------------------------------------------------------------------
             List<Detallesnotadepedido>lista = nota.getDetallesnotadepedidoList();
             //--------------------------------------------------------------------------
             for (Iterator<Detallesnotadepedido> it = lista.iterator(); it.hasNext();) {
                 Detallesnotadepedido detallesnotadepedido = it.next();
-                detallesnotadepedido.setCancelado(Character.valueOf('1'));
+                detallesnotadepedido.setCancelado(Character.valueOf(cancelado));
+                
             }
             //--------------------------------------------------------------------------
                             Historiconotapedido historico = new Historiconotapedido();
-                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" CANCELADA POR EL USUARIO "+idusuariocancelo);
-                                historico.setAnticipo(BigDecimal.ZERO);
-                                historico.setEntregado(Character.valueOf(nota.getEntregado()));
+                            if(estado==1){
+                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" CANCELADA POR EL USUARIO "+idusuariocancelo+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
+                               
+                                historico.setCancelado(Character.valueOf(cancelado));
+                                
+                            }else{
+                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+"NO CANCELADA O CAMBIADA DE ESTADO POR EL USUARIO "+idusuariocancelo+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
+                               
+                                historico.setCancelado(Character.valueOf(cancelado));
+                                
+
+                            }
+
+                                historico.setAnticipo(BigDecimal.ZERO);                                
                                 historico.setFecharegistro(gc.getTime());
                                 historico.setFkidnotapedido(nota);
+                                
                                 historico.setHoraregistro(gc.getTime());
+                                historico.setPendiente(Character.valueOf('0'));
+                                historico.setEntregado(Character.valueOf('0'));
                                 historico.setIdusuarioanulo(0);
                                 historico.setIdusuarioentrega(0);
                                 historico.setIdusuarioexpidio(0);
-                                historico.setPendiente(Character.valueOf(nota.getPendiente()));
+                                historico.setIdusuariocancelo(idusuariocancelo);
                                 historico.setPorcentajeaplicado(Short.valueOf("0"));
                                 historico.setSaldo(BigDecimal.ZERO);
                                 historico.setTotal(BigDecimal.ZERO);
+                                historico.setTotalapagar(BigDecimal.ZERO);
+                                historico.setRecargo(BigDecimal.ZERO);
+                                historico.setPorcrecargo(BigDecimal.ZERO);
+                                historico.setObservaciones("");
+                                historico.setDescuento(BigDecimal.ZERO);
+                                historico.setAnulado('0');
+                                
+
+
+                                 em.persist(historico);
           //----------------------------------------------------------------------------------
                             long notaID = procesaListNotaHistorico(nota,historico);
           //----------------------------------------------------------------------------------
@@ -621,6 +664,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                      try {
                             Query consulta = em.createQuery("SELECT h FROM Historiconotapedido h WHERE h.fkidnotapedido.id = :idnota");
                         consulta.setParameter("idnota", nota.getId());
+                  
                            nota.setHistoriconotapedidoList(consulta.getResultList());
 
                       } catch (Exception e) {
@@ -642,39 +686,78 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
     }
 
-    public long entregarNotaPedido(long idnota, int idusuarioentrega) {
+    public long entregarNotaPedido(long idnota, int idusuarioentrega, int estado) {
         long result = 0L;
+        char pendiente = '0';
+        char entregado ='0';
         try {
             //--------------------------------------------------------------------
                 GregorianCalendar gc = new GregorianCalendar(Locale.getDefault());
             //--------------------------------------------------------------------
 
-                Notadepedido nota = em.find(Notadepedido.class, idnota);
-                    nota.setEntregado(Character.valueOf('1'));
+                Notadepedido nota = em.find(Notadepedido.class,(long) idnota);
+                Empleados empleado = em.find(Empleados.class,(long) idusuarioentrega);
+                if(estado==1){
+                    entregado ='1';
+                    nota.setEntregado(Character.valueOf(entregado));
                     nota.setFechaentrega(gc.getTime());
-                    nota.setPendiente(Character.valueOf('0'));
+
+                    nota.setPendiente(Character.valueOf(pendiente));
                     nota.setIdusuarioEntregado(idusuarioentrega);
+                }else{
+                    pendiente ='1';
+                     nota.setEntregado(Character.valueOf(entregado));
+                     nota.setFechaentrega(gc.getTime());
+                     nota.setPendiente(pendiente);
+                     nota.setIdusuarioEntregado(idusuarioentrega);
+                }
 
                 List<Detallesnotadepedido>lista = nota.getDetallesnotadepedidoList();
 
                     for (Iterator<Detallesnotadepedido> it = lista.iterator(); it.hasNext();){
                             Detallesnotadepedido detallesnotadepedido = it.next();
-                            detallesnotadepedido.setEntregado(Character.valueOf('1'));
+                            detallesnotadepedido.setEntregado(Character.valueOf(entregado));
+                            detallesnotadepedido.setPendiente(Character.valueOf(pendiente));
                     }
                 Historiconotapedido historico = new Historiconotapedido();
-                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" ENTREGADA POR EL USUARIO "+idusuarioentrega);
-                                historico.setAnticipo(BigDecimal.ZERO);
+
+                        if(estado==1){
+                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" ENTREGADA POR EL EMPLEADO N° "+idusuarioentrega+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
                                 historico.setEntregado(Character.valueOf('1'));
+                                historico.setPendiente(pendiente);
+
+                        }else{
+                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" NO ENTREGADA, ACCION REALIZADA POR EMPLEADO N° "+idusuarioentrega+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
+                                historico.setEntregado(Character.valueOf('0'));
+                                historico.setPendiente(pendiente);
+                        }
+
+                                historico.setAnticipo(BigDecimal.ZERO);
+                         
                                 historico.setFecharegistro(gc.getTime());
                                 historico.setFkidnotapedido(nota);
                                 historico.setHoraregistro(gc.getTime());
                                 historico.setIdusuarioanulo(0);
                                 historico.setIdusuarioentrega(idusuarioentrega);
                                 historico.setIdusuarioexpidio(0);
-                                historico.setPendiente(Character.valueOf('1'));
+                                historico.setIdusuariocancelo(0);
+                                
+                                
+                                
                                 historico.setPorcentajeaplicado(Short.valueOf("0"));
                                 historico.setSaldo(BigDecimal.ZERO);
                                 historico.setTotal(BigDecimal.ZERO);
+                                historico.setAnulado('0');
+                                historico.setAnticipo(BigDecimal.ZERO);
+                                historico.setCancelado('0');
+                                historico.setDescuento(BigDecimal.ZERO);
+                                historico.setObservaciones("");
+                                historico.setPorcrecargo(BigDecimal.ZERO);
+                                historico.setRecargo(BigDecimal.ZERO);
+                                 historico.setTotalapagar(BigDecimal.ZERO);
+
+                                
+                               
                 //----------------------------------------------------------------------------------
                             long notaID = procesaListNotaHistorico(nota,historico);
           //----------------------------------------------------------------------------------
@@ -842,6 +925,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
         } catch (Exception e) {
         }finally{
+           
             return sb;
         }
     }
@@ -871,6 +955,101 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
         }
 
     }
+
+    public long anularNotaPedido(long idnota, long idusuario, int estado) {
+        long result = 0L;
+        
+        char anulada ='0';
+        try {
+            //--------------------------------------------------------------------
+                GregorianCalendar gc = new GregorianCalendar(Locale.getDefault());
+            //--------------------------------------------------------------------
+
+                Notadepedido nota = em.find(Notadepedido.class,idnota);
+                Empleados empleado = em.find(Empleados.class,idusuario);
+                if(estado==1){
+                    anulada ='1';
+                    
+                    nota.setFechaAnulado(gc.getTime());
+                    
+                    
+                    nota.setIdusuarioAnulado((int)idusuario);
+                    nota.setAnulado(Character.valueOf(anulada));
+                    
+
+                }else{
+                    
+                     nota.setAnulado(anulada);
+                     nota.setFechaAnulado(gc.getTime());
+                     nota.setIdusuarioAnulado((int)idusuario);
+                }
+
+                List<Detallesnotadepedido>lista = nota.getDetallesnotadepedidoList();
+
+                    for (Iterator<Detallesnotadepedido> it = lista.iterator(); it.hasNext();){
+                            Detallesnotadepedido detallesnotadepedido = it.next();
+                            detallesnotadepedido.setAnulado(Character.valueOf(anulada));
+                    }
+                Historiconotapedido historico = new Historiconotapedido();
+
+                        if(estado==1){
+                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" ANULADA POR EL EMPLEADO N° "+idusuario+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
+                                historico.setAnulado(anulada);
+                                
+
+                        }else{
+                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" NO ANULADA, ACCION REALIZADA POR EMPLEADO N° "+idusuario+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
+                                historico.setAnulado(anulada);
+
+                        }
+
+                                historico.setIdusuarioanulo((int)idusuario);
+
+                                historico.setAnticipo(BigDecimal.ZERO);
+
+                                historico.setFecharegistro(gc.getTime());
+                                historico.setFkidnotapedido(nota);
+                                historico.setHoraregistro(gc.getTime());
+                                
+                                historico.setIdusuarioentrega(0);
+                                historico.setIdusuarioexpidio(0);
+                                historico.setIdusuariocancelo(0);
+
+                                historico.setPorcentajeaplicado(Short.valueOf("0"));
+                                historico.setSaldo(BigDecimal.ZERO);
+                                historico.setTotal(BigDecimal.ZERO);
+                                historico.setTotalapagar(BigDecimal.ZERO);
+                                historico.setRecargo(BigDecimal.ZERO);
+                                historico.setPorcrecargo(BigDecimal.ZERO);
+                                historico.setPendiente('0');
+                                historico.setObservaciones("");
+                                historico.setEntregado('0');
+                                historico.setDescuento(BigDecimal.ZERO);
+                                historico.setCancelado('0');
+
+
+                             
+                //----------------------------------------------------------------------------------
+                            long notaID = procesaListNotaHistorico(nota,historico);
+          //----------------------------------------------------------------------------------
+                            em.flush();
+
+                       result = notaID;
+
+
+        } catch (Exception e) {
+            logger.error("Error en metodo anularNotaPedido "+e.getCause());
+            result = -1;
+        }finally{
+            return result;
+        }
+    }
+
+    public long actualizarNotaPedido(String xmlnotapedidomodificada) {
+        return 0L;
+    }
+
+ 
 
 
 

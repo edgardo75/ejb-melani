@@ -20,9 +20,9 @@ public interface EJBNotaPedidoRemote {
 
     long modificarSaldoNota(long idnota, double saldo, int idusuario);
 
-    long cancelarNotaPedido(long idnota,int idusuariocancelo);
+    long cancelarNotaPedido(long idnota,int idusuariocancelo,int estado);
 
-    long entregarNotaPedido(long idnota, int idusuario);
+    long entregarNotaPedido(long idnota, int idusuario,int estado);
 
     String selectNotaEntreFechas(String fecha1, String fecha2,int idvendedor);
 
@@ -31,6 +31,12 @@ public interface EJBNotaPedidoRemote {
     String selectAllNotas();
 
     String verNotasPedidoPaginadas(int index, int recordCount);
+
+    long anularNotaPedido(long idnota, long idusuario, int estado);
+
+    long actualizarNotaPedido(String xmlnotapedidomodificada);
+
+ 
 
    
     
