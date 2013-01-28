@@ -59,6 +59,10 @@ public class Historiconotapedido implements Serializable {
     private Character pendiente;
     @Column(name = "ENTREGADO")
     private Character entregado;
+     @Column(name = "CANCELADO")
+    private Character cancelado;
+      @Column(name = "ANULADO")
+    private Character anulado;
     @Column(name = "TOTAL",scale=3,precision=15)
     private BigDecimal total;
     @Column(name = "IDUSUARIOEXPIDIO")
@@ -282,6 +286,22 @@ public class Historiconotapedido implements Serializable {
         this.totalapagar = totalapagar;
     }
 
+    public Character getCancelado() {
+        return cancelado;
+    }
+
+    public void setCancelado(Character cancelado) {
+        this.cancelado = cancelado;
+    }
+
+    public Character getAnulado() {
+        return anulado;
+    }
+
+    public void setAnulado(Character anulado) {
+        this.anulado = anulado;
+    }
+
 
     @Override
     public int hashCode() {
@@ -321,27 +341,32 @@ public class Historiconotapedido implements Serializable {
 
             String item = "";
         try {
-
+          
               
             item+="<item>\n"
                            + "<idhistorico>"+this.getIdhistorico()+"</idhistorico>\n"
-                           + "<anticipo>"+this.getAnticipo()+"</anticipo>\n"
-                           + "<entregado>"+this.getEntregado()+"</entregado>\n"
+                           
+                           + "<anticipo>"+this.getAnticipo().toString()+"</anticipo>\n"
+                           + "<entregado>"+this.getEntregado().toString()+"</entregado>\n"
                            + "<fecharegistro>"+fereg+"</fecharegistro>\n"
-                           + "<horaregistro>"+hourreg+"</horaregistro>\n"
+                           + "<horaregistro>"+hourreg+"</horaregistro>\n" 
+                          + "<cancelado>"+this.getCancelado().toString()+"</cancelado>\n"
+                          + "<anulado>"+this.getAnulado().toString()+"</anulado>\n"
                            + "<idnota>"+this.getFkidnotapedido().getId()+"</idnota>\n"
-                           + "<iduseranulo>"+this.getIdusuarioanulo()+"</iduseranulo>\n"
-                           + "<iduserentrega>"+this.getIdusuarioentrega()+"</iduserentrega>\n"
-                           + "<iduserexpidio>"+this.getIdusuarioexpidio()+"</iduserexpidio>\n" +
-                           "<idusuariocancelo>"+this.getIdusuariocancelo()+"</idusuariocancelo>\n" +
+                           + "<iduseranulo>"+this.getIdusuarioanulo().toString()+"</iduseranulo>\n"
+                           + "<iduserentrega>"+this.getIdusuarioentrega().toString()+"</iduserentrega>\n"
+                           + "<iduserexpidio>"+this.getIdusuarioexpidio().toString()+"</iduserexpidio>\n" +
+                           "<idusuariocancelo>"+this.getIdusuariocancelo().toString()+"</idusuariocancelo>\n" +
                            "<recargo>"+this.getRecargo().toString()+"</recargo>\n" +
                            "<totalapagar>"+this.getTotalapagar().toString()+"</totalapagar>\n" +
-                           "<porcrecargo>"+this.getPorcrecargo()+"</porcrecargo>\n" +
+                           "<porcrecargo>"+this.getPorcrecargo().toString()+"</porcrecargo>\n" +
+                          
+
                            "<descuento>"+this.getDescuento().toString()+"</descuento>\n" +
                            "<accion>"+StringEscapeUtils.escapeXml(this.getAccion())+"</accion>\n"
 
-                           + "<saldo>"+this.getSaldo()+"</saldo>\n"
-                           + "<total>"+this.getTotal()+"</total>\n" +
+                           + "<saldo>"+this.getSaldo().toString()+"</saldo>\n"
+                           + "<total>"+this.getTotal().toString()+"</total>\n" +
                    "</item>\n";
 
 

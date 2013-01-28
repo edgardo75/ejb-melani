@@ -484,7 +484,9 @@ public class Notadepedido implements Serializable {
             item+="<item>\n"
 
                 + "<id>"+this.getId()+"</id>\n"
-                + "<numerocupon>"+this.getNumerodecupon().toString()+"</numerocupon>\n"               
+                + "<numerocupon>"+this.getNumerodecupon().toString()+"</numerocupon>\n"
+                + "<tarjetadecredito>"+this.getIdTarjetaFk().getDescripcion()+"</tarjetadecredito>\n" +
+                "<idtarjeta>"+this.getIdTarjetaFk().getIdtarjeta()+"</idtarjeta>\n"
                 + "<observaciones>"+StringEscapeUtils.escapeXml(this.getObservaciones())+"</observaciones>\n"
                 + "<anticipo>"+this.getAnticipo()+"</anticipo>\n"
                 + "<anulado>"+this.getAnulado()+"</anulado>\n"
@@ -503,7 +505,7 @@ public class Notadepedido implements Serializable {
                 + "</cliente>\n"
                 + "<idporcentajes>"+this.getFkidporcentajenotaId().getIdPorcentajes()+"</idporcentajes>\n"
                 + "<horacompra>"+hocompra+"</horacompra>\n"
-                + "<tarjetadecredito>"+this.getIdTarjetaFk().getDescripcion()+"</tarjetadecredito>\n"
+                
                 + "<usuarioexpidionota>"+this.getIdUsuarioExpidioNota()+"</usuarioexpidionota>\n"
                 + "<usuarioanulonota>"+this.getIdusuarioAnulado()+"</usuarioanulonota>\n"
                 + "<usuarioentregonota>"+this.getIdusuarioEntregado()+"</usuarioentregonota>\n" +
