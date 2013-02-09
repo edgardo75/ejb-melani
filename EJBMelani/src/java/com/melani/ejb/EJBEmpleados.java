@@ -176,6 +176,7 @@ public class EJBEmpleados implements EJBEmpleadosRemote {
                     xml+="<id>" +empleados.getIdPersona()+"</id>\n"+
                             "<nombre>"+empleados.getNombre()+"</nombre>\n" +
                             "<apellido>"+empleados.getApellido()+"</apellido>\n" ;
+                            
                     xml+=empleados.toXMLEmpleado();
                     xml+="</item>\n";
 
