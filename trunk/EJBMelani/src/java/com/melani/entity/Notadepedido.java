@@ -500,7 +500,8 @@ public class Notadepedido implements Serializable {
                 + "<fechaentrega>"+feentrega+"</fechaentrega>\n"
                 + "<stockfuturo>"+this.getStockfuturo()+"</stockfuturo>\n"
                 + "<cliente>\n"
-                    + "<id>"+this.getFkIdcliente().getIdPersona()+"</id>\n"
+                    + "<id>"+this.getFkIdcliente().getIdPersona()+"</id>\n" +
+                    "<nrodocumento>"+this.getFkIdcliente().getNrodocumento()+"</nrodocumento>\n"
                     + "<apellidoynombre>"+this.getFkIdcliente().getApellido()+" "+this.getFkIdcliente().getNombre()+ "</apellidoynombre>\n"
                 + "</cliente>\n"
                 + "<idporcentajes>"+this.getFkidporcentajenotaId().getIdPorcentajes()+"</idporcentajes>\n"
@@ -510,6 +511,10 @@ public class Notadepedido implements Serializable {
                 + "<usuarioanulonota>"+this.getIdusuarioAnulado()+"</usuarioanulonota>\n"
                 + "<usuarioentregonota>"+this.getIdusuarioEntregado()+"</usuarioentregonota>\n" +
                 "<usuariocancelonota>"+this.getIdusuariocancelo()+"</usuariocancelonota>\n"
+                + "<idusuarioexpidionota>"+this.getIdUsuarioExpidioNota()+"</idusuarioexpidionota>\n"
+                + "<idusuarioanulonota>"+this.getIdusuarioAnulado()+"</idusuarioanulonota>\n"
+                + "<idusuarioentregonota>"+this.getIdusuarioEntregado()+"</idusuarioentregonota>\n" +
+                "<idusuariocancelonota>"+this.getIdusuariocancelo()+"</idusuariocancelonota>\n"
                 + "<montoiva>"+this.getMontoiva()+"</montoiva>\n"                
                 + "<pendiente>"+this.getPendiente()+"</pendiente>\n"
                 + "<recargo>"+this.getRecargo()+"</recargo>\n"
@@ -527,9 +532,11 @@ public class Notadepedido implements Serializable {
                         List<Detallesnotadepedido>lista = this.getDetallesnotadepedidoList();
                         for (Iterator<Detallesnotadepedido> it = lista.iterator(); it.hasNext();) {
                             Detallesnotadepedido detallesnotadepedido = it.next();
-                            item+="<itemdetalle>\n"
+                            item+="<itemdetalle>\n" +
+                                    "<idnota>"+detallesnotadepedido.getNotadepedido().getId()+"</idnota>\n"
                                     + "<producto>\n" +
-                                        "<id>"+detallesnotadepedido.getProductos().getSid()+"</id>\n"
+                                        "<id>"+detallesnotadepedido.getProductos().getSid()+"</id>\n" +
+                                        "<code>"+detallesnotadepedido.getProductos().getCodproducto()+"</code>\n"
                                     + "<descripcion>"+StringEscapeUtils.escapeXml(detallesnotadepedido.getProductos().getDescripcion())+"</descripcion>\n"
                                     + "</producto>\n"
                                     + "<cantidad>"+detallesnotadepedido.getCantidad()+"</cantidad>\n"

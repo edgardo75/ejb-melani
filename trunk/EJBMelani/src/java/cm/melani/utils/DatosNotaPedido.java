@@ -11,6 +11,7 @@ package cm.melani.utils;
 public class DatosNotaPedido {
     private long idnota;
     private Personas personas;
+    private int vendedor;
     private double montototal;
     private double anticipo;
     private double saldo;
@@ -38,6 +39,7 @@ public class DatosNotaPedido {
     private String fechaentrega;
     private String fechaanulada;
     private String fechacancelada;
+    private String fechacompra;
 
 
     public long getIdnota() {
@@ -46,6 +48,19 @@ public class DatosNotaPedido {
 
     public void setIdnota(long idnota) {
         this.idnota = idnota;
+    }
+
+    public int getVendedor() {
+        return vendedor;
+    }
+
+    public String getFechacompra() {
+        return fechacompra;
+    }
+    
+
+    public void setVendedor(int vendedor) {
+        this.vendedor = vendedor;
     }
 
     public int getUsuario_cancelo_nota() {
@@ -236,9 +251,7 @@ public class DatosNotaPedido {
      }
     //-----------------------------------------------------------------------------------------
     
-    public DetallesNotaPedido getDetallesnota() {
-        return detallesnotapedido;
-    }
+   
 
     public int getStockfuturo() {
         return stockfuturo;
