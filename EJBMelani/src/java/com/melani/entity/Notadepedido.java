@@ -505,8 +505,7 @@ public class Notadepedido implements Serializable {
                     + "<apellidoynombre>"+this.getFkIdcliente().getApellido()+" "+this.getFkIdcliente().getNombre()+ "</apellidoynombre>\n"
                 + "</cliente>\n"
                 + "<idporcentajes>"+this.getFkidporcentajenotaId().getIdPorcentajes()+"</idporcentajes>\n"
-                + "<horacompra>"+hocompra+"</horacompra>\n"
-                
+                + "<horacompra>"+hocompra+"</horacompra>\n"                
                 + "<usuarioexpidionota>"+this.getIdUsuarioExpidioNota()+"</usuarioexpidionota>\n"
                 + "<usuarioanulonota>"+this.getIdusuarioAnulado()+"</usuarioanulonota>\n"
                 + "<usuarioentregonota>"+this.getIdusuarioEntregado()+"</usuarioentregonota>\n" +

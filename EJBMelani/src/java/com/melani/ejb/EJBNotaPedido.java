@@ -227,7 +227,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                  else{
 
                                              retorno = notape.getId();
-                                             logger.info("NOTA DE PEDIDO ACCIONADA POR VENDEDOR "+notadepedido.getVendedor());
+                                             logger.info("NOTA DE PEDIDO "+retorno+" ACCIONADA POR VENDEDOR "+notadepedido.getVendedor());
 
                                  }
 
@@ -517,7 +517,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             
 
             
-            System.out.println(xml+="</Lista>\n");
+           
             
             
             
@@ -1084,7 +1084,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
             nota.setAnticipo(BigDecimal.valueOf(datosnotapedido.getAnticipo()));
             
                                             nota.setAnulado(datosnotapedido.getAnulado());
-                                            
+                                    
 
                                             nota.setEnefectivo(datosnotapedido.getEnefectivo());
                                             
@@ -1105,7 +1105,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                             
 
                                             nota.setIdUsuarioExpidioNota(datosnotapedido.getUsuario_expidio_nota());
-                                            
+                        
 
                                             nota.setIdusuarioAnulado(datosnotapedido.getId_usuario_anulado());
                                             
@@ -1149,8 +1149,9 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
                                             nota.setDescuentonota(BigDecimal.valueOf(datosnotapedido.getDescuentonota()));
                                             
-                                            nota.setIdusuariocancelo(datosnotapedido.getUsuario_cancelo_nota());
-                                          
+                        
+                        nota.setIdusuariocancelo(datosnotapedido.getUsuario_cancelo_nota());
+                        
 
                                             try {
                                                 nota.setMontototalapagar(BigDecimal.valueOf(datosnotapedido.getMontototalapagar()));
@@ -1159,7 +1160,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                                 ex.printStackTrace();
                                             }
 
-
+                                            
                                             nota.setPorcdesctotal(BigDecimal.valueOf(datosnotapedido.getPorc_descuento_total()));
                                           
                                             nota.setPorcrecargo(BigDecimal.valueOf(datosnotapedido.getPorcentajerecargo()));
@@ -1180,6 +1181,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                                 
                                                 Query deletesql = em.createNativeQuery("DELETE FROM DETALLESNOTADEPEDIDO d WHERE d.FK_IDNOTA = "+nota.getId());
                                                 deletesql.executeUpdate();
+                                                
                                                   em.refresh(nota);
                                                   
                                                   em.flush();
@@ -1187,7 +1189,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                                  
                                                     for (Iterator<Itemdetallesnota> it = lista.iterator(); it.hasNext();) {
                                                         Itemdetallesnota itemdetallesnota = it.next();
-                                                        
+
                                                             Detallesnotadepedido detallesnotadepedido = new Detallesnotadepedido();
                                                          
                                                             detallesnotadepedido.setAnulado(itemdetallesnota.getAnulado());
@@ -1263,7 +1265,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                      result =  almacenarhistorico(datosnotapedido,nota);
 
            result=nota.getId();
-           logger.info("NOTA DE PEDIDO ACTUALIZADA POR EMPLEADO "+datosnotapedido.getVendedor());
+           logger.info("NOTA DE PEDIDO "+result+" ACTUALIZADA POR EMPLEADO "+datosnotapedido.getVendedor());
                                   //-----------------------------------------------------------------------------
 
 
