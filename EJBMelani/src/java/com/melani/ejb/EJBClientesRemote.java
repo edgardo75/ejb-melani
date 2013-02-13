@@ -19,6 +19,9 @@ public interface EJBClientesRemote {
 
     long addCliente(String xmlClienteDomicilioTelefono);
 
+     String parsearCaracteresEspecialesXML1(String xmlaParsear);
+
+
     String obtenerCliente(long idCliente);
 
     String obtenerClienteXTipoAndNumeroDocu(short idTipo, int nrodDocu);

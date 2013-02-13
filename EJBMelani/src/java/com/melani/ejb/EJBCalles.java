@@ -50,7 +50,7 @@ public class EJBCalles implements EJBCallesRemote {
                 calle.setDescripcion(descripcion.toUpperCase());
                 em.persist(calle);
                 em.flush();
-                logger.info("Se cargó la descripcion de la calle");
+                
                 retorno = calle.getId();
 
             } else {
