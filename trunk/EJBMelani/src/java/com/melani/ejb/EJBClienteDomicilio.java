@@ -45,14 +45,12 @@ public class EJBClienteDomicilio implements EJBClienteDomicilioRemote {
             GregorianCalendar calendario = new GregorianCalendar(Locale.getDefault());
             PersonasdomiciliosPK perpk = new PersonasdomiciliosPK(idDomicilio, idCliente);
 
-            //if(em.find(PersonasDomicilios.class, perpk)!=null){
+            
 
                 PersonasDomicilios personadomici = renovarDomicilio(idDomicilio,idCliente,idUsuario);
-                if(personadomici!=null)
-                    logger.info("DOMICILIO RENOVADO");
-                //retorno ="LA RELACION PERSONADOMICILIO EXISTE";
                 
-           // }else{
+                
+           
 
                 PersonasDomicilios personadomicilio = new PersonasDomicilios();
                 personadomicilio.setDomicilioss(em.find(Domicilios.class, idDomicilio));
@@ -65,9 +63,9 @@ public class EJBClienteDomicilio implements EJBClienteDomicilioRemote {
                 em.flush();
                 retorno ="InyectóRelacion";
 
-                logger.info("Relacion PersonaDomicilio Agregada Con Exito Cliente "+idCliente+" Domicilio "+idDomicilio);
+                
 
-            //}
+            
 
 
         } catch (Exception e) {
@@ -81,8 +79,7 @@ public class EJBClienteDomicilio implements EJBClienteDomicilioRemote {
     private PersonasDomicilios renovarDomicilio(long idDomicilio, long idCliente,int idUsuario) {
         PersonasDomicilios perdomi = null;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            GregorianCalendar calendario = new GregorianCalendar(Locale.getDefault());
+            
             perdomi = em.find(PersonasDomicilios.class, new PersonasdomiciliosPK(idDomicilio, idCliente));
 
             Query consulta = em.createQuery("SELECT p FROM PersonasDomicilios p WHERE p.personasdomiciliosPK.idPersona = :idPersona");
@@ -94,7 +91,7 @@ public class EJBClienteDomicilio implements EJBClienteDomicilioRemote {
                     for (Iterator<PersonasDomicilios> it = lista.iterator(); it.hasNext();) {
                          personasDomicilios = it.next();
                         ejbhistperdom.addOneHomePerson(Integer.valueOf(String.valueOf(personasDomicilios.getDomicilioss().getId())),Integer.valueOf(String.valueOf(personasDomicilios.getPersonas().getIdPersona())), idUsuario);
-                        logger.info("Domicilio Removido de la Relacion "+personasDomicilios.getPersonas().getIdPersona()+" el dia "+sdf.format(calendario.getTime())+"Domicilio ID "+personasDomicilios.getDomicilioss().getId());
+                      
                         em.remove(personasDomicilios);
 
 
@@ -105,19 +102,7 @@ public class EJBClienteDomicilio implements EJBClienteDomicilioRemote {
             perdomi=personasDomicilios;
 
 
-            /*if(perdomi==null){
-
-                PersonasDomicilios clidomi = new PersonasDomicilios();
-                clidomi.setDomicilioss(em.find(Domicilios.class, idDomicilio));
-                clidomi.setPersonas(em.find(Clientes.class, idCliente));
-                clidomi.setEstado("Domicilio RENOVADO AGREGADO");
-                clidomi.setFechaingresovivienda(calendario.getTime());
-                clidomi.setPersonasdomiciliosPK(new PersonasdomiciliosPK(idDomicilio, idCliente));
-                em.persist(clidomi);
-                em.flush();
-                logger.info("Domicilio Renovado del Cliente "+idCliente+" el dia "+GregorianCalendar.getInstance().toString()+"Domicilio ID "+idDomicilio);
-                perdomi = clidomi;
-            }*/
+            
             
 
 

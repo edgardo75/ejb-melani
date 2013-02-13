@@ -17,7 +17,7 @@ public class DatosCliente {
     private String apellido;// variable interna atribute apellido
     private String nombre;// variable interna atribute nombre
     private String email;//variable interna atribute email
-    private String det2allescli;//variable interna atribute observaciones
+    private String observaciones;//variable interna atribute observaciones
     private Integer nrodocu;//variable interna atribute nrodocu
     private Short idtipodocu;//variable interna atribute idtipodocu
     private float totalcompras;//variable interna atribute totalcompras
@@ -29,12 +29,24 @@ public class DatosCliente {
      * Este metodo devuelve el apellido de un cliente
      */
     public DatosCliente(){}
+
+
     public String getApellido() {
         return apellido;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 /*
  * Este metodo "setea" los datos del cliente
  */
+
+    
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
@@ -45,6 +57,8 @@ public class DatosCliente {
     public String getEmail() {
         return email;
     }
+
+   
     /*
      * Este metodo "setea" el email del cliente
      */
@@ -87,18 +101,7 @@ public class DatosCliente {
     public void setNrodocu(Integer nrodocu) {
         this.nrodocu = nrodocu;
     }
-/*
- * Este metodo devuelve las observaciones de un cliente
- */
-    public String getObservaciones() {
-        return det2allescli;
-    }
-/*
- * Este metodo "setea" las observaciones del cliente
- */
-    public void setObservaciones(String det2allescli) {
-        this.det2allescli = det2allescli;
-    }
+
 /*
  * Este metodo devuelve el total de compras
  */
@@ -136,13 +139,7 @@ public class DatosCliente {
         this.idcliente = idcliente;
     }
 
-    public String getDet2allescli() {
-        return det2allescli;
-    }
-
-    public void setDet2allescli(String det2allescli) {
-        this.det2allescli = det2allescli;
-    }
+   
 
     public Generos getGenero() {
         return genero;

@@ -53,7 +53,7 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
             switch((int)idDomicilio){
                     case 0:{
                             retorno = procesarAddDomicilio(datosDomici);
-                            logger.info("Valor devuelto por retorno en addDomicilio "+retorno);
+                            
 
                     }
                     break;
@@ -191,10 +191,10 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
             
             oxq.close();
               if (xml.contains("<Lista/>")) {
-                logger.info("La Consulta no arrojó resultados!!!");
+                
                 retorno =0;
             }else{
-                logger.info("Domicilio encontrado!!!");
+                
                 retorno = Integer.valueOf(xml.substring(xml.indexOf("<ID_DOMICILIO>")+14,xml.indexOf("</ID_DOMICILIO>")));
             }
       
@@ -204,7 +204,7 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
             retorno=-1;
             logger.error("Error en metodo existe de EJBDomicilio "+e);
         }finally{
-            logger.info("Valor devuelto de existe "+retorno);
+            
              try {
 
                 if (con != null) {
@@ -238,14 +238,14 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
                     case 1:{
 
                         retorno=actualizarDomicilio(domiciXML);
-                        logger.info("Domicilio Actualizado "+retorno);
+                        
                     }
                     break;
                     case -1:retorno=-1;
                     break;
                 default:{
                     retorno = procesarAddDomicilio(domiciXML);
-                    logger.info("Domicilio Insertado Nº "+retorno);
+                    
                 }
             }
             

@@ -828,7 +828,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                      sb.replace(sb.indexOf("</numerocupon>")+14, sb.indexOf("<observaciones>"), "\n"+periodoconsultado);
                      xml=sb.toString();
                     Empleados empleado = em.find(Empleados.class,(long) idvendedor);
-                    logger.info("Informe entre fechas generado por el vendedor "+empleado.getApellido()+" "+empleado.getNombre());
+                    
                 }else
                     xml+="<result>lista vacia</result>\n";
 

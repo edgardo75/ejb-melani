@@ -51,7 +51,7 @@ public class EJBClienteTelefono implements EJBClienteTelefonoRemote {
                     em.persist(personatel);
                     em.flush();
                     retorno = "InyectoRelacionClienteTelefono";
-                    logger.info("Inyecto Relacion Telefono "+prefijo+" "+numero+" para el cliente "+idcliente);
+                    
 
             }
 

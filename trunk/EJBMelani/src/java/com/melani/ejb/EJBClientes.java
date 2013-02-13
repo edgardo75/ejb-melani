@@ -45,6 +45,7 @@ import javax.persistence.Query;
 
 import javax.sql.DataSource;
 import oracle.xml.sql.query.OracleXMLQuery;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
 
@@ -68,8 +69,7 @@ public class EJBClientes implements EJBClientesRemote {
     EJBClienteDomicilioRemote ejbclidom;
     @EJB
     EJBClienteTelefonoRemote ejbclitel;
-    @EJB
-    EJBPresupuestosRemote ejbpresupuestos;
+    
 
     private long retornoemail=0L;
 
@@ -143,11 +143,15 @@ public class EJBClientes implements EJBClientesRemote {
 
           
                     XStream  xstream = new XStream();
+                    
                     xstream.alias("ClienteDomicilioTelefono",ClienteDomicilioTelefono.class);
+                    
                     xstream.alias("item", DatosCliente.class);
+                    
                     //---------------------------------------------------------------------
                     if(xmlClienteDomicilioTelefono.contains("<Domicilio>"))
                             xstream.alias("Domicilio", DatosDomicilios.class);
+                    
                     //---------------------------------------------------------------------
                     if(xmlClienteDomicilioTelefono.contains("<telefono>")){
                         xstream.alias("listaTelefonos", ListaTelefonos.class);
@@ -157,21 +161,23 @@ public class EJBClientes implements EJBClientesRemote {
                     
             
             //------------------------------------------------------------------------------------------
-            ClienteDomicilioTelefono todosDatos = (ClienteDomicilioTelefono) xstream.fromXML(ejbpresupuestos.parsearCaracteresEspecialesXML1(xmlClienteDomicilioTelefono));
+            ClienteDomicilioTelefono todosDatos = (ClienteDomicilioTelefono) xstream.fromXML(parsearCaracteresEspecialesXML1(xmlClienteDomicilioTelefono));
                    
             
             //------------------------------------------------------------------------------------------
              DatosCliente datosClientePersonales =todosDatos.getCliente();
            //------------------------------------------------------------------------------------------
             ///++++++++++++++++++++++++++++++++++++Primero Chequeo el email y luego la persona si existene en la base de datos
-             retornoemail = chequearemail(datosClientePersonales.getEmail());
+             retornoemail = chequearemail(datosClientePersonales.getEmail(),datosClientePersonales.getNrodocu());
 
              switch((int)retornoemail){
                 
-                 case -7:{logger.info("Error en metodo chequear email");
+                 case -7:{logger.error("Error en metodo chequear email");
+                 retorno=retornoemail;
                  break;
                  }
-                 case -5:{logger.info("Email encontrado en metodo chequearemail");
+                 case -8:{logger.error("Email encontrado en metodo chequearemail");
+                 retorno=retornoemail;
                   break;
                  }
                  default:{
@@ -185,7 +191,7 @@ public class EJBClientes implements EJBClientesRemote {
                                 switch((int)idcliente){
                                     case 0:{
                                                 //------agrego el cliente y todos sus datos desde cero
-                                         logger.info("Por Agregar Datos Cliente desde Cero "+datosClientePersonales.getNrodocu()+" "+datosClientePersonales.getIdtipodocu());
+                                         
                                             retorno =agregarTodosLosDatosCliente(todosDatos,datosClientePersonales,xmlClienteDomicilioTelefono);
                                             obtenerCliente(retorno);
                                         }
@@ -195,7 +201,7 @@ public class EJBClientes implements EJBClientesRemote {
                                     }
 
                                     default:{
-                                        logger.info("El CLIENTE "+datosClientePersonales.getNrodocu()+" YA EXISTE!!!");
+                                        
                                             retorno = actualizarDatos(todosDatos,datosClientePersonales,xmlClienteDomicilioTelefono,idcliente);
                                             if(retorno >0)
                                             obtenerCliente(retorno);
@@ -217,7 +223,7 @@ public class EJBClientes implements EJBClientesRemote {
 
 
         } catch (Exception e) {
-            logger.error("Error en Metodo addCliente, EJBClientes, verifique"+e);
+            logger.error("Error en Metodo addCliente, EJBClientes, verifique "+e);
         }finally{
         return retorno;
         }
@@ -230,8 +236,7 @@ public class EJBClientes implements EJBClientesRemote {
             Query consulta = em.createQuery("SELECT p FROM Personas p WHERE p.nrodocumento = :nrodocu");
                 consulta.setParameter("nrodocu", nrodocu);
                 
-              if(consulta.getResultList().size()==1)
-                  logger.info("Cliente encotrado en metodo existe_cliente "+consulta.getResultList().size())  ;
+              
 
 
            List<Personas>lista = consulta.getResultList();
@@ -387,7 +392,7 @@ public class EJBClientes implements EJBClientesRemote {
                 em.merge(cliente);
                 em.persist(histcli);
 
-                logger.info("Datos del cliente Actualizado Nº "+cliente.getIdPersona());
+                
             }
         } catch (Exception e) {
             retorno=-6;
@@ -420,7 +425,7 @@ public class EJBClientes implements EJBClientesRemote {
 
 
         } catch (Exception e) {
-            logger.info("Error en metodo obtenerClienteXTipoAndNumeroDocu en EJBClientes "+e);
+            logger.error("Error en metodo obtenerClienteXTipoAndNumeroDocu en EJBClientes "+e);
         }finally{
           
         return result+"</Lista>";
@@ -597,13 +602,12 @@ public class EJBClientes implements EJBClientesRemote {
                                 if(result.contains("InyectóRelacion")){
             
                                     //---------------------------Agregamos la Relacion con Persona Cliente y Domicilios-----------
-                                    //PersonasdomiciliosPK clave = new PersonasdomiciliosPK(idDomicilio, cliente.getIdPersona());
+                               
             
 
                                     List<PersonasDomicilios>listaPD = em.createQuery("SELECT p FROM PersonasDomicilios p WHERE " +
                                             "p.personasdomiciliosPK.idPersona = :idPersona").setParameter("idPersona", cliente.getIdPersona()).getResultList();
-                                            /*em.createQuery("SELECT p FROM PersonasDomicilios p WHERE "
-                                            + "p.personasdomiciliosPK = :clave").setParameter("clave", clave).getResultList();*/
+                               
 
                                     //-----------------------------------------------------------------------------
             
@@ -656,7 +660,7 @@ public class EJBClientes implements EJBClientesRemote {
                                                 }
                                             }else{
                                                 if(rettelefono==1){
-                                                    logger.info("El telefono Nº"+datosTel.getNumero()+" ya se encuentra cargado");
+                                                    
                                                      resultTC = ejbclitel.addClienteTelefono(datosTel.getNumero(), datosTel.getPrefijo(), cliente.getIdPersona());
                                                      if(resultTC.indexOf("RelacionTelefonoExistente")!=-1)
                                                              logger.info("Relacion existente para el cliente "+cliente.getNrodocumento());
@@ -712,7 +716,7 @@ public class EJBClientes implements EJBClientesRemote {
                         }
                          
                     }
-          //  if(retorno > 0)
+          
                 retorno = cliente.getIdPersona();
             //---------------------------------------------------------------------------------------------
             
@@ -722,7 +726,7 @@ public class EJBClientes implements EJBClientesRemote {
             retorno =-3;
             logger.error("ERROR EN METODO GUARDAR DOMICILIO Y TELEFONO CLIENTE "+e.getMessage());
         }finally{
-            logger.info("Valor de retorno "+retorno);
+            
             return retorno;
 
         }
@@ -763,19 +767,22 @@ public class EJBClientes implements EJBClientesRemote {
         }
     }
 
-    public long chequearemail(String email) {
+    public long chequearemail(String email,Integer nrodocu) {
         long retorno = -6;
         try {
-            Query sqlemail = em.createQuery("SELECT p FROM Personas p WHERE p.email = :email");
-                sqlemail.setParameter("email", email.toLowerCase());
+            Query sqlemail = em.createQuery("SELECT p FROM Personas p WHERE p.email = :email and p.nrodocumento = :nrodocumento");
+                        sqlemail.setParameter("email", email.toLowerCase());
+                        sqlemail.setParameter("nrodocumento", nrodocu);
 
-                if(sqlemail.getResultList().size()==0)
-                    logger.info("Email no encontrado en metodo chequearemail "+sqlemail.getResultList().size());
-                    else{
-                        logger.info("Email encontrado en metodo chequearemail "+sqlemail.getResultList().size());
-               
+                if(sqlemail.getResultList().size()==1)
                              retorno = -5;
-                    }
+                else{
+                    sqlemail = em.createQuery("SELECT p FROM Personas p WHERE p.email = :email");
+                        sqlemail.setParameter("email", email.toLowerCase());
+                        if(sqlemail.getResultList().size()==1)
+                            retorno =-8;
+
+                }
                  
         } catch (Exception e) {
             retorno = -7;
@@ -827,18 +834,18 @@ public class EJBClientes implements EJBClientesRemote {
                     xstream.alias("ClienteDomicilioTelefono",ClienteDomicilioTelefono.class);
                     xstream.alias("item", DatosCliente.class);
 
-                    ClienteDomicilioTelefono datoscliente = (ClienteDomicilioTelefono) xstream.fromXML(ejbpresupuestos.parsearCaracteresEspecialesXML1(datospersonalescliente).toString());
+                    ClienteDomicilioTelefono datoscliente = (ClienteDomicilioTelefono) xstream.fromXML(parsearCaracteresEspecialesXML1(datospersonalescliente).toString());
                     DatosCliente getcliente = datoscliente.getCliente();
 
-                     retornoemail = chequearemail(getcliente.getEmail());
+                     retornoemail = chequearemail(getcliente.getEmail(),getcliente.getNrodocu());
 
              switch((int)retornoemail){
 
-                 case -7:{logger.info("Error en metodo chequear email");
+                 case -7:{logger.error("Error en metodo chequear email");
                     xml+="<error>Error en metodo chequear email</error>\n";
                  break;
                  }
-                 case -5:{logger.info("Email encontrado en metodo chequearemail");
+                 case -8:{logger.error("Email encontrado en metodo chequearemail");
                     xml+="<info>Email encontrado en metodo chequearemail<info>\n";
                   break;
                  }
@@ -917,7 +924,43 @@ public class EJBClientes implements EJBClientesRemote {
 
 
 
+
+
+
 //--------------------------------------------------------------------------------------------------
+
+      public String parsearCaracteresEspecialesXML1(String xmlaParsear) {
+        String xml = "No paso Nada";
+        StringBuilder sb=null;
+    try {
+        
+        sb=new StringBuilder(xmlaParsear);
+
+            if(xmlaParsear.indexOf("<item>")!=-1){
+
+
+                xml=StringEscapeUtils.escapeXml(xmlaParsear.substring(xmlaParsear.indexOf("nes>")+4,xmlaParsear.indexOf("</obse")));
+                
+                sb.replace(sb.indexOf("nes>")+4, sb.indexOf("</obse"), xml);
+                
+            }
+           if(xmlaParsear.indexOf("<Domicilio>")!=-1){
+
+                xml=StringEscapeUtils.escapeXml(xmlaParsear.substring(xmlaParsear.indexOf("mes>")+4,xmlaParsear.indexOf("</det1")));
+                
+                sb.replace(sb.indexOf("mes>")+4, sb.indexOf("</det1"), xml);
+                
+           }
+
+    } catch (Exception e) {
+        xml = "Error";
+
+        logger.error("Error en metodo parsearCaracteresEspecialesXML1 ",e);
+    }finally{
+
+        return sb.toString();
+    }
+    }
 
 
 
