@@ -191,20 +191,19 @@ public class EJBClientes implements EJBClientesRemote {
                                 switch((int)idcliente){
                                     case 0:{
                                                 //------agrego el cliente y todos sus datos desde cero
-                                         
+                                         logger.info("entro por agregar todos");
                                             retorno =agregarTodosLosDatosCliente(todosDatos,datosClientePersonales,xmlClienteDomicilioTelefono);
-                                            obtenerCliente(retorno);
+                                            //obtenerCliente(retorno);
                                         }
                                         break;
-                                    case -1:{logger.warn("Fallo error al buscar cliente en metodo existe ");
+                                    case -1:{logger.error("Fallo error al buscar cliente en metodo existe ");
                                         break;
                                     }
 
                                     default:{
-                                        
+                                        logger.info("entro por actualizar datos cli");
                                             retorno = actualizarDatos(todosDatos,datosClientePersonales,xmlClienteDomicilioTelefono,idcliente);
-                                            if(retorno >0)
-                                            obtenerCliente(retorno);
+                                         
                                             break;
                                         }
                                 }
@@ -396,7 +395,7 @@ public class EJBClientes implements EJBClientesRemote {
             }
         } catch (Exception e) {
             retorno=-6;
-            logger.error("Error al actualizar los datos, ejbClientes "+e);
+            logger.error("Error en metodo actualizarDatos, ejbClientes "+e);
         }finally{
             return retorno;
         }
@@ -574,6 +573,9 @@ public class EJBClientes implements EJBClientesRemote {
                                    break;}
                                    case 0:{logger.error("Error no se pudo agregar domicilio Verifique!!!");
                                    retorno = 0;
+                                   break;}
+                                   case -3:{logger.error("Error en metodo actualizar domicilio Verifique!!!");
+                                   retorno = -3;
                                    break;}
                                    default:{
                                        String consulta="SELECT p FROM PersonasDomicilios p WHERE p.personasdomiciliosPK.idPersona = :idPersona" +

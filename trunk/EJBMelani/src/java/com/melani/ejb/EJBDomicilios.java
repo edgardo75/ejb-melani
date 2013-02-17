@@ -44,24 +44,25 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
         long retorno =0;
         try {
             //------------------------------------------------------------------
-          /*  XStream xstream = new XStream();
-            xstream.alias("Domicilio",DatosDomicilios.class);
-            DatosDomicilios domiciXML = (DatosDomicilios) xstream.fromXML(datosDomici);*/
+          
             //------------------------------------------------------------------
              idDomicilio= existe(datosDomici);
 
             switch((int)idDomicilio){
                     case 0:{
+                       logger.info("entro por procesa add");
                             retorno = procesarAddDomicilio(datosDomici);
                             
-
-                    }
-                    break;
-                    case -1:
+                        break;
+                    }                   
+                    case -1:{
                            retorno=-1;
                     break;
+                    }
                 default:{
-                    retorno=idDomicilio;
+                        logger.info("entro por actualizar domi");
+                        retorno = actualizarDomicilio(datosDomici,idDomicilio);
+                        
                     break;
                 }
             }
@@ -157,7 +158,7 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
 
 
         } catch (Exception xst) {
-            logger.warn("Error en la libreria Xstream metodo procesaAdd "+xst);
+            logger.error("Error en metodo procesarAddDomicilio  "+xst);
             retorno = -2;
         }  finally {
             
@@ -204,7 +205,7 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
             retorno=-1;
             logger.error("Error en metodo existe de EJBDomicilio "+e);
         }finally{
-            
+            System.out.println("valor debuelto de existe "+retorno);
              try {
 
                 if (con != null) {
@@ -237,7 +238,7 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
             switch((int)idDomicilio1){
                     case 1:{
 
-                        retorno=actualizarDomicilio(domiciXML);
+                        retorno=actualizarDomicilio(domiciXML,idDomicilio1);
                         
                     }
                     break;
@@ -252,24 +253,24 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
 
         } catch (Exception e) {
             retorno =-2;
-            logger.error("Error en Metodo addDomicilios "+e);
+            logger.error("Error en Metodo addDomicilio "+e);
         }finally{
             return retorno;
         }
     }
 
-    private long actualizarDomicilio(DatosDomicilios domiciXML) {
+    private long actualizarDomicilio(DatosDomicilios domiciXML,long iddomicilio) {
         long retorno = 0L;
         try {
-
-            Domicilios domicilio = em.find(Domicilios.class, domiciXML.getDomicilioId());
+                logger.info("valor de id domicilio "+iddomicilio);
+            Domicilios domicilio = em.find(Domicilios.class, iddomicilio);
 
             domicilio.setArea(domiciXML.getArea());
             domicilio.setBarrios(em.find(Barrios.class,(long) domiciXML.getBarrio().getBarrioId()));
             domicilio.setCalles(em.find(Calles.class,(long) domiciXML.getCalle().getCalleId()));
 
             if(domiciXML.getObservaciones()!=null)
-                domicilio.setObservaciones(domicilio.getObservaciones()+" \n"+domiciXML.getObservaciones());
+                domicilio.setObservaciones(domiciXML.getObservaciones().toUpperCase());
             
                 domicilio.setLocalidades(em.find(Localidades.class, domiciXML.getLocalidad().getIdLocalidad()));
                 domicilio.setManzana(domiciXML.getManzana());
