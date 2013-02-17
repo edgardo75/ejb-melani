@@ -30,14 +30,12 @@ public class EJBTelefonos implements EJBTelefonosRemote {
         long retorno =0;
         try {
             //-----------------------------------------------------------------------------
-           /* XStream xstream = new XStream();
-            xstream.alias("telefono", DatosTelefonos.class);
-            DatosTelefonos datosTel = (DatosTelefonos) xstream.fromXML(xmlTelefono);*/
+           
             //-----------------------------------------------------------------------------
 
             TelefonosPK telepk = new TelefonosPK(Long.valueOf(datosTel.getNumero().trim()),Long.valueOf(datosTel.getPrefijo().trim()));
             //-----------------------------------------------------------------------------
-            //Telefonos tel = em.find(Telefonos.class, telepk);
+           
             Query consulta = em.createQuery("SELECT t FROM Telefonos t WHERE t.telefonosPK.idPrefijo = :idPrefijo and " +
                     "t.telefonosPK.numero = :numero");
             consulta.setParameter("idPrefijo", Long.valueOf(datosTel.getPrefijo().trim()));
