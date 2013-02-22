@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 /**
  *
  * @author Edgardo
+ * @version 1.0 Build 5600 Feb 20, 2013
  */
 @Stateless(name="ejb/EJBClienteDomicilio")
 public class EJBClienteDomicilio implements EJBClienteDomicilioRemote {
@@ -35,7 +36,13 @@ public class EJBClienteDomicilio implements EJBClienteDomicilioRemote {
 
     @EJB
     EJBHistoricoPersonaDomicilioRemote ejbhistperdom;
-
+/**
+ *
+ * @param idCliente id de cliente registrado en la tabla correspondiente en la base de datos
+ * @param idDomicilio id interno en la base de datos
+ * @param idUsuario id usuario que realiza la accion
+ * @return devuelve un string indicando el exito de la operación o no
+ */
     public String addRelacionClienteDomicilio(long idCliente, long idDomicilio,int idUsuario) {
         String retorno = "NADA";
         try {

@@ -53,7 +53,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
         query = "SELECT h FROM Historiconotapedido h WHERE h.porcrecargo = :porcrecargo")})
 public class Historiconotapedido implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Column(name = "PORCENTAJEAPLICADO")
+    @Column(name = "PORCENTAJEAPLICADO",scale=3,precision=15)
     private Short porcentajeaplicado;
     @Column(name = "PENDIENTE")
     private Character pendiente;
@@ -65,6 +65,8 @@ public class Historiconotapedido implements Serializable {
     private Character anulado;
     @Column(name = "TOTAL",scale=3,precision=15)
     private BigDecimal total;
+    @Column(name = "PORCDESC",scale=3,precision=15)
+    private BigDecimal porcentajedesc;
     @Column(name = "IDUSUARIOEXPIDIO")
     private Integer idusuarioexpidio;
     @Column(name = "SALDO",scale=3,precision=15)
@@ -98,13 +100,13 @@ public class Historiconotapedido implements Serializable {
     @Column(name="ACCION",length=100)
     private String accion;
 
-    @Column(name = "DESCUENTO")
+    @Column(name = "DESCUENTO",scale=3,precision=15)
     private BigDecimal descuento;
-    @Column(name = "TOTALAPAGAR")
+    @Column(name = "TOTALAPAGAR",scale=3,precision=15)
     private BigDecimal totalapagar;
-    @Column(name = "RECARGO")
+    @Column(name = "RECARGO",scale=3,precision=15)
     private BigDecimal recargo;
-    @Column(name = "PORCRECARGO")
+    @Column(name = "PORCRECARGO",scale=3,precision=15)
     private BigDecimal porcrecargo;
 
     @JoinColumn(name="FKIDNOTAPEDIDO_ID",referencedColumnName="ID")
@@ -127,6 +129,14 @@ public class Historiconotapedido implements Serializable {
 
     public Historiconotapedido(Long idhistorico) {
         this.idhistorico = idhistorico;
+    }
+
+    public BigDecimal getPorcentajedesc() {
+        return porcentajedesc;
+    }
+
+    public void setPorcentajedesc(BigDecimal porcentajedesc) {
+        this.porcentajedesc = porcentajedesc;
     }
 
    
@@ -360,6 +370,7 @@ public class Historiconotapedido implements Serializable {
                            "<recargo>"+this.getRecargo().toString()+"</recargo>\n" +
                            "<totalapagar>"+this.getTotalapagar().toString()+"</totalapagar>\n" +
                            "<porcrecargo>"+this.getPorcrecargo().toString()+"</porcrecargo>\n" +
+                           "<porcentajedescuento>"+this.getPorcentajedesc().toString()+"</porcentajedescuento>\n" +
                           
 
                            "<descuento>"+this.getDescuento().toString()+"</descuento>\n" +

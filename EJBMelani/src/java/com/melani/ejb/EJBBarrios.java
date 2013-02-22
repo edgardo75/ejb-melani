@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.melani.ejb;
 
 import com.melani.entity.Barrios;
@@ -28,6 +23,7 @@ import org.apache.log4j.Logger;
 /**
  *
  * @author Edgardo
+ * @version 1.0 Build 5600 Feb 20, 2013
  */
 @Stateless(name="ejb/EJBBarrios")
 @WebService(serviceName="ServiceBarrios",name="BarriosWs")
@@ -40,7 +36,13 @@ public class EJBBarrios implements EJBBarriosRemote {
    private DataSource datasource;
    
 
-       // @SuppressWarnings("CallToThreadDumpStack")
+   /**
+    * 
+    * @param descripcion nombre propio del barrio
+    * @param idUsuario operario que raliza la accion
+    * @return retorna el id del barrio 
+    */
+
     public long addBarrio(String descripcion,int idUsuario) {
         long retorno = 0;
         try {
@@ -71,13 +73,15 @@ public class EJBBarrios implements EJBBarriosRemote {
         }
     }
 
-
+/**
+ *
+ * @return devuelve la lista de barrios
+ */
 
     public String searchallbarrios() {
 
         String xml = "<Lista>\n";
-        //OracleXMLQuery oxq = null;
-        //Connection con = null;
+        
         try {
             Query consulta = em.createNamedQuery("Barrios.findAll");
             List<Barrios>lista = consulta.getResultList();
@@ -106,7 +110,10 @@ public class EJBBarrios implements EJBBarriosRemote {
         }
     }
 
-
+/**
+ *
+ * @return devuelve la cantidad actual de barrios instanciados
+ */
     public int recordCountBarrios() {
         int retorno =0;
       
@@ -164,6 +171,12 @@ public class EJBBarrios implements EJBBarriosRemote {
         
 
     }
+/**
+ *
+ * @param indiceInicio indica la pagina en al cual se establece la consulta paginada
+ * @param numeroItems indica los numeros de registros que retorna cada consulta paginada
+ * @return devuelve una lista de barrios instanciados
+ */
 
     public String obtenrItemsPaginados(int indiceInicio, int numeroItems) {
         String xml = "<Lista>\n";
@@ -188,7 +201,12 @@ public class EJBBarrios implements EJBBarriosRemote {
         
     }
 }
-
+/**
+ *
+ * @param startindex indice de pagina
+ * @param numitems cantidad de registro por pagina
+ * @return devuelve la lista de barrios instanciados
+ */
     public Barrios[] barrios_paging(int startindex, int numitems) {
          Barrios[]fBarrios=null;
         try {
@@ -211,7 +229,10 @@ public class EJBBarrios implements EJBBarriosRemote {
         return fBarrios;
         }
     }
-
+/**
+ *
+ * @return devuelve la lista de barrios en la tabla correspondiente de la base de datos
+ */
     public String selectAllBarrios() {
         String xml = "";
         OracleXMLQuery oxq = null;

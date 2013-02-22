@@ -11,6 +11,7 @@ import java.util.List;
 /**
  *
  * @author Edgardo
+ * @version 1.0 Build 5600 Feb 20, 2013
  */
   //----------------------------------------------------------------------------------------
 @XStreamAlias("detallesnotapedido")

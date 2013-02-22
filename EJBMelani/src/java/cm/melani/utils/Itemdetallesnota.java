@@ -10,6 +10,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 /**
  *
  * @author Edgardo
+ * @version 1.0 Build 5600 Feb 20, 2013
  */
 @XStreamAlias("itemdetallesnota")
 public class Itemdetallesnota {

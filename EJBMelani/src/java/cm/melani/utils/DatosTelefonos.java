@@ -9,7 +9,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  *
- * @author BlackCrystal™
+ * @author Edgardo Alvarez™
+ * @version 1.0 Build 5600 Feb 20, 2013
  */
 @XStreamAlias("telefono")
 public class DatosTelefonos {

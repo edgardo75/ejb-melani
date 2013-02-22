@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 /**
  *
  * @author Edgardo
+ * @version 1.0 Build 5600 Feb 20, 2013
  */
 @Stateless(name="ejb/EJBCalles")
 
@@ -35,7 +36,12 @@ public class EJBCalles implements EJBCallesRemote {
    @PersistenceContext
    private EntityManager em;
    
-
+/**
+ *
+ * @param descripcion nombre propio de calle
+ * @param idUsuario usuario que realiza la accion de carga de calle
+ * @return retorna el id de la calle insertada
+ */
     public long addCalles(String descripcion,int idUsuario) {
         long retorno = 0;
         try {
@@ -65,7 +71,10 @@ public class EJBCalles implements EJBCallesRemote {
         }
 
     }
-
+/**
+ *
+ * @return devuelve una lista de calles instanciados
+ */
     public String searchAllCalles() {
         String xml = "<Lista>\n";
        
@@ -91,29 +100,21 @@ public class EJBCalles implements EJBCallesRemote {
             logger.error("Error en metodo searchallcalles", e.getCause());
             e.getMessage();
         } finally {
-           /* try {
-                if (con != null) {
-                    con.close();
-                }
-                if (oxq != null) {
-                    oxq.close();
-                }
-
-            } catch (Exception e) {
-                xml = "error en el servidor";
-                logger.error("Error cerrando conexiones en metodo searchAllCalles "+e);
-            }*/
+         
             
             return xml;
 
         }
     }
-
+/**
+ *
+ * @return devuelve la cantidad de calles en la tabla de la base de datos
+ */
     public Object recorCountCalles() {
         int retorno =0;
         try {
             Query consulta = em.createNativeQuery("SELECT COUNT(*) FROM CALLES");
-            //retorno = Integer.valueOf(consulta.toString());
+
             String resultado = consulta.getResultList().toString();
             resultado = resultado.replace("[[", "");
             resultado = resultado.replace("]]", "");
@@ -126,42 +127,25 @@ public class EJBCalles implements EJBCallesRemote {
         }
     }
 
-   /* public String get_ItemCalles_Paging1(int indice, int cantidadRegistros) {
-        
-       String xml = "<Lista>\n";
-        try {
-           
-
-            Query consulta = em.createNativeQuery("SELECT FIRST "+cantidadRegistros+" SKIP ("+indice+"*"+cantidadRegistros+") * FROM CALLES c ORDER BY c.id_calle",Calles.class);
-            List<Calles>lista = consulta.getResultList();
-
-            for (Iterator<Calles> it = lista.iterator(); it.hasNext();) {
-                Calles calles = it.next();
-              xml+=calles.toXML();
-            }
-           
-
-        } catch (Exception e) {
-            logger.error("Error en metodo get_ItemCalles_Paging de ejbCalles "+e);
-        }finally{
-
-        return xml+"</Lista>\n";
-        }
-    }*/
+  /**
+   *
+   * @param startIndex indice de pagina
+   * @param numItems numero de registro por pagina
+   * @return listado de calles paginadas
+   */
 
     public Calles[] calles_paging(Integer startIndex, Integer numItems) {
          List<Calles> lista=null;
         try {
 
             Query consulta = em.createNativeQuery("SELECT FIRST "+numItems+" SKIP ("+startIndex+"*"+numItems+") c.id_calle,c.DESCRIPCION FROM CALLES c ORDER BY c.id_calle",Calles.class);
-            //Query consulta = em.createNativeQuery("SELECT c.id_calle,c.descripcion FROM Calles c ORDER BY c.id_calle ASC",Calles.class).setFirstResult(startIndex).setMaxResults(numItems);
+            
             lista = consulta.getResultList();
-            //
-           // aCalles = new ArrayList<Calles>(Arrays.asList(fCalles));
+            
         } catch (Exception e) {
-                //e.getMessage();
+            
             e.getMessage();
-           // logger.error("Error en metodo calles_paging");
+           
             
 
         }finally{
@@ -231,14 +215,14 @@ public class EJBCalles implements EJBCallesRemote {
      */
     public Object[] paginadoFirebird(Integer startIndex, Integer numItems) {
          com.melani.entity.Calles fCalles[] = null;
-        //ArrayList<com.melani.entity.Calles>aCalles = new ArrayList<com.melani.entity.Calles>();
+      
         try {
 
 
             Query consulta = em.createNativeQuery("SELECT FIRST "+numItems+" SKIP ("+startIndex+"*"+numItems+") c.id_calle,c.DESCRIPCION FROM CALLES c ORDER BY c.id_calle",Calles.class);
-            //Query consulta = em.createNativeQuery("SELECT c.id_calle,c.descripcion FROM Calles c ORDER BY c.id_calle ASC",Calles.class).setFirstResult(startIndex).setMaxResults(numItems);
+      
             List<Calles> lista = consulta.getResultList();
-            //
+      
 
             Iterator<Calles> iter = lista.iterator();
             
@@ -249,18 +233,7 @@ public class EJBCalles implements EJBCallesRemote {
             }
             
            
-            /*Calles lleca = null;
-            for (Iterator<Calles> it = lista.iterator(); it.hasNext();) {
-                
-                Calles calles = it.next();
-                lleca = new Calles();
-
-                lleca.setId(calles.getId());
-                lleca.setDescripcion(calles.getDescripcion());              
-
-                aCalles.add(lleca);
-                
-            }*/
+      
 
           
             
@@ -269,15 +242,15 @@ public class EJBCalles implements EJBCallesRemote {
                 fCalles=lista.toArray(fCalles);
             
             
-           // aCalles = new ArrayList<Calles>(Arrays.asList(fCalles));
+          
         } catch (Exception e) {
-                //e.getMessage();
+          
             e.getMessage();
-           // logger.error("Error en metodo calles_paging");
+          
             
 
         }finally{
-//           
+           
 
              return fCalles;
         }
@@ -292,12 +265,7 @@ public class EJBCalles implements EJBCallesRemote {
             List<Calles>lista = consulta.getResultList();
            
                         arrayStreet.add(lista);
-            /*for (Iterator<Calles> it = lista.iterator(); it.hasNext();) {
-                Calles calles = it.next();
-                arrayStreet.add(it.hashCode(), calles);
-
-
-            }*/
+            
 
 
 

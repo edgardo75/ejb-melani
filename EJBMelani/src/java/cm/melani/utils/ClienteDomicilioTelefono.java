@@ -7,9 +7,12 @@ package cm.melani.utils;
 
 
 
-/**
+/** Descripcion de la Clase
  *
- * @author BlackCrystal™
+ * @author Edgardo Alvarez™
+ * @version 1.0 Build 5600 Feb 20, 2013
+ *
+ * Esta clase se usa para parsear los datos en xml a clases pojos, en este caso la información es de cliente con sus datos de telefonos y domicilios
  */
 public class ClienteDomicilioTelefono {
     

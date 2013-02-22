@@ -50,7 +50,7 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
 
             switch((int)idDomicilio){
                     case 0:{
-                       logger.info("entro por procesa add");
+                    
                             retorno = procesarAddDomicilio(datosDomici);
                             
                         break;
@@ -60,7 +60,7 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
                     break;
                     }
                 default:{
-                        logger.info("entro por actualizar domi");
+                   
                         retorno = actualizarDomicilio(datosDomici,idDomicilio);
                         
                     break;
@@ -205,7 +205,7 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
             retorno=-1;
             logger.error("Error en metodo existe de EJBDomicilio "+e);
         }finally{
-            System.out.println("valor debuelto de existe "+retorno);
+         
              try {
 
                 if (con != null) {
@@ -262,7 +262,7 @@ public class EJBDomicilios implements EJBDomiciliosRemote {
     private long actualizarDomicilio(DatosDomicilios domiciXML,long iddomicilio) {
         long retorno = 0L;
         try {
-                logger.info("valor de id domicilio "+iddomicilio);
+          
             Domicilios domicilio = em.find(Domicilios.class, iddomicilio);
 
             domicilio.setArea(domiciXML.getArea());

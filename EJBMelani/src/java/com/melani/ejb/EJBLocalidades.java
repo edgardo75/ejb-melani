@@ -76,11 +76,11 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
                 resultado = "No SE PUDO CONECTAR";
                 e.getMessage();
             }
-            String sql = "SELECT l.ID_LOCALIDAD as ID,l.descripcion as DESCRIPCION,l.CODIGOPOSTAL from localidades l order by l.ID_LOCALIDAD ASC;";
+            String sql = "SELECT l.ID_LOCALIDAD as ID,l.descripcion as DESCRIPCION,l.CODIGOPOSTAL,l.ID_PROVINCIA as idprovincia from localidades l order by l.ID_LOCALIDAD ASC;";
 
              oxq = new OracleXMLQuery(con, sql);
 
-            oxq.setRowTag("Item");
+            oxq.setRowTag("localidades");
             oxq.setRowsetTag("Lista");
             oxq.setEncoding("ISO-8859-1");
             resultado = oxq.getXMLString();

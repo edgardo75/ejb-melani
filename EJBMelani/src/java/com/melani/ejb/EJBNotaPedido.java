@@ -445,6 +445,8 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
                         historico.setIdusuarioentrega(notadepedido.getUsuario_entregado());
 
+                        historico.setPorcentajedesc(BigDecimal.valueOf(notadepedido.getPorc_descuento_total()));
+
                         
             
                         historico.setIdusuarioexpidio(notadepedido.getUsuario_expidio_nota());
@@ -452,6 +454,8 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                         historico.setPorcrecargo(BigDecimal.valueOf(notadepedido.getPorcentajerecargo()));
 
                         historico.setTotalapagar(BigDecimal.valueOf(notadepedido.getMontototalapagar()));
+
+
 
                         historico.setDescuento(BigDecimal.valueOf(notadepedido.getDescuentonota()));
                         
@@ -802,6 +806,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
 }
 
+
     public String selectNotaEntreFechas(String fecha1, String fecha2,int idvendedor) {
         String xml="<Lista>\n";
         List<Notadepedido>lista = null;
@@ -810,7 +815,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
             
 
-            Query jpasql=em.createNativeQuery("SELECT * from NOTADEPEDIDO n where CAST(n.FECHADECOMPRA as date)  between CAST('"+fecha1+"' as DATE) and cast('"+fecha2+"' as date) order by n.id desc", Notadepedido.class);
+            Query jpasql=em.createNativeQuery("SELECT * FROM NOTADEPEDIDO n where CAST(n.FECHADECOMPRA as date)  between CAST('"+fecha1+"' as DATE) and cast('"+fecha2+"' as date) order by n.id desc", Notadepedido.class);
                 lista= jpasql.getResultList();
 
                 if(lista.size()>0){
@@ -827,7 +832,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                     
                      sb.replace(sb.indexOf("</numerocupon>")+14, sb.indexOf("<observaciones>"), "\n"+periodoconsultado);
                      xml=sb.toString();
-                    Empleados empleado = em.find(Empleados.class,(long) idvendedor);
+         
                     
                 }else
                     xml+="<result>lista vacia</result>\n";
@@ -1148,6 +1153,8 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                            
 
                                             nota.setDescuentonota(BigDecimal.valueOf(datosnotapedido.getDescuentonota()));
+
+
                                             
                         
                         nota.setIdusuariocancelo(datosnotapedido.getUsuario_cancelo_nota());
@@ -1275,6 +1282,51 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
         }finally{
             
         return result;
+        }
+    }
+
+    public String selecNotaEntreFechasEntrega(String fecha1, String fecha2, int idvendedor) {
+        String xml="<Lista>\n";
+        List<Notadepedido>lista = null;
+
+        try {
+
+
+
+            Query jpasql=em.createNativeQuery("SELECT * FROM NOTADEPEDIDO n where CAST(n.FECHAENTREGA as date)  between CAST('"+fecha1+"' as DATE) and cast('"+fecha2+"' as date) order by n.id,n.fechaentrega,n.horacompra desc", Notadepedido.class);
+                lista= jpasql.getResultList();
+
+                if(lista.size()>0){
+                    for (Iterator<Notadepedido> it = lista.iterator(); it.hasNext();) {
+                             Notadepedido notadepedido1 = it.next();
+                             xml+=notadepedido1.toXML();
+                    }
+                    fecha1=fecha1.substring(3, 5)+"/"+fecha1.substring(0, 2)+"/"+fecha1.substring(6, 10);
+                    fecha2=fecha2.substring(3, 5)+"/"+fecha2.substring(0, 2)+"/"+fecha2.substring(6, 10);
+                    StringBuilder sb =new StringBuilder(xml);
+
+                    String periodoconsultado = "<fechainicio>"+fecha1+"</fechainicio>\n" +
+                            "<fechafinal>"+fecha2+"</fechafinal>\n";
+
+                     sb.replace(sb.indexOf("</numerocupon>")+14, sb.indexOf("<observaciones>"), "\n"+periodoconsultado);
+                     xml=sb.toString();
+
+
+                }else
+                    xml+="<result>lista vacia</result>\n";
+
+
+
+
+
+        } catch (Exception e) {
+            xml+="<error>Error</error>\n";
+            logger.error("Error en metodo selectnotaEntreFechas",e.fillInStackTrace());
+        }finally{
+
+
+
+                return xml+="</Lista>\n";
         }
     }
 
