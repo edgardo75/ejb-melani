@@ -12,6 +12,7 @@ package cm.melani.utils;
 /**
  *
  * @author Edgardo™
+ * @version 1.0 Build 5600 Feb 20, 2013
  */
 
 public class DatosDomicilios {

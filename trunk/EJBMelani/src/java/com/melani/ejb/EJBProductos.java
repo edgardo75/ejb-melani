@@ -353,7 +353,7 @@ public class EJBProductos implements EJBProductosRemote {
                 retorno = producto.getSid();
         } catch (Exception e) {
             retorno =-1;
-            logger.error("error en metodo existencias ejbProductos "+e);
+            logger.error("Error en metodo existencias ejbProductos "+e);
         }finally{
             return retorno;
         }
@@ -400,31 +400,9 @@ public class EJBProductos implements EJBProductosRemote {
 
     public String searchAllProductos() {
         String xml = "NADA";
-        Connection con =null;
-        OracleXMLQuery oxq = null;
+       
         try {
-          /*  try {
-                con = datasource.getConnection();
-
-            } catch (Exception e) {
-                logger.error("Error al conectar a base de datos", e);
-            }
-            String consulta = "SELECT p.sid,p.DESCRIPCION,p.codproducto,p.PRECIOUNITARIO,p.CANTIDADINICIAL,p.CANTIDADDISPONIBLE" +
-                    ",p.FECHA FROM PRODUCTOS p Order by p.sid";
-
-            oxq = new OracleXMLQuery(con, consulta);
-
-            oxq.setRowTag("producto");
-            oxq.setRowsetTag("Lista");
-            oxq.setEncoding("ISO-8859-1");
-            oxq.setDateFormat("dd/MM/yyyy");
-            xml = oxq.getXMLString();
-            oxq.close();
-
-            
-            if (xml.contains("<Lista/>")) {
-                xml = "La Consulta no arrojó resultados!!!";
-            }*/
+         
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Query query = em.createNativeQuery("SELECT p.sid,p.DESCRIPCION,p.codproducto,p.PRECIOUNITARIO,p.CANTIDADINICIAL,p.CANTIDADDISPONIBLE" +
                     ",p.FECHA FROM PRODUCTOS p Order by p.sid", Productos.class);
@@ -456,17 +434,7 @@ public class EJBProductos implements EJBProductosRemote {
         } catch (Exception e) {
             logger.error("Error al buscar todos los producto EJBProducto", e);
         }finally{
-            /*try {
-                if (con != null) {
-                    con.close();
-                }
-                if (oxq != null) {
-                    oxq.close();
-                }
-                
-            } catch (SQLException ex) {
-               logger.error("Error a cerrar conexiones EJBProducto", ex);
-            }*/
+           
             
             return xml;
 
@@ -547,6 +515,7 @@ public class EJBProductos implements EJBProductosRemote {
         try {
             
             //-----------------------------------------------------------------------
+           
              XStream xstream = new XStream();
             
                 xstream.alias("producto", DatosProductos.class);
@@ -562,8 +531,13 @@ public class EJBProductos implements EJBProductosRemote {
 
                         Query consulta1 = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.CODPRODUCTO) LIKE LOWER('"+datosprod.getCodproducto()+"%')");
                         Query consulta = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.DESCRIPCION) LIKE LOWER('"+datosprod.getDescripcion()+"%')");
-            
 
+
+                        
+
+
+                    if(consulta.getResultList().isEmpty()){
+                        if(consulta1.getResultList().isEmpty()){
 
                             if(producto==null){
                             //----------------------------Producto Nuevo-------------------------------------------
@@ -626,7 +600,11 @@ public class EJBProductos implements EJBProductosRemote {
                             }else
                                 retorno = producto.getSid();
 
-            }
+                        }
+                     }else
+                            retorno = -6;
+                        }else
+                            retorno = -5;
 
 
         } catch (Exception e) {

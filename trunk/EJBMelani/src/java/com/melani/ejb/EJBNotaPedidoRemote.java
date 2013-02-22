@@ -36,6 +36,8 @@ public interface EJBNotaPedidoRemote {
 
     long actualizarNotaPedido(String xmlnotapedidomodificada);
 
+    String selecNotaEntreFechasEntrega(String fecha1, String fecha2, int idvendedor);
+
  
 
    

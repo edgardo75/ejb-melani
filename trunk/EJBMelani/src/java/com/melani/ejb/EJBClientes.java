@@ -191,7 +191,7 @@ public class EJBClientes implements EJBClientesRemote {
                                 switch((int)idcliente){
                                     case 0:{
                                                 //------agrego el cliente y todos sus datos desde cero
-                                         logger.info("entro por agregar todos");
+                                         
                                             retorno =agregarTodosLosDatosCliente(todosDatos,datosClientePersonales,xmlClienteDomicilioTelefono);
                                             //obtenerCliente(retorno);
                                         }
@@ -201,7 +201,7 @@ public class EJBClientes implements EJBClientesRemote {
                                     }
 
                                     default:{
-                                        logger.info("entro por actualizar datos cli");
+                                      
                                             retorno = actualizarDatos(todosDatos,datosClientePersonales,xmlClienteDomicilioTelefono,idcliente);
                                          
                                             break;
@@ -626,8 +626,7 @@ public class EJBClientes implements EJBClientesRemote {
                                     em.persist(cliente);
 
 
-                                }else
-                                   logger.info("La relación ClienteDomicilio cliente "+cliente.getIdPersona()+" Domicilio "+idDomicilio+" "+result);
+                                }
                 }
                //-------------------------------------------------------------------------------------------------
                 //---------------------------------------------------------------------------------------------
@@ -651,27 +650,12 @@ public class EJBClientes implements EJBClientesRemote {
 
                                             if(rettelefono==2){
                                                 resultTC = ejbclitel.addClienteTelefono(datosTel.getNumero(), datosTel.getPrefijo(), cliente.getIdPersona());
-                                                if(resultTC.indexOf("RelacionTelefonoExistente")!=-1)
-                                                    logger.info("Relacion existente para el cliente "+cliente.getNrodocumento());
-                                                else{ 
-                                                    if(resultTC.indexOf("InyectoRelacionClienteTelefono")!=-1)
-                                                        logger.info("Relacion Telefono Insertada "+resultTC+" para el cliente "+cliente.getNrodocumento());
-                                                    else
-                                                        logger.error(resultTC);
-                                                
-                                                }
+                                               
                                             }else{
                                                 if(rettelefono==1){
                                                     
                                                      resultTC = ejbclitel.addClienteTelefono(datosTel.getNumero(), datosTel.getPrefijo(), cliente.getIdPersona());
-                                                     if(resultTC.indexOf("RelacionTelefonoExistente")!=-1)
-                                                             logger.info("Relacion existente para el cliente "+cliente.getNrodocumento());
-                                                            else{
-                                                                if(resultTC.indexOf("InyectoRelacionClienteTelefono")!=-1)
-                                                                    logger.info("Relacion Telefono Insertada "+resultTC+" para el cliente "+cliente.getNrodocumento());
-                                                                else
-                                                                    logger.error(resultTC);
-                                                            }
+                                                    
 
                                             }
                                    

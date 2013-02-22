@@ -10,7 +10,7 @@ package cm.melani.utils;
 /**
  *Clase DatosCliente Utilizada para Instanciar mediante libreria Xstream, con
  * el objetivo de Producir una salida de un Objeto Cliente
- * @version 1.0
+ * @version 1.0 Build 5600 Feb 20, 2013
  * @author Edgardo Alvarez
  */
 public class DatosCliente {
@@ -25,12 +25,12 @@ public class DatosCliente {
     private long idcliente;//variable interna atribute idcliente
     private Generos genero;//variable interna atribute genero
 
-    /*
-     * Este metodo devuelve el apellido de un cliente
-     */
+   
     public DatosCliente(){}
 
-
+ /**
+     * @return Este metodo devuelve el apellido de un cliente
+     */
     public String getApellido() {
         return apellido;
     }
@@ -42,8 +42,8 @@ public class DatosCliente {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
-/*
- * Este metodo "setea" los datos del cliente
+/**
+ * @return Este metodo "setea" los datos del cliente
  */
 
     
@@ -51,77 +51,77 @@ public class DatosCliente {
         this.apellido = apellido;
     }
 
-    /*
-     * Este metodo devuelve el email del cliente
+    /**
+     * @return Este metodo devuelve el email del cliente
      */
     public String getEmail() {
         return email;
     }
 
    
-    /*
-     * Este metodo "setea" el email del cliente
+    /**
+     * @return Este metodo "setea" el email del cliente
      */
     public void setEmail(String email) {
         this.email = email;
     }
-/*
- * Este metodo devuelve el id del Tipo de Documento
+/**
+ * @return Este metodo devuelve el id del Tipo de Documento
  */
     public Short getIdtipodocu() {
         return idtipodocu;
     }
-/*
- * Este metodo "setea" el id Tipo de Documento
+/**
+ * @return Este metodo "setea" el id Tipo de Documento
  */
     public void setIdtipodocu(Short idtipodocu) {
         this.idtipodocu = idtipodocu;
     }
-/*
- * Este metodo devuelve el nombre del cliente
+/**
+ * @return Este metodo devuelve el nombre del cliente
  */
     public String getNombre() {
         return nombre;
     }
-/*
- * Este metodo "setea" el nombre del cliente
+/**
+ * @return Este metodo "setea" el nombre del cliente
  */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-/*
- * Este metodo devuelve el numero de documento
+/**
+ * @return Este metodo devuelve el numero de documento
  */
     public Integer getNrodocu() {
         return nrodocu;
     }
-/*
- * Este metodo "setea" el numero de documento
+/**
+ * @return Este metodo "setea" el numero de documento
  */
     public void setNrodocu(Integer nrodocu) {
         this.nrodocu = nrodocu;
     }
 
-/*
- * Este metodo devuelve el total de compras
+/**
+ * @return Este metodo devuelve el total de compras
  */
     public float getTotalcompras() {
         return totalcompras;
     }
-/*
- * Este metodo "setea" el total de compras
+/**
+ * @return Este metodo "setea" el total de compras
  */
     public void setTotalcompras(float totalcompras) {
         this.totalcompras = totalcompras;
     }
-/*
- * Este metodo devuelve el total de puntos del cliente
+/**
+ * @return Este metodo devuelve el total de puntos del cliente
  */
     public int getTotalpuntos() {
         return totalpuntos;
     }
-/*
- * Este metodo "setea" el total de puntos
+/**
+ * @return Este metodo "setea" el total de puntos
  */
     public void setTotalpuntos(int totalpuntos) {
         this.totalpuntos = totalpuntos;
@@ -132,8 +132,8 @@ public class DatosCliente {
     public long getIdcliente() {
         return idcliente;
     }
-/*
- * Este metodo "setea" el id del cliente
+/**
+ * @return Este metodo "setea" el id del cliente
  */
     public void setIdcliente(long idcliente) {
         this.idcliente = idcliente;
