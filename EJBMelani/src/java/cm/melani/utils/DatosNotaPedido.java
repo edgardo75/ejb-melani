@@ -14,6 +14,7 @@ public class DatosNotaPedido {
     private Personas personas;
     private int vendedor;
     private double montototal;
+    private double anticipoacum;
     private double anticipo;
     private double saldo;
     private char entregado;
@@ -63,6 +64,15 @@ public class DatosNotaPedido {
     public void setVendedor(int vendedor) {
         this.vendedor = vendedor;
     }
+
+    public double getAnticipoacum() {
+        return anticipoacum;
+    }
+
+    public void setAnticipoacum(double anticipoacum) {
+        this.anticipoacum = anticipoacum;
+    }
+    
 
     public int getUsuario_cancelo_nota() {
         return usuario_cancelo_nota;
