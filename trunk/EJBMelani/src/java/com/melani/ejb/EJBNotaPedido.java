@@ -128,6 +128,11 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
                                             notape.setEnefectivo(notadepedido.getEnefectivo());
 
+
+                                           
+                                           notape.setPendiente(Character.valueOf(notadepedido.getPendiente()));
+                                           
+
                                             notape.setEntregado(Character.valueOf(notadepedido.getEntregado()));
 
                                             notape.setFkIdcliente(em.find(Personas.class, notadepedido.getPersonas().getId()));
@@ -150,7 +155,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
                                             notape.setObservaciones(notadepedido.getObservaciones());
 
-                                            notape.setPendiente(Character.valueOf(notadepedido.getPendiente()));
+                                            
 
                                             notape.setRecargo(BigDecimal.valueOf(notadepedido.getRecargo()));
 
@@ -162,7 +167,10 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
                                             notape.setFechadecompra(gc.getTime());
 
+
+                                            
                                             notape.setFechaentrega(sdf.parse(notadepedido.getFechaentrega()));
+
 
 
                                             notape.setCancelado(Character.valueOf(notadepedido.getCancelado()));
@@ -181,6 +189,12 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                             notape.setPorcdesctotal(BigDecimal.valueOf(notadepedido.getPorc_descuento_total()));
 
                                             notape.setPorcrecargo(BigDecimal.valueOf(notadepedido.getPorcentajerecargo()));
+
+                                            if(notadepedido.getCancelado()=='1')
+                                                notape.setFecancelado(gc.getTime());
+
+                                            if(notadepedido.getAnulado()=='1')
+                                                notape.setFechaAnulado(gc.getTime());
 
                                             em.persist(notape);
 
@@ -335,6 +349,8 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
     
             List<Itemdetallesnota>lista = notadepedido.getDetallesnotapedido().getDetallesnota();
 
+
+
     
            
             for (Iterator<Itemdetallesnota> it = lista.iterator(); it.hasNext();) {
@@ -363,6 +379,8 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                 detalles.setIva(BigDecimal.valueOf(itemdetallesnota.getIva()));
     
                 detalles.setNotadepedido(notape);
+
+
 
     
                 detalles.setPendiente(Character.valueOf(itemdetallesnota.getPendiente()));
@@ -519,8 +537,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
            
             
             
-
-            
+                
            
             
             
@@ -601,7 +618,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                 nota.setCancelado(Character.valueOf(cancelado));
         
                 nota.setIdusuariocancelo(idusuariocancelo);
-                nota.setFecancelado(gc.getTime());
+                nota.setFecancelado(null);
             }
             //--------------------------------------------------------------------------
             List<Detallesnotadepedido>lista = nota.getDetallesnotadepedidoList();
@@ -716,7 +733,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                 }else{
                     pendiente ='1';
                      nota.setEntregado(Character.valueOf(entregado));
-                     nota.setFechaentrega(gc.getTime());
+                     
                      nota.setPendiente(pendiente);
                      nota.setIdusuarioEntregado(idusuarioentrega);
                 }
@@ -736,7 +753,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                 historico.setPendiente(pendiente);
 
                         }else{
-                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" NO ENTREGADA, ACCION REALIZADA POR EMPLEADO N° "+idusuarioentrega+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
+                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" NO ENTREGADA AÚN, ACCION REALIZADA POR EMPLEADO N° "+idusuarioentrega+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
                                 historico.setEntregado(Character.valueOf('0'));
                                 historico.setPendiente(pendiente);
                         }
@@ -815,7 +832,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
             
 
-            Query jpasql=em.createNativeQuery("SELECT * FROM NOTADEPEDIDO n where CAST(n.FECHADECOMPRA as date)  between CAST('"+fecha1+"' as DATE) and cast('"+fecha2+"' as date) order by n.id desc", Notadepedido.class);
+            Query jpasql=em.createNativeQuery("SELECT * FROM NOTADEPEDIDO n where CAST(n.FECHADECOMPRA as date)  between CAST('"+fecha1+"' as DATE) and cast('"+fecha2+"' as date) and n.entregado=0 and n.pendiente=1 order by n.id desc", Notadepedido.class);
                 lista= jpasql.getResultList();
 
                 if(lista.size()>0){
@@ -935,6 +952,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                 }
 
         } catch (Exception e) {
+            logger.error("Error en metodo devolverNotaProcesadaSB "+e.getMessage());
         }finally{
            
             return sb;
@@ -991,7 +1009,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                 }else{
                     
                      nota.setAnulado(anulada);
-                     nota.setFechaAnulado(gc.getTime());
+                     nota.setFechaAnulado(null);
                      nota.setIdusuarioAnulado((int)idusuario);
                 }
 
@@ -1009,7 +1027,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                 
 
                         }else{
-                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" NO ANULADA, ACCION REALIZADA POR EMPLEADO N° "+idusuario+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
+                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" NO ANULADA AÚN, ACCION REALIZADA POR EMPLEADO N° "+idusuario+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
                                 historico.setAnulado(anulada);
 
                         }
@@ -1086,7 +1104,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             //---------------------------------------------------------------------------------
             
-            nota.setAnticipo(BigDecimal.valueOf(datosnotapedido.getAnticipo()));
+           
             
                                             nota.setAnulado(datosnotapedido.getAnulado());
                                     
@@ -1103,13 +1121,16 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                             nota.setFkidporcentajenotaId(em.find(Porcentajes.class, datosnotapedido.getPorcentajes().getId_porcentaje()));
                                             
 
-                                            nota.setHoracompra(gc.getTime());
+                                           
                                             
 
                                             nota.setIdTarjetaFk(em.find(TarjetasCreditoDebito.class, datosnotapedido.getTarjetacredito().getId_tarjeta()));
                                             
 
                                             nota.setIdUsuarioExpidioNota(datosnotapedido.getUsuario_expidio_nota());
+
+
+                                            nota.setAnticipo(BigDecimal.valueOf(datosnotapedido.getAnticipoacum()));
                         
 
                                             nota.setIdusuarioAnulado(datosnotapedido.getId_usuario_anulado());
@@ -1157,7 +1178,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
                                             
                         
-                        nota.setIdusuariocancelo(datosnotapedido.getUsuario_cancelo_nota());
+                                             nota.setIdusuariocancelo(datosnotapedido.getUsuario_cancelo_nota());
                         
 
                                             try {
@@ -1171,7 +1192,11 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                             nota.setPorcdesctotal(BigDecimal.valueOf(datosnotapedido.getPorc_descuento_total()));
                                           
                                             nota.setPorcrecargo(BigDecimal.valueOf(datosnotapedido.getPorcentajerecargo()));
-                                          
+
+                                            if(datosnotapedido.getCancelado()=='1')
+                                                nota.setFecancelado(gc.getTime());
+                                            if(datosnotapedido.getAnulado()=='1')
+                                                nota.setFechaAnulado(gc.getTime());
 
 
                                         em.persist(nota);
@@ -1181,6 +1206,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                   //-------------------DETALLE---------------------------------------------------
                                                 List<Itemdetallesnota>lista = datosnotapedido.getDetallesnotapedido().getDetallesnota();
                                                 
+
                                                 
 
                                                 
@@ -1258,7 +1284,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
             consulta1.setParameter("fkIdnota", nota.getId());
           
-            nota.getDetallesnotadepedidoList().clear();
+           
 
 
             nota.setDetallesnotadepedidoList(consulta1.getResultList());
@@ -1271,7 +1297,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
                      result =  almacenarhistorico(datosnotapedido,nota);
 
-           result=nota.getId();
+                  result=nota.getId();
            logger.info("NOTA DE PEDIDO "+result+" ACTUALIZADA POR EMPLEADO "+datosnotapedido.getVendedor());
                                   //-----------------------------------------------------------------------------
 
@@ -1293,7 +1319,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
 
 
-            Query jpasql=em.createNativeQuery("SELECT * FROM NOTADEPEDIDO n where CAST(n.FECHAENTREGA as date)  between CAST('"+fecha1+"' as DATE) and cast('"+fecha2+"' as date) order by n.id,n.fechaentrega,n.horacompra desc", Notadepedido.class);
+            Query jpasql=em.createNativeQuery("SELECT * FROM NOTADEPEDIDO n WHERE CAST(n.FECHAENTREGA as date)  between CAST('"+fecha1+"' as DATE) and cast('"+fecha2+"' as date) and n.entregado=0 and n.pendiente=1 order by n.fechaentrega,n.horacompra,n.id desc", Notadepedido.class);
                 lista= jpasql.getResultList();
 
                 if(lista.size()>0){
@@ -1316,7 +1342,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                     xml+="<result>lista vacia</result>\n";
 
 
-
+                    
 
 
         } catch (Exception e) {
