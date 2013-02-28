@@ -32,57 +32,30 @@ import org.apache.commons.lang3.StringEscapeUtils;
 @Entity
 @Table(name = "HISTORICONOTAPEDIDO", catalog = "", schema = "")
 @NamedQueries({@NamedQuery(name = "Historiconotapedido.findAll", query = "SELECT h FROM Historiconotapedido h"),
-@NamedQuery(name = "Historiconotapedido.findByPorcentajeaplicado", query = "SELECT h FROM Historiconotapedido h WHERE h.porcentajeaplicado = :porcentajeaplicado"),
-@NamedQuery(name = "Historiconotapedido.findByPendiente", query = "SELECT h FROM Historiconotapedido h WHERE h.pendiente = :pendiente"),
-@NamedQuery(name = "Historiconotapedido.findByEntregado", query = "SELECT h FROM Historiconotapedido h WHERE h.entregado = :entregado"),
-@NamedQuery(name = "Historiconotapedido.findByTotal", query = "SELECT h FROM Historiconotapedido h WHERE h.total = :total"),
-@NamedQuery(name = "Historiconotapedido.findByIdusuarioexpidio", query = "SELECT h FROM Historiconotapedido h WHERE h.idusuarioexpidio = :idusuarioexpidio"),
-@NamedQuery(name = "Historiconotapedido.findBySaldo", query = "SELECT h FROM Historiconotapedido h WHERE h.saldo = :saldo"),
-@NamedQuery(name = "Historiconotapedido.findByIdusuarioentrega", query = "SELECT h FROM Historiconotapedido h WHERE h.idusuarioentrega = :idusuarioentrega"),
-@NamedQuery(name = "Historiconotapedido.findByFecharegistro", query = "SELECT h FROM Historiconotapedido h WHERE h.fecharegistro = :fecharegistro"),
-@NamedQuery(name = "Historiconotapedido.findByObservaciones", query = "SELECT h FROM Historiconotapedido h WHERE h.observaciones = :observaciones"),
-@NamedQuery(name = "Historiconotapedido.findByAnticipo", query = "SELECT h FROM Historiconotapedido h WHERE h.anticipo = :anticipo"),
 @NamedQuery(name = "Historiconotapedido.findByIdhistorico", query = "SELECT h FROM Historiconotapedido h WHERE h.idhistorico = :idhistorico"),
-@NamedQuery(name = "Historiconotapedido.findByIdusuarioanulo", query = "SELECT h FROM Historiconotapedido h WHERE h.idusuarioanulo = :idusuarioanulo"),
-@NamedQuery(name = "Historiconotapedido.findByHoraregistro", query = "SELECT h FROM Historiconotapedido h WHERE h.horaregistro = :horaregistro"),
+@NamedQuery(name = "Historiconotapedido.findByAnticipo", query = "SELECT h FROM Historiconotapedido h WHERE h.anticipo = :anticipo"),
 @NamedQuery(name = "Historiconotapedido.findByIdusuariocancelo", query = "SELECT h FROM Historiconotapedido h WHERE h.idusuariocancelo = :idusuariocancelo"),
-@NamedQuery(name = "Historiconotapedido.findByDescuento",
-        query = "SELECT h FROM Historiconotapedido h WHERE h.descuento = :descuento"), @NamedQuery(name = "Historiconotapedido.findByTotalapagar",
-        query = "SELECT h FROM Historiconotapedido h WHERE h.totalapagar = :totalapagar"), @NamedQuery(name = "Historiconotapedido.findByRecargo",
-        query = "SELECT h FROM Historiconotapedido h WHERE h.recargo = :recargo"), @NamedQuery(name = "Historiconotapedido.findByPorcrecargo",
-        query = "SELECT h FROM Historiconotapedido h WHERE h.porcrecargo = :porcrecargo")})
+@NamedQuery(name = "Historiconotapedido.findByPendiente", query = "SELECT h FROM Historiconotapedido h WHERE h.pendiente = :pendiente"),
+@NamedQuery(name = "Historiconotapedido.findByTotal", query = "SELECT h FROM Historiconotapedido h WHERE h.total = :total"),
+@NamedQuery(name = "Historiconotapedido.findByIdusuarioanulo", query = "SELECT h FROM Historiconotapedido h WHERE h.idusuarioanulo = :idusuarioanulo"),
+@NamedQuery(name = "Historiconotapedido.findBySaldo", query = "SELECT h FROM Historiconotapedido h WHERE h.saldo = :saldo"),
+@NamedQuery(name = "Historiconotapedido.findByHoraregistro", query = "SELECT h FROM Historiconotapedido h WHERE h.horaregistro = :horaregistro"),
+@NamedQuery(name = "Historiconotapedido.findByFecharegistro", query = "SELECT h FROM Historiconotapedido h WHERE h.fecharegistro = :fecharegistro"),
+@NamedQuery(name = "Historiconotapedido.findByAccion", query = "SELECT h FROM Historiconotapedido h WHERE h.accion = :accion"),
+@NamedQuery(name = "Historiconotapedido.findByPorcentajeaplicado", query = "SELECT h FROM Historiconotapedido h WHERE h.porcentajeaplicado = :porcentajeaplicado"),
+@NamedQuery(name = "Historiconotapedido.findByDescuento", query = "SELECT h FROM Historiconotapedido h WHERE h.descuento = :descuento"),
+@NamedQuery(name = "Historiconotapedido.findByIdusuarioexpidio", query = "SELECT h FROM Historiconotapedido h WHERE h.idusuarioexpidio = :idusuarioexpidio"),
+@NamedQuery(name = "Historiconotapedido.findByTotalapagar", query = "SELECT h FROM Historiconotapedido h WHERE h.totalapagar = :totalapagar"),
+@NamedQuery(name = "Historiconotapedido.findByObservaciones", query = "SELECT h FROM Historiconotapedido h WHERE h.observaciones = :observaciones"),
+@NamedQuery(name = "Historiconotapedido.findByRecargo", query = "SELECT h FROM Historiconotapedido h WHERE h.recargo = :recargo"),
+@NamedQuery(name = "Historiconotapedido.findByIdusuarioentrega", query = "SELECT h FROM Historiconotapedido h WHERE h.idusuarioentrega = :idusuarioentrega"),
+@NamedQuery(name = "Historiconotapedido.findByPorcrecargo", query = "SELECT h FROM Historiconotapedido h WHERE h.porcrecargo = :porcrecargo"),
+@NamedQuery(name = "Historiconotapedido.findByEntregado", query = "SELECT h FROM Historiconotapedido h WHERE h.entregado = :entregado"),
+@NamedQuery(name = "Historiconotapedido.findByCancelado", query = "SELECT h FROM Historiconotapedido h WHERE h.cancelado = :cancelado"),
+@NamedQuery(name = "Historiconotapedido.findByAnulado", query = "SELECT h FROM Historiconotapedido h WHERE h.anulado = :anulado"),
+@NamedQuery(name = "Historiconotapedido.findByPorcdesc", query = "SELECT h FROM Historiconotapedido h WHERE h.porcdesc = :porcdesc")})
 public class Historiconotapedido implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Column(name = "PORCENTAJEAPLICADO",scale=3,precision=15)
-    private Short porcentajeaplicado;
-    @Column(name = "PENDIENTE")
-    private Character pendiente;
-    @Column(name = "ENTREGADO")
-    private Character entregado;
-     @Column(name = "CANCELADO")
-    private Character cancelado;
-      @Column(name = "ANULADO")
-    private Character anulado;
-    @Column(name = "TOTAL",scale=3,precision=15)
-    private BigDecimal total;
-    @Column(name = "PORCDESC",scale=3,precision=15)
-    private BigDecimal porcentajedesc;
-    @Column(name = "IDUSUARIOEXPIDIO")
-    private Integer idusuarioexpidio;
-    @Column(name = "SALDO",scale=3,precision=15)
-    private BigDecimal saldo;
-    @Column(name = "IDUSUARIOENTREGA")
-    private Integer idusuarioentrega;
-    @Column(name = "FECHAREGISTRO")
-    @Temporal(TemporalType.DATE)
-    private Date fecharegistro;
-    @Column(name = "OBSERVACIONES",length=32000)
-    private String observaciones;
-    @Column(name = "ANTICIPO",scale=3,precision=15)
-    private BigDecimal anticipo;
-    @Column(name = "IDUSUARIOCANCELO")
-    private Integer idusuariocancelo;
-    
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy=GenerationType.TABLE,generator="HistoriconotapedidoIdGen")
@@ -90,24 +63,51 @@ public class Historiconotapedido implements Serializable {
     pkColumnName="FNAME",pkColumnValue="Historiconotapedido" , valueColumnName="FKEY",
     allocationSize=1)
     @Column(name = "IDHISTORICO")
-    private Long idhistorico;
+    private Integer idhistorico;
+    @Column(name = "ANTICIPO",precision=15,scale=3)
+    private BigDecimal anticipo;
+    @Column(name = "IDUSUARIOCANCELO")
+    private Integer idusuariocancelo;
+    @Column(name = "PENDIENTE",length=1)
+    private Character pendiente;
+    @Column(name = "TOTAL",precision=15,scale=3)
+    private BigDecimal total;
     @Column(name = "IDUSUARIOANULO")
     private Integer idusuarioanulo;
+    @Column(name = "SALDO",precision=15,scale=3)
+    private BigDecimal saldo;
     @Column(name = "HORAREGISTRO")
     @Temporal(TemporalType.TIME)
     private Date horaregistro;
-
-    @Column(name="ACCION",length=100)
+    @Column(name = "FECHAREGISTRO")
+    @Temporal(TemporalType.DATE)
+    private Date fecharegistro;
+    @Column(name = "ACCION",length=100)
     private String accion;
-
-    @Column(name = "DESCUENTO",scale=3,precision=15)
+    @Column(name = "PORCENTAJEAPLICADO")
+    private Short porcentajeaplicado;
+    @Column(name = "DESCUENTO",precision=15,scale=3)
     private BigDecimal descuento;
-    @Column(name = "TOTALAPAGAR",scale=3,precision=15)
+    @Column(name = "IDUSUARIOEXPIDIO")
+    private Integer idusuarioexpidio;
+    @Column(name = "TOTALAPAGAR",precision=15,scale=3)
     private BigDecimal totalapagar;
-    @Column(name = "RECARGO",scale=3,precision=15)
+    @Column(name = "OBSERVACIONES",length=32000)
+    private String observaciones;
+    @Column(name = "RECARGO",precision=15,scale=3)
     private BigDecimal recargo;
-    @Column(name = "PORCRECARGO",scale=3,precision=15)
+    @Column(name = "IDUSUARIOENTREGA")
+    private Integer idusuarioentrega;
+    @Column(name = "PORCRECARGO",precision=15,scale=3)
     private BigDecimal porcrecargo;
+    @Column(name = "ENTREGADO",length=1)
+    private Character entregado;
+    @Column(name = "CANCELADO",length=1)
+    private Character cancelado;
+    @Column(name = "ANULADO",length=1)
+    private Character anulado;
+    @Column(name = "PORCDESC",precision=15,scale=3)
+    private BigDecimal porcdesc;
 
     @JoinColumn(name="FKIDNOTAPEDIDO_ID",referencedColumnName="ID")
     @ManyToOne
@@ -127,16 +127,16 @@ public class Historiconotapedido implements Serializable {
     public Historiconotapedido() {
     }
 
-    public Historiconotapedido(Long idhistorico) {
+    public Historiconotapedido(Integer idhistorico) {
         this.idhistorico = idhistorico;
     }
 
     public BigDecimal getPorcentajedesc() {
-        return porcentajedesc;
+        return porcdesc;
     }
 
     public void setPorcentajedesc(BigDecimal porcentajedesc) {
-        this.porcentajedesc = porcentajedesc;
+        this.porcdesc = porcentajedesc;
     }
 
    
@@ -248,11 +248,11 @@ public class Historiconotapedido implements Serializable {
 
    
 
-    public Long getIdhistorico() {
+    public Integer getIdhistorico() {
         return idhistorico;
     }
 
-    public void setIdhistorico(Long idhistorico) {
+    public void setIdhistorico(Integer idhistorico) {
         this.idhistorico = idhistorico;
     }
 
