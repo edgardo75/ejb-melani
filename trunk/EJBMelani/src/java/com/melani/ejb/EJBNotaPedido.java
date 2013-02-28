@@ -484,7 +484,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                         historico.setCancelado(notadepedido.getCancelado());
 
                         historico.setAnulado(notadepedido.getAnulado());
-
+                       
                         
                         historico.setAccion("Historico Almacenado con exito nota de pedido N "+notape.getId());
             
@@ -631,12 +631,12 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             //--------------------------------------------------------------------------
                             Historiconotapedido historico = new Historiconotapedido();
                             if(estado==1){
-                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" CANCELADA POR EL USUARIO "+idusuariocancelo+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
+                                historico.setAccion("Cancelada por"+empleado.getNameuser());
                                
                                 historico.setCancelado(Character.valueOf(cancelado));
                                 
                             }else{
-                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+"NO CANCELADA O CAMBIADA DE ESTADO POR EL USUARIO "+idusuariocancelo+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
+                                historico.setAccion("No cancelada por"+empleado.getNameuser());
                                
                                 historico.setCancelado(Character.valueOf(cancelado));
                                 
@@ -660,7 +660,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                 historico.setTotalapagar(BigDecimal.ZERO);
                                 historico.setRecargo(BigDecimal.ZERO);
                                 historico.setPorcrecargo(BigDecimal.ZERO);
-                                historico.setObservaciones("");
+                                historico.setPorcentajedesc(BigDecimal.ZERO);
                                 historico.setDescuento(BigDecimal.ZERO);
                                 historico.setAnulado('0');
                                 
@@ -700,7 +700,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                      //-----------------------------------------------------------------
 
                         em.persist(nota);
-                        em.persist(historico);
+                        
                  result = nota.getId();
 
         } catch (Exception e) {
@@ -745,42 +745,54 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                             detallesnotadepedido.setEntregado(Character.valueOf(entregado));
                             detallesnotadepedido.setPendiente(Character.valueOf(pendiente));
                     }
+               
                 Historiconotapedido historico = new Historiconotapedido();
-
+                
                         if(estado==1){
-                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" ENTREGADA POR EL EMPLEADO N° "+idusuarioentrega+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
-                                historico.setEntregado(Character.valueOf('1'));
-                                historico.setPendiente(pendiente);
+                          
+                                historico.setAccion("Entregado por"+empleado.getNameuser());
+                             
+                                historico.setEntregado('1');
+                             
+                                historico.setPendiente('0');
+                             
 
                         }else{
-                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" NO ENTREGADA AÚN, ACCION REALIZADA POR EMPLEADO N° "+idusuarioentrega+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
-                                historico.setEntregado(Character.valueOf('0'));
-                                historico.setPendiente(pendiente);
+                          
+                                historico.setAccion("No entregada por "+empleado.getNameuser());
+                              
+                                historico.setEntregado('0');
+                             
+                                historico.setPendiente('1');
+                              
                         }
 
+
+
+
                                 historico.setAnticipo(BigDecimal.ZERO);
-                         
                                 historico.setFecharegistro(gc.getTime());
                                 historico.setFkidnotapedido(nota);
+
                                 historico.setHoraregistro(gc.getTime());
+
                                 historico.setIdusuarioanulo(0);
-                                historico.setIdusuarioentrega(idusuarioentrega);
+                                historico.setIdusuarioentrega(0);
                                 historico.setIdusuarioexpidio(0);
                                 historico.setIdusuariocancelo(0);
-                                
-                                
-                                
                                 historico.setPorcentajeaplicado(Short.valueOf("0"));
                                 historico.setSaldo(BigDecimal.ZERO);
                                 historico.setTotal(BigDecimal.ZERO);
-                                historico.setAnulado('0');
-                                historico.setAnticipo(BigDecimal.ZERO);
-                                historico.setCancelado('0');
-                                historico.setDescuento(BigDecimal.ZERO);
-                                historico.setObservaciones("");
-                                historico.setPorcrecargo(BigDecimal.ZERO);
+                                historico.setTotalapagar(BigDecimal.ZERO);
                                 historico.setRecargo(BigDecimal.ZERO);
-                                 historico.setTotalapagar(BigDecimal.ZERO);
+                                historico.setPorcrecargo(BigDecimal.ZERO);
+                                historico.setPorcentajedesc(BigDecimal.ZERO);
+                                historico.setDescuento(BigDecimal.ZERO);
+                                historico.setAnulado('0');
+                                historico.setCancelado('0');
+
+
+                                 em.persist(historico);
 
                                 
                                
@@ -1022,12 +1034,12 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                 Historiconotapedido historico = new Historiconotapedido();
 
                         if(estado==1){
-                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" ANULADA POR EL EMPLEADO N° "+idusuario+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
+                                historico.setAccion("Nota anulada"+empleado.getNameuser());
                                 historico.setAnulado(anulada);
                                 
 
                         }else{
-                                historico.setAccion("NOTA DE PEDIDO N "+nota.getId()+" NO ANULADA AÚN, ACCION REALIZADA POR EMPLEADO N° "+idusuario+" NOMBRE "+empleado.getNombre()+" "+empleado.getApellido());
+                                historico.setAccion("NOTa no anulada por "+empleado.getNameuser());
                                 historico.setAnulado(anulada);
 
                         }
@@ -1051,13 +1063,14 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                 historico.setRecargo(BigDecimal.ZERO);
                                 historico.setPorcrecargo(BigDecimal.ZERO);
                                 historico.setPendiente('0');
-                                historico.setObservaciones("");
+                                
                                 historico.setEntregado('0');
                                 historico.setDescuento(BigDecimal.ZERO);
                                 historico.setCancelado('0');
+                                historico.setPorcentajedesc(BigDecimal.ZERO);
 
 
-                             
+                                em.persist(historico);
                 //----------------------------------------------------------------------------------
                             long notaID = procesaListNotaHistorico(nota,historico);
           //----------------------------------------------------------------------------------
