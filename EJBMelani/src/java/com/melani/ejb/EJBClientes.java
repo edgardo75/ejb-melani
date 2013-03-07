@@ -813,17 +813,42 @@ public class EJBClientes implements EJBClientesRemote {
     }
 
     public String addClienteDatosPersonales(String datospersonalescliente) {
+        long idcliente =0L;
+
         String xml="<Lista>\n";
         try {
 
+                      
                     XStream  xstream = new XStream();
+                      
                     xstream.alias("ClienteDomicilioTelefono",ClienteDomicilioTelefono.class);
+                      
                     xstream.alias("item", DatosCliente.class);
+                      
 
+                    //---------------------------------------------------------------------
+                    if(datospersonalescliente.contains("<Domicilio>"))
+                            xstream.alias("Domicilio", DatosDomicilios.class);
+
+                    //---------------------------------------------------------------------
+                    if(datospersonalescliente.contains("<telefono>")){
+                      
+                        xstream.alias("listaTelefonos", ListaTelefonos.class);
+                        xstream.alias("telefono", DatosTelefonos.class);
+                        xstream.addImplicitCollection(ListaTelefonos.class,"list");
+                    }
+                      
                     ClienteDomicilioTelefono datoscliente = (ClienteDomicilioTelefono) xstream.fromXML(parsearCaracteresEspecialesXML1(datospersonalescliente).toString());
+                      
+
+                    //------------------------------------------------------------------------------------------
+            
+                      
                     DatosCliente getcliente = datoscliente.getCliente();
+                    
 
                      retornoemail = chequearemail(getcliente.getEmail(),getcliente.getNrodocu());
+                    
 
              switch((int)retornoemail){
 
@@ -837,15 +862,55 @@ public class EJBClientes implements EJBClientesRemote {
                  }
                  default:{
 
-                     long idcliente = addDatosCliente(getcliente.getApellido(), getcliente.getNombre(), getcliente.getIdtipodocu(), getcliente.getNrodocu(), getcliente.getEmail(), getcliente.getObservaciones(), getcliente.getGenero().getIdgenero());
-                     if(idcliente>0){
-                             Clientes cliem = em.find(Clientes.class, idcliente);
-                             xml+="<item>\n";
-                             xml+=cliem.toXML();
-                             xml+=cliem.toXMLCLI();
-                             xml+="</item>\n";
 
-                     }
+                 
+                     //*****************************************************************************++++
+                                      idcliente= existe_cliente(getcliente.getNrodocu());
+
+                                switch((int)idcliente){
+                                    case 0:{
+                                                //------agrego el cliente y todos sus datos desde cero
+                 
+                                            idcliente =agregarTodosLosDatosCliente(datoscliente,getcliente,datospersonalescliente);
+                                            if(idcliente>0){
+                                                     Clientes cliem = em.find(Clientes.class, idcliente);
+                                                     xml+="<item>\n";
+                                                     xml+=cliem.toXML();
+                                                     xml+=cliem.toXMLCLI();
+                                                     xml+="</item>\n";
+
+                                             }
+                                        }
+                                        break;
+                                        
+                                            case -1:{
+                 
+                                                logger.error("Fallo error al buscar cliente en metodo existe");
+                                             xml+="<error>Fallo error al buscar cliente en metodo existe</error>\n";
+                                            break;
+                                        }
+
+                                    default:{
+                 
+                                            idcliente = actualizarDatos(datoscliente,getcliente,datospersonalescliente,idcliente);
+                                            if(idcliente>0){
+                                                     Clientes cliem = em.find(Clientes.class, idcliente);
+                                                     xml+="<item>\n";
+                                                     xml+=cliem.toXML();
+                                                     xml+=cliem.toXMLCLI();
+                                                     xml+="</item>\n";
+
+                                             }
+
+                                            break;
+                                        }
+                                }
+                        //**********************************************************************************
+
+
+
+                     //idcliente = addDatosCliente(getcliente.getApellido(), getcliente.getNombre(), getcliente.getIdtipodocu(), getcliente.getNrodocu(), getcliente.getEmail(), getcliente.getObservaciones(), getcliente.getGenero().getIdgenero());
+                     
 
 
                  }
