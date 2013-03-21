@@ -1131,11 +1131,8 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                             nota.setFkIdcliente(em.find(Personas.class, datosnotapedido.getPersonas().getId()));
                                             
 
-                                            nota.setFkidporcentajenotaId(em.find(Porcentajes.class, datosnotapedido.getPorcentajes().getId_porcentaje()));
-                                            
-
-                                           
-                                            
+                                            nota.setFkidporcentajenotaId(em.find(Porcentajes.class, datosnotapedido.getPorcentajes().getId_porcentaje()));                      
+                                 
 
                                             nota.setIdTarjetaFk(em.find(TarjetasCreditoDebito.class, datosnotapedido.getTarjetacredito().getId_tarjeta()));
                                             
@@ -1173,8 +1170,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                             nota.setStockfuturo(datosnotapedido.getStockfuturo());
 
 
-                                            nota.setTotal(BigDecimal.valueOf(datosnotapedido.getMontototal()));
-                                       
+                                            nota.setTotal(BigDecimal.valueOf(datosnotapedido.getMontototal()));                                     
 
 
                                             nota.setFechadecompra(sdf.parse(datosnotapedido.getFechacompra()));
@@ -1186,12 +1182,10 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                             nota.setCancelado(Character.valueOf(datosnotapedido.getCancelado()));
                                            
 
-                                            nota.setDescuentonota(BigDecimal.valueOf(datosnotapedido.getDescuentonota()));
-
-
-                                            
+                                            nota.setDescuentonota(BigDecimal.valueOf(datosnotapedido.getDescuentonota()));                                           
                         
-                                             nota.setIdusuariocancelo(datosnotapedido.getUsuario_cancelo_nota());
+
+                                            nota.setIdusuariocancelo(datosnotapedido.getUsuario_cancelo_nota());
                         
 
                                             try {
@@ -1306,6 +1300,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
 
                     em.persist(nota);
+                    em.flush();
 
 
                      result =  almacenarhistorico(datosnotapedido,nota);
