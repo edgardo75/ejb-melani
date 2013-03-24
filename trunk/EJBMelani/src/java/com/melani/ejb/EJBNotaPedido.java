@@ -127,11 +127,8 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                             notape.setAnulado(notadepedido.getAnulado());
 
                                             notape.setEnefectivo(notadepedido.getEnefectivo());
-
-
                                            
-                                           notape.setPendiente(Character.valueOf(notadepedido.getPendiente()));
-                                           
+                                            notape.setPendiente(Character.valueOf(notadepedido.getPendiente()));
 
                                             notape.setEntregado(Character.valueOf(notadepedido.getEntregado()));
 
@@ -151,9 +148,11 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
 
                                             notape.setMontoiva(BigDecimal.valueOf(notadepedido.getMontoiva()));
 
-                                            notape.setNumerodecupon(notadepedido.getNumerodecupon());
+                                            
+                                                notape.setNumerodecupon(notadepedido.getNumerodecupon());
 
-                                            notape.setObservaciones(notadepedido.getObservaciones());
+                                          
+                                                notape.setObservaciones(notadepedido.getObservaciones());
 
                                             
 
@@ -176,6 +175,8 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                             notape.setCancelado(Character.valueOf(notadepedido.getCancelado()));
 
                                             notape.setDescuentonota(BigDecimal.valueOf(notadepedido.getDescuentonota()));
+
+                                            notape.setDescuentoPesos(BigDecimal.valueOf(notadepedido.getDescuentopesos()));
 
                                             notape.setIdusuariocancelo(notadepedido.getUsuario_cancelo_nota());
 
@@ -1152,10 +1153,12 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                             nota.setMontoiva(BigDecimal.valueOf(datosnotapedido.getMontoiva()));
                                             
 
-                                            nota.setNumerodecupon(datosnotapedido.getNumerodecupon());
+                                           
+                                                nota.setNumerodecupon(datosnotapedido.getNumerodecupon());
                                             
 
-                                            nota.setObservaciones(datosnotapedido.getObservaciones());
+                                            
+                                                nota.setObservaciones(datosnotapedido.getObservaciones());
                                             
 
                                             nota.setPendiente(Character.valueOf(datosnotapedido.getPendiente()));
@@ -1182,7 +1185,9 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                                             nota.setCancelado(Character.valueOf(datosnotapedido.getCancelado()));
                                            
 
-                                            nota.setDescuentonota(BigDecimal.valueOf(datosnotapedido.getDescuentonota()));                                           
+                                            nota.setDescuentonota(BigDecimal.valueOf(datosnotapedido.getDescuentonota()));
+
+                                            nota.setDescuentoPesos(BigDecimal.valueOf(datosnotapedido.getDescuentopesos()));
                         
 
                                             nota.setIdusuariocancelo(datosnotapedido.getUsuario_cancelo_nota());

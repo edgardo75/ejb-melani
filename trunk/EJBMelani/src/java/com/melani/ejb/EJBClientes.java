@@ -734,10 +734,15 @@ public class EJBClientes implements EJBClientesRemote {
                case 1:{
                     for (Iterator<Clientes> it = lista.iterator(); it.hasNext();) {
                             Clientes clientes = it.next();
-                            xml+="<item>\n";
-                            xml+=clientes.toXML();
-                            xml+=clientes.toXMLCLI();
+                            xml+="<item>\n"+
+                            "<id>"+clientes.getIdPersona()+"</id>\n"+
+                             "<apellido>"+clientes.getApellido()+"</apellido>\n"+
+                             "<nombre>"+clientes.getNombre()+"</nombre>\n"+
+                             "<idtipodocu>"+clientes.getTipodocumento().getId()+"</idtipodocu>\n"+
+                             "<nrodocu>"+clientes.getNrodocumento()+"</nrodocu>\n";
+                            
                             xml+="</item>\n";
+                                    
                      }
                }
            }
@@ -748,7 +753,7 @@ public class EJBClientes implements EJBClientesRemote {
             logger.error("Error en metodo getCustomerDocNumber "+e.getMessage());
             xml="Error";
         }finally{
-          
+          System.out.println(xml);
             return xml;
         }
     }

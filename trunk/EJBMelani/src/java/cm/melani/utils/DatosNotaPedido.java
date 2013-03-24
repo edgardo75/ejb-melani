@@ -38,6 +38,7 @@ public class DatosNotaPedido {
     private Porcentajes porcentaje;
     private DetallesNotaPedido detallesnotapedido;
     private Double descuentonota;
+    private Double descuentopesos;
     private String fechaentrega;
     private String fechaanulada;
     private String fechacancelada;
@@ -84,6 +85,10 @@ public class DatosNotaPedido {
 
     public Double getDescuentonota() {
         return descuentonota;
+    }
+
+    public Double getDescuentopesos() {
+        return descuentopesos;
     }
 
     public String getFechaanulada() {

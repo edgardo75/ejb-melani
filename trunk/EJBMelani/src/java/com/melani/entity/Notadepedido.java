@@ -114,7 +114,9 @@ public class Notadepedido implements Serializable {
     private Character enefectivo;
     @Column(name="FECHAENTREGA")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaentrega;    
+    private Date fechaentrega;
+     @Column(name = "DESCUENTO_PESOS",precision=15,scale=3)
+    private BigDecimal descuentoPesos;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "notadepedido")
     private List<Detallesnotadepedido> detallesnotadepedidoList;
     @OneToMany(cascade= CascadeType.ALL,mappedBy = "fkidnotapedido")
@@ -217,6 +219,14 @@ public class Notadepedido implements Serializable {
 
     public void setDescuentonota(BigDecimal descuentonota) {
         this.descuentoNota = descuentonota;
+    }
+
+    public BigDecimal getDescuentoPesos() {
+        return descuentoPesos;
+    }
+
+    public void setDescuentoPesos(BigDecimal descuentoPesos) {
+        this.descuentoPesos = descuentoPesos;
     }
 
    
@@ -489,12 +499,13 @@ public class Notadepedido implements Serializable {
                 "<idtarjeta>"+this.getIdTarjetaFk().getIdtarjeta()+"</idtarjeta>\n"
                 + "<observaciones>"+StringEscapeUtils.escapeXml(this.getObservaciones())+"</observaciones>\n"
                 + "<anticipo>"+this.getAnticipo()+"</anticipo>\n"
-                + "<anulado>"+this.getAnulado()+"</anulado>\n"
+                + "<anulado>"+this.getAnulado().toString()+"</anulado>\n"
                 + "<cancelado>"+this.getCancelado()+"</cancelado>\n"
                 + "<efectivo>"+this.getEnefectivo()+"</efectivo>\n"
                 + "<entregado>"+this.getEntregado()+"</entregado>\n"
                 + "<fechaanulado>"+fechanulado+"</fechaanulado>\n" +
-                "<descuentonota>" +this.getDescuentonota()+"</descuentonota>\n"+
+                "<descuentonota>" +this.getDescuentonota()+"</descuentonota>\n" +
+                "<descuentopesos>"+this.getDescuentoPesos()+"</descuentopesos>\n"+
                 "<fecancel>"+fecancel+"</fecancel>\n"
                 + "<fechacompra>"+fecompra+"</fechacompra>\n"
                 + "<fechaentrega>"+feentrega+"</fechaentrega>\n"
@@ -514,15 +525,15 @@ public class Notadepedido implements Serializable {
                 + "<idusuarioanulonota>"+this.getIdusuarioAnulado()+"</idusuarioanulonota>\n"
                 + "<idusuarioentregonota>"+this.getIdusuarioEntregado()+"</idusuarioentregonota>\n" +
                 "<idusuariocancelonota>"+this.getIdusuariocancelo()+"</idusuariocancelonota>\n"
-                + "<montoiva>"+this.getMontoiva()+"</montoiva>\n"                
+                + "<montoiva>"+this.getMontoiva()+"</montoiva>\n"
                 + "<pendiente>"+this.getPendiente()+"</pendiente>\n"
                 + "<recargo>"+this.getRecargo()+"</recargo>\n"
                 + "<total>"+this.getTotal()+"</total>\n"
                 + "<saldo>"+this.getSaldo()+"</saldo>\n" +
-                "<montototalapagar>"+this.getMontototalapagar().toString()+"</montototalapagar>\n" +
-                "<porcentajedesctotal>"+this.getPorcdesctotal().toString()+"</porcentajedesctotal>\n" +
-                "<recargototal>"+this.getRecargo().toString()+"</recargototal>\n" +
-                "<porcrecargo>"+this.getPorcrecargo().toString()+"</porcrecargo>\n"
+                "<montototalapagar>"+this.getMontototalapagar()+"</montototalapagar>\n" +
+                "<porcentajedesctotal>"+this.getPorcdesctotal()+"</porcentajedesctotal>\n" +
+                "<recargototal>"+this.getRecargo()+"</recargototal>\n" +
+                "<porcrecargo>"+this.getPorcrecargo()+"</porcrecargo>\n"
                 + "<detallenota>\n";
                     if(this.getDetallesnotadepedidoList().isEmpty())
                         item+="</detallenota>\n";
@@ -542,9 +553,9 @@ public class Notadepedido implements Serializable {
                                     + "<precio>"+detallesnotadepedido.getPrecio()+"</precio>\n" +
                                     "<preciocondescuento>"+detallesnotadepedido.getPreciocondescuento()+"</preciocondescuento>\n" +
                                     "<descuento>"+detallesnotadepedido.getDescuento()+"</descuento>\n" +
-                                    "<subtotal>"+detallesnotadepedido.getSubtotal().toString()+"</subtotal>\n" +
+                                    "<subtotal>"+detallesnotadepedido.getSubtotal()+"</subtotal>\n" +
                                     "<entregado>"+detallesnotadepedido.getEntregado()+"</entregado>\n" +
-                                    "<iva>"+detallesnotadepedido.getIva().toString()+"</iva>\n" +
+                                    "<iva>"+detallesnotadepedido.getIva()+"</iva>\n" +
                                     "<cancelado>"+detallesnotadepedido.getCancelado()+"</cancelado>\n" +
                                     "<anulado>"+detallesnotadepedido.getAnulado()+"</anulado>\n" 
 
