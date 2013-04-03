@@ -10,9 +10,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -117,11 +120,11 @@ public class Notadepedido implements Serializable {
     private Date fechaentrega;
      @Column(name = "DESCUENTO_PESOS",precision=15,scale=3)
     private BigDecimal descuentoPesos;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "notadepedido")
+    @OneToMany(mappedBy = "notadepedido",cascade={CascadeType.ALL})
     private List<Detallesnotadepedido> detallesnotadepedidoList;
-    @OneToMany(cascade= CascadeType.ALL,mappedBy = "fkidnotapedido")
+    @OneToMany(mappedBy = "fkidnotapedido",cascade={CascadeType.ALL})
     private List<Historiconotapedido> historiconotapedidoList;
-    
+    @JoinColumn(name = "IDTARJETAFK_IDTARJETA", referencedColumnName = "IDTARJETA")
     @ManyToOne
     private TarjetasCreditoDebito idTarjetaFk;
     @JoinColumn(name = "FK_IDCLIENTE", referencedColumnName = "ID_PERSONA")
@@ -539,28 +542,10 @@ public class Notadepedido implements Serializable {
                         item+="</detallenota>\n";
                     else{
 
-                        List<Detallesnotadepedido>lista = this.getDetallesnotadepedidoList();
-                        for (Iterator<Detallesnotadepedido> it = lista.iterator(); it.hasNext();) {
-                            Detallesnotadepedido detallesnotadepedido = it.next();
-                            item+="<itemdetalle>\n" +
-                                    "<idnota>"+detallesnotadepedido.getNotadepedido().getId()+"</idnota>\n"
-                                    + "<producto>\n" +
-                                        "<id>"+detallesnotadepedido.getProductos().getSid()+"</id>\n" +
-                                        "<code>"+detallesnotadepedido.getProductos().getCodproducto()+"</code>\n"
-                                    + "<descripcion>"+StringEscapeUtils.escapeXml(detallesnotadepedido.getProductos().getDescripcion())+"</descripcion>\n"
-                                    + "</producto>\n"
-                                    + "<cantidad>"+detallesnotadepedido.getCantidad()+"</cantidad>\n"
-                                    + "<precio>"+detallesnotadepedido.getPrecio()+"</precio>\n" +
-                                    "<preciocondescuento>"+detallesnotadepedido.getPreciocondescuento()+"</preciocondescuento>\n" +
-                                    "<descuento>"+detallesnotadepedido.getDescuento()+"</descuento>\n" +
-                                    "<subtotal>"+detallesnotadepedido.getSubtotal()+"</subtotal>\n" +
-                                    "<entregado>"+detallesnotadepedido.getEntregado()+"</entregado>\n" +
-                                    "<iva>"+detallesnotadepedido.getIva()+"</iva>\n" +
-                                    "<cancelado>"+detallesnotadepedido.getCancelado()+"</cancelado>\n" +
-                                    "<anulado>"+detallesnotadepedido.getAnulado()+"</anulado>\n" 
-
-
-                                    + "</itemdetalle>\n";
+                        Iterator iter = this.getDetallesnotadepedidoList().iterator();
+                        while (iter.hasNext()) {
+                            Detallesnotadepedido detallenota = (Detallesnotadepedido) iter.next();
+                            item+=detallenota.toXML();
 
                         }
                     

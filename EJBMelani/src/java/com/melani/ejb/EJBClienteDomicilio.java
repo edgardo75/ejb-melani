@@ -10,7 +10,7 @@ import com.melani.entity.Domicilios;
 
 import com.melani.entity.PersonasDomicilios;
 import com.melani.entity.PersonasdomiciliosPK;
-import java.text.SimpleDateFormat;
+
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;

@@ -7,6 +7,8 @@ package com.melani.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -55,10 +57,10 @@ public class Detallesnotadepedido implements Serializable {
     @Column(name = "IVA")
     private BigDecimal iva;
     @JoinColumn(name = "FK_IDNOTA", referencedColumnName = "ID", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Notadepedido notadepedido;
     @JoinColumn(name = "FK_IDPRODUCTO", referencedColumnName = "SID", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Productos productos;
     @Column(name = "ANULADO")
     private Character anulado;
@@ -206,6 +208,32 @@ public class Detallesnotadepedido implements Serializable {
     @Override
     public String toString() {
         return "entity.Detallesnotadepedido[detallesnotadepedidoPK=" + detallesnotadepedidoPK + "]";
+    }
+
+    public String toXML(){
+
+    String item="<itemdetalle>\n" +
+                  "<idnota>"+this.getNotadepedido().getId()+"</idnota>\n"
+                                    + "<producto>\n" +
+                                        "<id>"+this.getProductos().getSid()+"</id>\n" +
+                                        "<code>"+this.getProductos().getCodproducto()+"</code>\n"
+                                    + "<descripcion>"+this.getProductos().getDescripcion()+"</descripcion>\n"
+                                    + "</producto>\n"
+                                    + "<cantidad>"+this.getCantidad()+"</cantidad>\n"
+                                    + "<precio>"+this.getPrecio()+"</precio>\n" +
+                                    "<preciocondescuento>"+this.getPreciocondescuento()+"</preciocondescuento>\n" +
+                                    "<descuento>"+this.getDescuento()+"</descuento>\n" +
+                                    "<subtotal>"+this.getSubtotal()+"</subtotal>\n" +
+                                    "<entregado>"+this.getEntregado()+"</entregado>\n" +
+                                    "<iva>"+this.getIva()+"</iva>\n" +
+                                    "<cancelado>"+this.getCancelado()+"</cancelado>\n" +
+                                    "<anulado>"+this.getAnulado()+"</anulado>\n"
+
+
+                                    + "</itemdetalle>\n";
+
+
+    return item;
     }
 
 }
