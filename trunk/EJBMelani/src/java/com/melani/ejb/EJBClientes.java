@@ -753,7 +753,7 @@ public class EJBClientes implements EJBClientesRemote {
             logger.error("Error en metodo getCustomerDocNumber "+e.getMessage());
             xml="Error";
         }finally{
-          System.out.println(xml);
+         
             return xml;
         }
     }

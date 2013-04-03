@@ -210,7 +210,7 @@ public class EJBEmpleados implements EJBEmpleadosRemote {
                     sb.append(" ");
                     sb.append(empleadoDesabilito.getApellido());
                     
-                    logger.info("EMPLEADO DESHABILITADO EL DIA DE LA FECHA "+gc.getTime()+", EL EMPLEADO QUE REALIZÓ LA OPERACION FUE "+sb.toString());
+                    logger.warn("EMPLEADO DESHABILITADO EL DIA DE LA FECHA "+gc.getTime()+", EL EMPLEADO QUE REALIZÓ LA OPERACION FUE "+sb.toString());
                     
              retorno=Integer.valueOf(String.valueOf(empleadoDesabilitado.getIdPersona()));
 
@@ -278,7 +278,7 @@ public class EJBEmpleados implements EJBEmpleadosRemote {
                     sb.append(" ");
                     sb.append(empleadohabilito.getApellido());
 
-                    logger.info("EMPLEADO HABILITADO EL DIA DE LA FECHA "+gc.getTime()+", EL EMPLEADO QUE REALIZÓ LA OPERACION FUE "+sb.toString());
+                    logger.warn("EMPLEADO HABILITADO EL DIA DE LA FECHA "+gc.getTime()+", EL EMPLEADO QUE REALIZÓ LA OPERACION FUE "+sb.toString());
 
              retorno=Integer.valueOf(String.valueOf(empleadohabilito.getIdPersona()));
 

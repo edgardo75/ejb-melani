@@ -71,11 +71,11 @@ public class Productos implements Serializable {
     @Lob @Basic(fetch=FetchType.EAGER)
     @Column(name = "IMG")
     private byte[] img;
-    @OneToMany(mappedBy = "productos",cascade={CascadeType.ALL},fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "productos",cascade={CascadeType.ALL})
     private List<ExistenciasProductos> existenciasProductoss;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productos",fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productos")
     private List<Detallesnotadepedido> detallesnotadepedidoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productos",fetch=FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productos")
     private List<Detallespresupuesto> detallepresupuestosList;
 
     public Productos(){}

@@ -40,7 +40,7 @@ public class EmpresaTelefonia implements Serializable {
     private Short idEmpTelefonia;
     @Column(name = "NOMBRE", length = 30,unique=true)
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresatelefonia",fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "idEmpresatelefonia")
     private List<Telefonos> telefonosList;
 
     public EmpresaTelefonia() {

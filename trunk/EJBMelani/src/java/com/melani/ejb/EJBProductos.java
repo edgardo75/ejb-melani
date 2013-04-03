@@ -37,6 +37,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.sql.DataSource;
 import oracle.xml.sql.query.OracleXMLQuery;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 /**
  *
@@ -412,18 +413,22 @@ public class EJBProductos implements EJBProductosRemote {
                     else{
                         Iterator iter = lista.iterator();
                         xml="<Lista>\n";
+
                         while(iter.hasNext()){
                             Productos prod = (Productos) iter.next();
                             xml+="<producto>\n"
                                     + "<id>"+prod.getSid()+"</id>\n"
                                     + "<idproduct>"+prod.getCodproducto()+"</idproduct>\n"
-                                    + "<descripcion>"+prod.getDescripcion()+"</descripcion>\n"
+                                    + "<descripcion>"+StringEscapeUtils.escapeXml(prod.getDescripcion())+"</descripcion>\n"
                                     + "<cantidadDisponible>"+prod.getCantidadDisponible()+"</cantidadDisponible>\n"
                                     + "<cantidadInicial>"+prod.getCantidadInicial()+"</cantidadInicial>\n"
                                     + "<fecha>"+sdf.format(prod.getFecha())+"</fecha>\n" 
                                     +"<precio>"+prod.getPrecioUnitario()+"</precio>\n"
                                     + "</producto>\n";
-                        
+                      
+                                
+                            
+
                         
                         }
                         xml+="</Lista>\n";
@@ -529,62 +534,15 @@ public class EJBProductos implements EJBProductosRemote {
 
                    
 
-                        Query consulta1 = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.CODPRODUCTO) LIKE LOWER('"+datosprod.getCodproducto()+"%')");
-                        Query consulta = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.DESCRIPCION) LIKE LOWER('"+datosprod.getDescripcion()+"%')");
-
-
-                        
-
-
-                    if(consulta.getResultList().isEmpty()){
-                        if(consulta1.getResultList().isEmpty()){
-
-                            if(producto==null){
-                            //----------------------------Producto Nuevo-------------------------------------------
-            
-                                    producto = new Productos();
-
-                                    producto.setCantidadDisponible(BigInteger.valueOf(datosprod.getCantidaddisponible()));
-
-                                    producto.setCantidadInicial(BigInteger.valueOf(datosprod.getCantidadinicial()));
-
-                                    producto.setPrecioUnitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
-
-                                    if(consulta.getResultList().isEmpty())
-                                        producto.setDescripcion(datosprod.getDescripcion().toUpperCase());
-
-                                    producto.setFecha(calendario.getTime());
-
-                                    if(consulta1.getResultList().isEmpty())
-                                        producto.setCodproducto(datosprod.getCodproducto().toUpperCase());
-
-                                    em.persist(producto);
-
-                                        ExistenciasProductos existencias = new ExistenciasProductos();
-
-                                        existencias.setCantidadactual(Integer.valueOf(datosprod.getCantidaddisponible()));
-                                        existencias.setCantidadinicial(datosprod.getCantidadinicial());
-                                        existencias.setFechaagregado(calendario.getTime());
-                                        existencias.setPreciounitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
-                                        existencias.setIdUsuario(datosprod.getIdusuario());
-                                        existencias.setProductos(em.find(Productos.class, producto.getSid()));
-                                        em.persist(existencias);
-
-                                    retorno = existencias(producto);
-            
-                        //-----------------------------------------------------------------------
-
-                         }else{
-                            if(producto.getCantidadDisponible().intValue()!=datosprod.getCantidaddisponible()||producto.getPrecioUnitario()!=BigDecimal.valueOf(datosprod.getPreciounitario())){
-                                
+                      
+                               
                 //--------------------------------Actualizo Producto Los CamposNecesarios-------------------------------
+
                                         producto.setCantidadDisponible(BigInteger.valueOf(producto.getCantidadDisponible().intValue()+datosprod.getCantidaddisponible()));
                                         producto.setPrecioUnitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
-                                        if(consulta.getResultList().isEmpty())
-                                            producto.setDescripcion(datosprod.getDescripcion().toUpperCase());
-                                        if(consulta1.getResultList().isEmpty())
-                                            producto.setCodproducto(datosprod.getCodproducto());
+                    
                                         em.persist(producto);
+                                        em.flush();
                 //---------------------------------------------------------------------------------
                                         ExistenciasProductos existencias = new ExistenciasProductos();
                                         existencias.setCantidadactual(datosprod.getCantidaddisponible());
@@ -592,19 +550,24 @@ public class EJBProductos implements EJBProductosRemote {
                                         existencias.setFechaagregado(calendario.getTime());
                                         existencias.setPreciounitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
                                         existencias.setProductos(em.find(Productos.class, producto.getSid()));
+                                        existencias.setIdUsuario(datosprod.getIdusuario());
+
                                         em.persist(existencias);
+                                        em.flush();
                 //---------------------------------------------------------------------------------
+                                       
+
+                                       
+
+
+
                                     retorno = existencias(producto);
             
                 //---------------------------------------------------------------------------------
-                            }else
+                          
                                 retorno = producto.getSid();
 
-                        }
-                     }else
-                            retorno = -6;
-                        }else
-                            retorno = -5;
+                       
 
 
         } catch (Exception e) {

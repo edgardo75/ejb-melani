@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -61,7 +61,7 @@ public class ExistenciasProductos implements Serializable {
     @Column(name="ID_USUARIO")
     private Integer idUsuario;
     @JoinColumn(name = "PRODUCTOS_SID", referencedColumnName = "SID")
-    @ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
+    @ManyToOne
     private Productos productos;
 
     public ExistenciasProductos() {
