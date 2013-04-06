@@ -438,7 +438,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
     private long almacenarhistorico(DatosNotaPedido notadepedido,Notadepedido notape) {
         long resultado =0L;
 
-        double acumAnticipo=0;
+        
 
         //----------------------------------------------------------------------------------------
         try{
@@ -521,6 +521,9 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                               .setParameter("idnota", notape.getId()).getResultList();
                            notape.setHistoriconotapedidoList(listHistoricoNota);
 
+                          
+                         
+
                       } catch (Exception e) {
                           logger.error("Error en la consulta historiconotadepedido, metodo almacenar historico", e.getCause());
                           resultado = -2;
@@ -546,9 +549,20 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
         String xml = "<Lista>\n";
 
         try {
-            Notadepedido nota = em.find(Notadepedido.class, idnta);
-            xml+=devolverNotaProcesadaSB(nota).toString();
 
+            Query consulta= em.createNamedQuery("Notadepedido.findById");
+            consulta.setParameter("id", idnta);
+            
+            if(!consulta.getResultList().isEmpty()){
+                Notadepedido nota = em.find(Notadepedido.class, idnta);
+                xml+=devolverNotaProcesadaSB(nota).toString();
+            }else
+                xml+="Nota de Pedido no encontrada";
+
+            
+        }catch(IllegalStateException ilgs){
+            logger.error("No se puede realizar la operacion de Actualizacion o Borrado "+ilgs.getCause());
+            xml += "No se puede realizar la operacion de Actualizacion o Borrado";
         } catch (Exception e) {
             logger.error("Error en metodo selectUnaNota "+e.getCause());
             xml += "Error no paso nada";
@@ -940,8 +954,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                 String usuarioentregonota ="";
                 long idusuariocancelonota =0L;
                 String usuariocancelonota="";
-                String anticipoAcumulado=null;
-                Double antAcumulado=0.0;
+                
                 StringBuilder sb=null;
         try {
                          sb=new StringBuilder(nota.toXML());
@@ -951,41 +964,29 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
             if(nota.getIdUsuarioExpidioNota()>0){
                  idusuarioexpidio = nota.getIdUsuarioExpidioNota();
                 Personas persona = em.find(Personas.class, idusuarioexpidio);
-                usuarioexpidio=persona.getApellido().toUpperCase()+" "+persona.getNombre().toUpperCase();
+                usuarioexpidio=persona.getNombre().toUpperCase();
                 sb.replace(sb.indexOf("dionota>")+8, sb.indexOf("</usuarioex"), usuarioexpidio);
             }
                     if(nota.getIdusuarioAnulado()>0){
                         idusuarioanulonota = nota.getIdusuarioAnulado();
                         Personas persona = em.find(Personas.class, idusuarioanulonota);
-                        usuarioanulonota=persona.getApellido().toUpperCase()+" "+persona.getNombre().toUpperCase();
+                        usuarioanulonota=persona.getNombre().toUpperCase();
                         sb.replace(sb.indexOf("anulonota>")+10, sb.indexOf("</usuarioanul"), usuarioanulonota.toUpperCase());
 
                     }
                             if(nota.getIdusuarioEntregado()>0){
                                 idusuarioentregonota=nota.getIdusuarioEntregado();
                                 Personas persona = em.find(Personas.class, idusuarioentregonota);
-                                usuarioentregonota=persona.getApellido().toUpperCase()+" "+persona.getNombre().toUpperCase();
+                                usuarioentregonota=persona.getNombre().toUpperCase();
                                 sb.replace(sb.indexOf("oentregonota>")+13, sb.indexOf("</usuarioent"), usuarioentregonota.toUpperCase());
                             }
                                 if(nota.getIdusuariocancelo()>0){
                                         idusuariocancelonota=nota.getIdusuariocancelo();
                                         Personas persona = em.find(Personas.class, idusuariocancelonota);
-                                        usuariocancelonota=persona.getApellido().toUpperCase()+" "+persona.getNombre().toUpperCase();
+                                        usuariocancelonota=persona.getNombre().toUpperCase();
                                         sb.replace(sb.indexOf("ocancelonota>")+13, sb.indexOf("</usuariocan"), usuariocancelonota.toUpperCase());
                                 }
-                         if(nota.getHistoriconotapedidoList().isEmpty()){
-                            anticipoAcumulado="<anticipoAcum>0.000</anticipoAcum>\n";
-                            sb.replace(sb.indexOf("</descuentopesos>\n")+17, sb.indexOf("<fecan"), anticipoAcumulado);
-                         }else{
-                            List<Historiconotapedido>lista=nota.getHistoriconotapedidoList();
-                             for (Iterator<Historiconotapedido> it = lista.iterator(); it.hasNext();) {
-                                 Historiconotapedido historiconotapedido = it.next();
-                                 if(historiconotapedido.getAnticipo().doubleValue()>0)
-                                    antAcumulado+=historiconotapedido.getAnticipo().doubleValue();
-                             }
-                            anticipoAcumulado="\n<anticipoAcum>"+antAcumulado+"</anticipoAcum>\n";
-                            sb.replace(sb.indexOf("</descuentopesos>\n")+17, sb.indexOf("<fecan"), anticipoAcumulado);
-                         }
+                     
 
         } catch (Exception e) {
             logger.error("Error en metodo devolverNotaProcesadaSB "+e.getMessage());
@@ -1220,6 +1221,8 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
                                             nota.setDescuentonota(BigDecimal.valueOf(datosnotapedido.getDescuentonota()));
 
+                                            nota.setAnticipo(BigDecimal.valueOf(datosnotapedido.getAnticipoacum()));
+
                                             nota.setDescuentoPesos(BigDecimal.valueOf(datosnotapedido.getDescuentopesos()));
 
 
@@ -1447,6 +1450,30 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
 
         } catch (Exception e) {
             logger.error("Error en metodo backupLogListDetalleNotaAntesdeBorrar");
+        }
+    }
+
+    public int eliminarNotaDePedido(long idNota) {
+        int idRetorno=0;
+        try {
+           
+            Query consulta=em.createNamedQuery("Notadepedido.findById");
+            consulta.setParameter("id", idNota);
+            
+            if(!consulta.getResultList().isEmpty()){
+                Notadepedido nota =em.find(Notadepedido.class, idNota);
+                em.remove(nota);
+                em.flush();
+                idRetorno=1;
+            }else
+                idRetorno=-2;
+
+        } catch (Exception e) {
+            idRetorno=-1;
+            logger.error("Error en metodo eliminarNotaDePedido "+e.getCause());
+        }finally{
+            return idRetorno;
+
         }
     }
 
