@@ -52,16 +52,16 @@ public class EJBBarrios implements EJBBarriosRemote {
             Query consulta =  em.createNativeQuery("SELECT * FROM BARRIOS WHERE LOWER(BARRIOS.DESCRIPCION) LIKE LOWER('"+descripcion+"%')", Barrios.class);
             List<Barrios> lista = consulta.getResultList();
             //------------------------------------------------------------------------------------------------
-          if (lista.isEmpty()) {
-                Barrios bario = new Barrios();
-                bario.setDescripcion(descripcion.toUpperCase());
-                em.persist(bario);
-                em.flush();
-               
-                retorno = bario.getId();
-            } else {
-                retorno = -4;
-            }
+                  if (lista.isEmpty()) {
+                        Barrios bario = new Barrios();
+                        bario.setDescripcion(descripcion.toUpperCase());
+                        em.persist(bario);
+                        em.flush();
+
+                        retorno = bario.getId();
+                    } else {
+                        retorno = -4;
+                    }
             //------------------------------------------------------------------------------------------------
 
 
@@ -78,35 +78,33 @@ public class EJBBarrios implements EJBBarriosRemote {
  * @return devuelve la lista de barrios
  */
 
-    public String searchallbarrios() {
+    public String searchAllBarrios() {
 
-        String xml = "<Lista>\n";
+        String xml = "<?xml version = '1.0' encoding = 'iso-8859-1'?>\n" +
+                "<Lista>\n";
         
         try {
             Query consulta = em.createNamedQuery("Barrios.findAll");
             List<Barrios>lista = consulta.getResultList();
 
-            if(lista.size()==0)
-                xml="LA CONSULTA NO ARROJÓ RESULTADOS";
-            else{
-                for (Iterator<Barrios> it = lista.iterator(); it.hasNext();) {
-                    Barrios barrios = it.next();
-                    xml+=barrios.toXML();
-                }
-                xml += "</Lista>\n";
+                if(lista.size()==0)
+                    xml="LA CONSULTA NO ARROJÓ RESULTADOS";
+                else{
+                    for (Iterator<Barrios> it = lista.iterator(); it.hasNext();) {
+                        Barrios barrios = it.next();
+                        xml+=barrios.toXML();
+                    }
+                    xml += "</Lista>\n";
 
-            }
-           
+                }
 
         //*********************************************************************
         } catch (Exception e) {
             xml="error";
             logger.error("error en metodo searchallbarrios",e.getCause());
         } finally {
-            
-            
-            return xml;
 
+            return xml;
         }
     }
 
@@ -115,61 +113,55 @@ public class EJBBarrios implements EJBBarriosRemote {
  * @return devuelve la cantidad actual de barrios instanciados
  */
     public int recordCountBarrios() {
-        int retorno =0;
-      
+        int retorno =0;      
         OracleXMLQuery oxq = null;
         Connection con = null;
         String xml =null;
         try {
-            try {
+                try {
 
-                con = datasource.getConnection();
-         
-            } catch (Exception e) {
-                logger.error("No se pudo Obtener La Conexion con La base de Datos en metodo recordCountBarrios"+e);
-             
-            }
+                    con = datasource.getConnection();
+
+                } catch (Exception e) {
+                    logger.error("No se pudo Obtener La Conexion con La base de Datos en metodo recordCountBarrios"+e);
+
+                }
              String sql = "SELECT COUNT(*) FROM BARRIOS b";
 
-             oxq = new OracleXMLQuery(con, sql);
+                oxq = new OracleXMLQuery(con, sql);
+                oxq.setRowTag("Item");
+                oxq.setRowsetTag("Lista");
+                xml = oxq.getXMLString();
+                oxq.close();
 
-            oxq.setRowTag("Item");
-            oxq.setRowsetTag("Lista");
-            oxq.setEncoding("ISO-8859-1");
-            xml = oxq.getXMLString();
-            oxq.close();
-
-            if (xml.contains("<Lista/>")) {
-                xml = "La Consulta no arrojó resultados!!!";
-            }
-             
-
-             retorno = Integer.valueOf(xml.substring(xml.indexOf("<COUNT>")+7, xml.indexOf("</COUNT>")));
-
-
-        } catch (Exception e) {
-            retorno = -1;
-            logger.error("Error al Obtener la cantidad de registros de la tabla barrios", e);
-        }finally{
-            try {
-         
-                if (con != null) {
-                    con.close();
+                if (xml.contains("<Lista/>")) {
+                    xml = "La Consulta no arrojó resultados!!!";
                 }
-                if (oxq != null) {
-                    oxq.close();
-                }
-                
+
+                retorno = Integer.valueOf(xml.substring(xml.indexOf("<COUNT>")+7, xml.indexOf("</COUNT>")));
+
+
             } catch (Exception e) {
-                logger.error("Error cerrando conexiones metodo recordCountBarrios "+e);
-            }
+                retorno = -1;
+                logger.error("Error al Obtener la cantidad de registros de la tabla barrios", e);
+            }finally{
+
+                try {
+
+                    if (con != null) {
+                        con.close();
+                    }
+                    if (oxq != null) {
+                        oxq.close();
+                    }
+
+                } catch (Exception e) {
+                    logger.error("Error cerrando conexiones metodo recordCountBarrios "+e);
+                }
             return retorno;
         
 
         }
-        
-        
-
     }
 /**
  *
@@ -179,26 +171,21 @@ public class EJBBarrios implements EJBBarriosRemote {
  */
 
     public String obtenrItemsPaginados(int indiceInicio, int numeroItems) {
-        String xml = "<Lista>\n";
+        String xml = "<?xml version = '1.0' encoding = 'iso-8859-1'?>\n" +
+                "<Lista>\n";
         try {
             Query consulta = em.createNativeQuery("SELECT FIRST "+numeroItems+" SKIP ("+indiceInicio+"*"+numeroItems+") * FROM BARRIOS b ORDER BY b.id_barrio", Barrios.class);
-
             List<Barrios>lista = consulta.getResultList();
 
-            for (Iterator<Barrios> it = lista.iterator(); it.hasNext();) {
-                Barrios barrios = it.next();
-                xml+=barrios.toXML();
-            }
-           
+                for (Iterator<Barrios> it = lista.iterator(); it.hasNext();) {
+                    Barrios barrios = it.next();
+                    xml+=barrios.toXML();
+                }
 
         } catch (Exception e) {
             logger.error("Error al obtenerItemsPaginados EJBbarrios "+e);
-
-        }finally{
-         
-               
-            return xml+"</Lista>\n";
-        
+        }finally{              
+            return xml+"</Lista>\n";        
     }
 }
 /**
@@ -207,26 +194,25 @@ public class EJBBarrios implements EJBBarriosRemote {
  * @param numitems cantidad de registro por pagina
  * @return devuelve la lista de barrios instanciados
  */
-    public Barrios[] barrios_paging(int startindex, int numitems) {
+    public Barrios[] barrios_Paging(int startindex, int numitems) {
          Barrios[]fBarrios=null;
         try {
             Query consulta = em.createNativeQuery("SELECT FIRST "+numitems+" SKIP ("+startindex+"*"+numitems+") * FROM BARRIOS b ORDER BY b.id_barrio");
 
             List<Barrios>lista = consulta.getResultList();
-            try {
-                int len = lista.size();
-
-                fBarrios = new Barrios[len];
-                lista.toArray(fBarrios);
-            } catch (Exception ee) {
-               ee.getMessage();
-            }
+                try {
+                    int len = lista.size();
+                    fBarrios = new Barrios[len];
+                    lista.toArray(fBarrios);
+                } catch (Exception ee) {
+                   ee.getMessage();
+                }
             
         } catch (Exception e) {
             e.getMessage();
         }finally{
          
-        return fBarrios;
+             return fBarrios;
         }
     }
 /**
@@ -234,53 +220,48 @@ public class EJBBarrios implements EJBBarriosRemote {
  * @return devuelve la lista de barrios en la tabla correspondiente de la base de datos
  */
     public String selectAllBarrios() {
+        //variables locales
         String xml = "";
         OracleXMLQuery oxq = null;
         Connection con = null;
         try{
-        try {
+                    try {
+                        //me conecto a la base de datos
                         con = datasource.getConnection();
                     } catch (Exception e) {
                         logger.error("No se pudo Obtener La Conexion con La base de Datos en metodo searchallbarrios"+e);
                         xml = "No se pudo Obtener La Conexion con La base de Datos";
                     }
 
-            String sql =   "SELECT * FROM BARRIOS";
+                        String sql =   "SELECT * FROM BARRIOS";
              //----------------------------------------------------------------------------
                         oxq = new OracleXMLQuery(con, sql);
                         oxq.setRowTag("Item");
                         oxq.setRowsetTag("Lista");
                         oxq.setEncoding("ISO-8859-1");
-                        oxq.setDateFormat("dd/MM/yyyy");
-
-
                         xml = oxq.getXMLString();
 
                         oxq.close();
+                     
                //----------------------------------------------------------------------------
         }catch(Exception e) {
             logger.error("Error en metodo selectAllBarrios", e.getCause());
 
         }finally{
-            try {
-                if (con != null) {
-                    con.close();
+            //Cerramos la conexiones correspondientes
+                try {
+                    if (con != null) {
+                        con.close();
+                    }
+                    if (oxq != null) {
+                        oxq.close();
+                    }
+
+                } catch (SQLException ex) {
+                    logger.error("Error al cerrar las conexiones en método selectAllBarrios de EJBBarrios",ex.getCause());
                 }
-                if (oxq != null) {
-                    oxq.close();
-                }
-               
-            } catch (SQLException ex) {
-                java.util.logging.Logger.getLogger(EJBBarrios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            }
-             return xml;
+                
+           return xml;
         }
-    }
-
-   
-
-
-
-
- 
+    } 
 }

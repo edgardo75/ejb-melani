@@ -12,7 +12,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -40,10 +40,10 @@ import org.apache.commons.lang3.StringEscapeUtils;
     @EmbeddedId
     protected TelefonosPK telefonosPK;
     @JoinColumn(name = "ID_EMPRESATELEFONIA", referencedColumnName = "ID_EMP_TELEFONIA", nullable = false)
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.ALL},optional = false,fetch=FetchType.LAZY)
     private EmpresaTelefonia idEmpresatelefonia;
     @JoinColumn(name = "ID_TIPOTELEFONO", referencedColumnName = "ID_TIPOTEL")
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
     private Tipostelefono idTipotelefono;
 
      @OneToMany(cascade = CascadeType.ALL, mappedBy = "telefonos")

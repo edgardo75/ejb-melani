@@ -186,7 +186,7 @@ public class EJBClientes implements EJBClientesRemote {
             
                
                         //*****************************************************************************++++
-                                      idcliente= existe_cliente(datosClientePersonales.getNrodocu());
+                                      idcliente= existe_Cliente(datosClientePersonales.getNrodocu());
 
                                 switch((int)idcliente){
                                     case 0:{
@@ -229,7 +229,7 @@ public class EJBClientes implements EJBClientesRemote {
        
     }
 //---------------------------------------------------------------------------------------------
-    private long existe_cliente(int nrodocu) {
+    private long existe_Cliente(int nrodocu) {
         long retorno =0;
         try {
             Query consulta = em.createQuery("SELECT p FROM Personas p WHERE p.nrodocumento = :nrodocu");
@@ -247,7 +247,7 @@ public class EJBClientes implements EJBClientesRemote {
 
         } catch (Exception e) {
             retorno = -1;
-            logger.error("Error al Buscar Cliente, metodo existe_cliente, EJBCliente "+e);
+            logger.error("Error al Buscar Cliente, metodo existe_Cliente, EJBCliente "+e);
         }finally{
           
                 return retorno;
@@ -273,7 +273,7 @@ public class EJBClientes implements EJBClientesRemote {
                 
                 cliente.setFechaCarga(calendario.getTime());
                 
-                cliente.setGeneros(em.find(Generos.class, datosClientePersonales.getGenero().getIdgenero()));
+                cliente.setGeneros(em.find(Generos.class, datosClientePersonales.getGeneros().getIdgenero()));
                 
                 cliente.setNombre(datosClientePersonales.getNombre().toUpperCase());
                 
@@ -355,7 +355,7 @@ public class EJBClientes implements EJBClientesRemote {
             
             
             
-                cliente.setGeneros(em.find(Generos.class, datosClientePersonales.getGenero().getIdgenero()));
+                cliente.setGeneros(em.find(Generos.class, datosClientePersonales.getGeneros().getIdgenero()));
 
 
 
@@ -870,7 +870,7 @@ public class EJBClientes implements EJBClientesRemote {
 
                  
                      //*****************************************************************************++++
-                                      idcliente= existe_cliente(getcliente.getNrodocu());
+                                      idcliente= existe_Cliente(getcliente.getNrodocu());
 
                                 switch((int)idcliente){
                                     case 0:{
@@ -1016,6 +1016,27 @@ public class EJBClientes implements EJBClientesRemote {
 
         return sb.toString();
     }
+    }
+
+    @Override
+    public String obtenerClientesySusNotas() {
+        String result="nada";
+        try {
+            Query consulta=em.createQuery("Select c From Clientes c JOIN c.notadepedidoList n WHERE n.fkIdcliente.idPersona = :idPersona");
+            consulta.setParameter("idPersona", 1);
+            
+            if(consulta.getResultList().size()>0){
+                result="hubieron resultados";
+            }
+            
+            
+            
+        } catch (Exception e) {
+            logger.error("Error en metodo obtenerClientesySusNotas",e.getCause());
+            result="fallo";
+        }finally{
+        return result;
+        }
     }
 
 

@@ -37,5 +37,7 @@ public interface EJBClientesRemote {
     String addClienteDatosPersonales(String datospersonalescliente);
 
     String ShowReportClient();
+
+    String obtenerClientesySusNotas();
     
 }

@@ -6,6 +6,7 @@
 package com.melani.ejb;
 
 import com.melani.entity.Productos;
+
 import javax.ejb.Remote;
 
 /**
@@ -34,5 +35,9 @@ public interface EJBProductosRemote {
     String actualizarProducto(String xmlProducto);
 
     String ShowReportProduct();
+
+    int grabarImagen(int id_producto, byte[] longitudImagen);
+
+    byte[] obtenerImagenProducto(int idProducto);
     
 }

@@ -36,7 +36,7 @@ public class Clientes extends Personas implements Serializable {
     private BigInteger totalEnPuntos;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaCarga;
-    @OneToMany(mappedBy = "fkIdcliente",fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "fkIdcliente")
     private List<Notadepedido> notadepedidoList;
     public Clientes(){}
 

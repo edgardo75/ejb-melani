@@ -25,7 +25,7 @@ public class DatosCliente {
     private long idcliente;//variable interna atribute idcliente
     private Generos genero;//variable interna atribute genero
 
-   
+   //Constructor
     public DatosCliente(){}
 
  /**
@@ -43,10 +43,8 @@ public class DatosCliente {
         this.observaciones = observaciones;
     }
 /**
- * @return Este metodo "setea" los datos del cliente
- */
-
-    
+ * @return Este metodo "setea" el apellido del cliente
+ */    
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
@@ -139,19 +137,23 @@ public class DatosCliente {
         this.idcliente = idcliente;
     }
 
-   
+   /**
+ * @return Este metodo trata a la clase Genero
+ */
 
-    public Generos getGenero() {
+    public Generos getGeneros() {
         return genero;
     }
-
-    public void setGenero(Generos genero) {
+/**
+ * @return Este metodo "setea" la clase Generos
+ */
+    public void setGeneros(Generos genero) {
         this.genero = genero;
     }
 
    
 
-    
+//Clase anónima Generos
 public class Generos{
     private short idgenero;
 

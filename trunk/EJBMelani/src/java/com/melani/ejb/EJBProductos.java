@@ -24,6 +24,7 @@ import java.sql.Connection;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +38,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.sql.DataSource;
 import oracle.xml.sql.query.OracleXMLQuery;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 /**
  *
@@ -107,6 +107,7 @@ public class EJBProductos implements EJBProductosRemote {
 
         }
     }
+
 //------------------------------------------------------------------------------------------------------
 
     private static byte[] writtingImage(String fileLocation) throws IOException {
@@ -203,6 +204,7 @@ public class EJBProductos implements EJBProductosRemote {
               fos.write(buffer);
             }
             //----------------------------------------------------------------------------------
+
             result = "LEIDO";
 
 
@@ -288,6 +290,8 @@ public class EJBProductos implements EJBProductosRemote {
 
                                     producto.setFecha(calendario.getTime());
 
+                                    producto.setImg(new byte[10000]);
+
                                     producto.setCodproducto(datosprod.getCodproducto().toUpperCase());
 
                                     em.persist(producto);
@@ -344,11 +348,11 @@ public class EJBProductos implements EJBProductosRemote {
     private long existencias(Productos producto) {
         long retorno = 0L;
         try {
-            Query consulta = em.createQuery("SELECT e FROM ExistenciasProductos e WHERE e.productos.sid = :sid");
+            List<ExistenciasProductos>lista = em.createQuery("SELECT e FROM ExistenciasProductos e WHERE e.productos.sid = :sid")
 
-                consulta.setParameter("sid", producto.getSid());
+                .setParameter("sid", producto.getSid()).getResultList();
 
-                List<ExistenciasProductos>lista = consulta.getResultList();
+                
                 producto.setExistenciasProductoss(lista);
                 em.merge(producto);
                 retorno = producto.getSid();
@@ -405,7 +409,7 @@ public class EJBProductos implements EJBProductosRemote {
         try {
          
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Query query = em.createNativeQuery("SELECT p.sid,p.DESCRIPCION,p.codproducto,p.PRECIOUNITARIO,p.CANTIDADINICIAL,p.CANTIDADDISPONIBLE" +
+            Query query = em.createNativeQuery("SELECT p.sid,p.DESCRIPCION,p.codproducto,p.PRECIOUNITARIO,p.CANTIDADINICIAL,p.CANTIDADDISPONIBLE,p.img" +
                     ",p.FECHA FROM PRODUCTOS p Order by p.sid", Productos.class);
             List<Productos> lista = query.getResultList();
                     if(lista.isEmpty())
@@ -419,24 +423,30 @@ public class EJBProductos implements EJBProductosRemote {
                             xml+="<producto>\n"
                                     + "<id>"+prod.getSid()+"</id>\n"
                                     + "<idproduct>"+prod.getCodproducto()+"</idproduct>\n"
-                                    + "<descripcion>"+StringEscapeUtils.escapeXml(prod.getDescripcion())+"</descripcion>\n"
+                                    + "<descripcion>"+prod.getDescripcion()+"</descripcion>\n"
                                     + "<cantidadDisponible>"+prod.getCantidadDisponible()+"</cantidadDisponible>\n"
                                     + "<cantidadInicial>"+prod.getCantidadInicial()+"</cantidadInicial>\n"
                                     + "<fecha>"+sdf.format(prod.getFecha())+"</fecha>\n" 
-                                    +"<precio>"+prod.getPrecioUnitario()+"</precio>\n"
-                                    + "</producto>\n";
-                      
+                                    +"<precio>"+prod.getPrecioUnitario()+"</precio>\n" ;
+
+                                    if(Arrays.equals(prod.getImg(),null))
+                                        xml+="<img>0</img>\n";
+                                    else
+                                        xml+="<img>"+prod.getImg().length+"</img>\n";
+                                    xml+="</producto>\n";
+                                    
+                        List<ExistenciasProductos>lista1=prod.getExistenciasProductoss();
+                            for (Iterator<ExistenciasProductos> it = lista1.iterator(); it.hasNext();) {
+                                ExistenciasProductos existenciasProductos = it.next();
                                 
-                            
+                            }
 
                         
                         }
                         xml+="</Lista>\n";
 
                     }
-
-
-        } catch (Exception e) {
+        }catch (Exception e) {
             logger.error("Error al buscar todos los producto EJBProducto", e);
         }finally{
            
@@ -534,7 +544,8 @@ public class EJBProductos implements EJBProductosRemote {
 
                    
 
-                      
+                        //Query consulta1 = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.CODPRODUCTO) LIKE LOWER('"+datosprod.getCodproducto()+"%')");
+                        //Query consulta = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.DESCRIPCION) LIKE LOWER('"+datosprod.getDescripcion()+"%')");
                                
                 //--------------------------------Actualizo Producto Los CamposNecesarios-------------------------------
 
@@ -619,6 +630,51 @@ public class EJBProductos implements EJBProductosRemote {
                     }
         return xml;
     }
+    }
+
+    public int grabarImagen(int id_producto, byte[] longitudImagen) {
+        int retorno = 0;
+        try {
+            
+            Productos producto=em.find(Productos.class,(long) id_producto);
+            
+            ByteArrayInputStream bis=new ByteArrayInputStream(longitudImagen);
+            
+
+             int formDataLength = bis.available();
+            
+            byte[] dataBytes = new byte[formDataLength];
+                        int byteRead = 0;
+                            int totalBytesRead = 0;
+                    while (totalBytesRead < formDataLength) {
+                        byteRead = bis.read(dataBytes, totalBytesRead, formDataLength);
+                        totalBytesRead += byteRead;
+                    }
+            producto.setImg(dataBytes);
+            em.persist(producto);
+            retorno=1;
+
+        } catch (Exception e) {
+            retorno=-1;
+            logger.error("Error al Almacenar Imagen en Base de Datos");
+        }finally{
+            return retorno;
+        }
+
+    }
+
+    public byte[] obtenerImagenProducto(int idProducto) {
+        byte[] retorno = null;
+        try {
+            Productos producto = em.find(Productos.class, (long)idProducto);
+            retorno = producto.getImg();
+
+        } catch (Exception e) {
+            
+            logger.error("Error en metodo obtenerImagenProducto en EJBProductos",e.getCause());
+        }finally{
+        return retorno;
+        }
     }
 //---------------------------------------------------------------------------------------------------
 

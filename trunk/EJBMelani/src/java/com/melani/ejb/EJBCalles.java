@@ -7,7 +7,6 @@ package com.melani.ejb;
 
 import com.melani.entity.Calles;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,23 +44,24 @@ public class EJBCalles implements EJBCallesRemote {
     public long addCalles(String descripcion,int idUsuario) {
         long retorno = 0;
         try {
+            //paso a minúsculas las letras de la palabra
             descripcion = descripcion.toLowerCase();
             Query consulta = em.createNativeQuery("SELECT * FROM CALLES WHERE LOWER(CALLES.DESCRIPCION) like LOWER('"+descripcion+"%')",Calles.class);
 
             
             List<Calles> lista = consulta.getResultList();
 
-            if (lista.isEmpty()) {
-                Calles calle = new Calles();
-                calle.setDescripcion(descripcion.toUpperCase());
-                em.persist(calle);
-                em.flush();
-                
-                retorno = calle.getId();
+                if (lista.isEmpty()) {
+                    Calles calle = new Calles();
+                    calle.setDescripcion(descripcion.toUpperCase());
+                    em.persist(calle);
+                    em.flush();
 
-            } else {
-                retorno = -5;
-            }
+                    retorno = calle.getId();
+
+                } else {
+                    retorno = -5;
+                }
 
         } catch (Exception e) {
             retorno = -1;
@@ -73,12 +73,13 @@ public class EJBCalles implements EJBCallesRemote {
     }
 /**
  *
- * @return devuelve una lista de calles instanciados
+ * @return devuelve una lista de calles en la vista actual del contenedor
  */
     public String searchAllCalles() {
         String xml = "<Lista>\n";
        
         try {
+
             Query consulta =em.createQuery("SELECT c FROM Calles c Order by c.id");
 
             List<Calles>lista = consulta.getResultList();
@@ -87,11 +88,13 @@ public class EJBCalles implements EJBCallesRemote {
             if(lista.size()==0)
                 xml="LA CONSULTA NO ARROJÓ RESULTADOS";
             else{
+
                 for (Iterator<Calles> it = lista.iterator(); it.hasNext();) {
                     Calles calles = it.next();
                     xml+=calles.toXML();
                 }
-            xml+="</Lista>\n";
+
+                xml+="</Lista>\n";
             }
           
 
@@ -99,184 +102,33 @@ public class EJBCalles implements EJBCallesRemote {
             xml="Error";
             logger.error("Error en metodo searchallcalles", e.getCause());
             e.getMessage();
-        } finally {
-         
-            
+        } finally {           
             return xml;
-
         }
     }
 /**
  *
- * @return devuelve la cantidad de calles en la tabla de la base de datos
+ * @return devuelve la cantidad de calles actualmente en la vista del contenedor
  */
     public Object recorCountCalles() {
         int retorno =0;
         try {
             Query consulta = em.createNativeQuery("SELECT COUNT(*) FROM CALLES");
 
-            String resultado = consulta.getResultList().toString();
-            resultado = resultado.replace("[[", "");
-            resultado = resultado.replace("]]", "");
+                String resultado = consulta.getResultList().toString();
+                    resultado = resultado.replace("[[", "");
+                    resultado = resultado.replace("]]", "");
             
-            retorno = Integer.valueOf(resultado);
+                retorno = Integer.valueOf(resultado);
+
         } catch (Exception e) {
             logger.error("Error en metodo recorCountCalles "+e);
         }finally{
-        return retorno;
+            return retorno;
         }
     }
 
-  /**
-   *
-   * @param startIndex indice de pagina
-   * @param numItems numero de registro por pagina
-   * @return listado de calles paginadas
-   */
-
-    public Calles[] calles_paging(Integer startIndex, Integer numItems) {
-         List<Calles> lista=null;
-        try {
-
-            Query consulta = em.createNativeQuery("SELECT FIRST "+numItems+" SKIP ("+startIndex+"*"+numItems+") c.id_calle,c.DESCRIPCION FROM CALLES c ORDER BY c.id_calle",Calles.class);
-            
-            lista = consulta.getResultList();
-            
-        } catch (Exception e) {
-            
-            e.getMessage();
-           
-            
-
-        }finally{
-
-
-                int len = lista.size();
-                Calles fCalles[] = new Calles[len];
-                fCalles=lista.toArray(fCalles);
-             return fCalles;
-        }
-
-       
-    }
-
-    private ArrayList<com.melani.entity.Calles> marshallToCalles(List<com.melani.entity.Calles> lista) {
-        ArrayList<com.melani.entity.Calles>aCalles = new ArrayList<com.melani.entity.Calles>();
-        com.melani.entity.Calles lleca;
-        try {
-          
-            for (Iterator<com.melani.entity.Calles> it = lista.iterator(); it.hasNext();) {
-                com.melani.entity.Calles calles = it.next();
-                        lleca = new com.melani.entity.Calles();
-                lleca.setDescripcion(calles.getDescripcion());
-                lleca.setId(calles.getId());
-                aCalles.add(lleca);
-
-            }
-          
-
-        } catch (Exception e) {
-            logger.error("Error en metodo marshallToCalles",e.getCause());
-        }finally{
-        return aCalles;
-        }
-    }
-    //--------------------------------------------------------------------------------
-
-
-    //--------------------------------------------------------------------------------
-
-    public void persist(Object object) {
-        em.persist(object);
-    }
-
-    @Override
-    public Calles[] paginadocalles(int uno, int dos) {
-
-        Calles []lleca = null;
-        Query consulta = em.createQuery("SELECT FIRST dos SKIP (uno*dos) c.id_calle as id,c.descripcion as descripcion FROM CALLES c ORDER BY c.id_calle");
-        consulta.setParameter(uno, "uno");
-        consulta.setParameter(dos,"dos");
-        
-        
-        List<Calles>lista = consulta.getResultList();
-        
-        for (Iterator<Calles> it = lista.iterator(); it.hasNext();) {
-            Calles calles = it.next();
-            
-            
-        }
-        
-        return lleca;
-    }
-
-    /**
-     * Web service operation
-     */
-    public Object[] paginadoFirebird(Integer startIndex, Integer numItems) {
-         com.melani.entity.Calles fCalles[] = null;
-      
-        try {
-
-
-            Query consulta = em.createNativeQuery("SELECT FIRST "+numItems+" SKIP ("+startIndex+"*"+numItems+") c.id_calle,c.DESCRIPCION FROM CALLES c ORDER BY c.id_calle",Calles.class);
-      
-            List<Calles> lista = consulta.getResultList();
-      
-
-            Iterator<Calles> iter = lista.iterator();
-            
-            while(iter.hasNext()){
-                Calles lleca = iter.next();
-                
-            
-            }
-            
-           
-      
-
-          
-            
-                int len = lista.size();
-                fCalles = new Calles[len];
-                fCalles=lista.toArray(fCalles);
-            
-            
-          
-        } catch (Exception e) {
-          
-            e.getMessage();
-          
-            
-
-        }finally{
-           
-
-             return fCalles;
-        }
-    }
-
-    public ArrayList pagingStreet(int page, int recordSize) {
-        ArrayList arrayStreet=new ArrayList();
-        try {
-
-            Query consulta = em.createNativeQuery("SELECT FIRST "+recordSize+" SKIP ("+page+"*"+recordSize+") " +
-                    "c.id_calle,c.DESCRIPCION FROM CALLES c ORDER BY c.id_calle");
-            List<Calles>lista = consulta.getResultList();
-           
-                        arrayStreet.add(lista);
-            
-
-
-
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }finally{
-           
-               
-            return arrayStreet;
-        }
-    }
+  
 
 
 

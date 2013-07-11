@@ -90,7 +90,7 @@ public class Presupuestos implements Serializable {
     private BigDecimal porcentajerecargo;
      @Column(name = "DESCUENTORESTO",precision=15,scale=3)
     private BigDecimal descuentoresto;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuestos")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuestos",fetch=FetchType.LAZY)
     private List<Detallespresupuesto> detallepresupuestosList;
     
     
