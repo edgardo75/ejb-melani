@@ -5,10 +5,6 @@
 
 package cm.melani.utils;
 
-
-
-
-
 /**
  *
  * @author Edgardo™
@@ -36,43 +32,68 @@ public class DatosDomicilios {
 
     ////////-------------GETTERS AND SETTERS----------------
     ////----------------------------------
+    //Constructor
     public DatosDomicilios(){}
-     public long getDomicilioId(){
+    /**
+        * @return Este metodo retorna el id del Domicilio
+    */
+    public long getDomicilioId(){
         return domicilioId;
     }
+    /**
+        * @return Este metodo retorna el piso del domicilio
+    */
     public String getPiso(){
         return piso;
-    }
-
-    
-
-    
-
+    }    
+    /**
+    * @return Este metodo retorna detalles u observaciones del domicilio
+    */
     public String getObservaciones() {
         return det1ails_homes;
     }
 
+    /**
+        * @return Este metodo setea los datos de observaciones de domicilio
+    */
     public void setObservaciones(String det1ails_homes) {
         this.det1ails_homes = det1ails_homes;
     }
-    
+
+    /**
+        * @return Este metodo retorna el numero de departamento del domicilio
+    */
     public Integer getNumDepto(){
         return numdepto;
     }
+    /**
+        * @return Este metodo retorna la manzana del domicilio
+    */
     public String getManzana(){
         return manzana;
     }
+    /**
+        * @return Este metodo retorna el entre calles del domicilio
+    */
     public String getEntrecalleycalle(){
         return entrecalleycalle;
     }
 
+    /**
+        * @return Este metodo retorna sector del domicilio
+    */
     public String getSector(){
         return sector;
     }
+    /**
+        * @return Este metodo retorna la torre o edificio del domicilio
+    */
     public String getTorre(){
         return torre;
     }
-
+/**
+        * @return Este metodo retorna el area del domicilio
+    */
     public String getArea() {
         return area;
     }
@@ -87,10 +108,16 @@ public class DatosDomicilios {
         this.numdepto = numdepto;
     }
 
+    /**
+        * @return Este metodo retorna el monoblock del domicilio
+    */
     public String getMonoblock(){
         return monoblock;
     }
 
+    /**
+        * @return Este metodo retorna el número del domicilio
+    */
     public int getNumero(){
         return numero;
     }

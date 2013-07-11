@@ -38,8 +38,6 @@ public interface EJBNotaPedidoRemote {
 
     String selecNotaEntreFechasEntrega(String fecha1, String fecha2, int idvendedor);
 
-    int eliminarNotaDePedido(long idNota);
-
  
 
    

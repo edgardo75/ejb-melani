@@ -124,6 +124,7 @@ public class Notadepedido implements Serializable {
     private List<Detallesnotadepedido> detallesnotadepedidoList;
     @OneToMany(mappedBy = "fkidnotapedido",cascade={CascadeType.ALL})
     private List<Historiconotapedido> historiconotapedidoList;
+    
     @JoinColumn(name = "IDTARJETAFK_IDTARJETA", referencedColumnName = "IDTARJETA")
     @ManyToOne
     private TarjetasCreditoDebito idTarjetaFk;

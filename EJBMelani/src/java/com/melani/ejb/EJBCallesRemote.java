@@ -23,14 +23,8 @@ public interface EJBCallesRemote {
 
     String searchAllCalles();
 
-    Object recorCountCalles();
+    Object recorCountCalles();  
 
-   // String get_ItemCalles_Paging1(int indice, int cantidadRegistros);
-
-    Calles[] calles_paging(Integer startIndex, Integer numItems);
-
-    Calles[] paginadocalles(int uno, int dos);
-
-    ArrayList    pagingStreet(int page, int recordSize);
+    
     
 }

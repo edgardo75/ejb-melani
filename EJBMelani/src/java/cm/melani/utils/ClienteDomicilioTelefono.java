@@ -21,16 +21,16 @@ public class ClienteDomicilioTelefono {
     private DatosDomicilios Domicilio;
     private ListaTelefonos listaTelefonos;
 
+    //Constructor
     public ClienteDomicilioTelefono(){}
+
     public DatosCliente getCliente() {
         return item;
     }
 
     public Integer getIdusuario() {
         return idusuario;
-    }
-
-    
+    }   
 
     public DatosCliente getItem() {
         return item;
@@ -39,11 +39,6 @@ public class ClienteDomicilioTelefono {
     public ListaTelefonos getListaTelefonos() {
         return listaTelefonos;
     }
-
-    
-
-
-
 
     public DatosDomicilios getDomicilio() {
         return Domicilio;
