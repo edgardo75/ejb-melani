@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.ejb;
-
 import com.melani.entity.Localidades;
 import com.melani.entity.Provincias;
 import java.sql.Connection;
@@ -20,8 +18,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.sql.DataSource;
 import oracle.xml.sql.query.OracleXMLQuery;
-
-
 /**
  *
  * @author Edgardo
@@ -33,64 +29,46 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
     org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(EJBLocalidades.class);
      @PersistenceContext(unitName="EJBMelaniPU2")
      private EntityManager em;
-
      @Resource(name="jdbc/_melani")
      private DataSource datasource;
-     
-    
-
-    public String searchLocXProvincia(short provincia) {
+public String searchLocXProvincia(short provincia) {
         String xml ="<Lista>\n";
         Query jpql = null;
         try {
             jpql = em.createQuery("SELECT l FROM Localidades l WHERE l.provincias.idProvincia = :provincia");
-            
             jpql.setParameter("provincia",provincia);
-           
             List<Localidades>localidad = jpql.getResultList();
-
-            for (Iterator<Localidades> it = localidad.iterator(); it.hasNext();) {
+           for (Iterator<Localidades> it = localidad.iterator(); it.hasNext();) {
                 Localidades localidades = it.next();
                 xml += localidades.toXML();
-
             }
-
         } catch (Exception e) {
             e.getMessage();
         }finally{
-          
             return xml+="</Lista>\n";
         }
     }
-
-    public String searchAllLocalidadesSQL() {
+public String searchAllLocalidadesSQL() {
         String resultado = "";
         OracleXMLQuery oxq = null;
         Connection con = null;
         try {
             try {
                con = datasource.getConnection();
-
-
             } catch (Exception e) {
                 resultado = "No SE PUDO CONECTAR";
                 e.getMessage();
             }
             String sql = "SELECT l.ID_LOCALIDAD as ID,l.descripcion as DESCRIPCION,l.CODIGOPOSTAL,l.ID_PROVINCIA as idprovincia from localidades l order by l.ID_LOCALIDAD ASC;";
-
              oxq = new OracleXMLQuery(con, sql);
-
             oxq.setRowTag("localidades");
             oxq.setRowsetTag("Lista");
             oxq.setEncoding("ISO-8859-1");
             resultado = oxq.getXMLString();
             oxq.close();
-
             if (resultado.contains("<Lista/>")) {
                 resultado = "La Consulta no arrojó resultados!!!";
             }
-
-
         } catch (Exception e) {
             resultado = "FALLO";
             e.getCause();
@@ -102,68 +80,45 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
                 if (oxq != null) {
                     oxq.close();
                 }
-
             } catch (SQLException ex) {
                 logger.error("Error en metodo searchAllLocalidadesSQL, ejblocalidades");
             }
             return resultado;
         }
     }
-
     public long addLocalidadCompleto(String descripcion, short idprovincia, int codigopostal) {
         long retorno = 0;
         try {
-
             descripcion = descripcion.toUpperCase();
             StringBuilder sb = new StringBuilder();
-            //sb.append("%");
             sb.append(descripcion);
             sb.append("%");
-            
             Query consulta = em.createQuery("SELECT l FROM Localidades l WHERE l.descripcion LIKE :descripcion and l.codigopostal = :codigopostal and " +
                     " l.provincias.idProvincia = :idProvincia");
-            
             consulta.setParameter("descripcion",descripcion.toString());
             consulta.setParameter("codigopostal", codigopostal);
             consulta.setParameter("idProvincia", idprovincia);
-
-
             List<Localidades> lista = consulta.getResultList();
-
-           
-
             if (lista.isEmpty()) {
-
                 Localidades depto = new Localidades();
-
                 depto.setDescripcion(descripcion.toUpperCase());
-                
                 depto.setProvincias(em.find(Provincias.class, idprovincia));
                 depto.setCodigopostal(codigopostal);
-
                 em.persist(depto);
                 em.flush();
-
-
                 retorno = depto.getIdLocalidad();
             } else {
                 retorno = -6;
             }
-
-           
-
         } catch (Exception e) {
             retorno =-1;
             logger.error("Error en metodo addLocalidades", e.getCause());
-            
-        }finally{
+       }finally{
             return retorno;
         }
     }
     //--------------------------------------------------------------------------------
-    
     //--------------------------------------------------------------------------------
-
     public String searchAllLocalidadesbyidprov(Short idprovincia) {
          String resultado = "<Lista>\n";
          try {
@@ -176,60 +131,13 @@ public class EJBLocalidades implements EJBLocalidadesRemote {
                  for (Iterator<Localidades> it = lista.iterator(); it.hasNext();) {
                      Localidades localidades = it.next();
                      resultado+=localidades.toXML();
-
                  }
              resultado+="</Lista>\n";
              }
-
-
         } catch (Exception e) {
             logger.error("Error en metodo searchAllLocalidadesbyidprov ",e);
         }finally{
         return resultado;
-
         }
-        /*OracleXMLQuery oxq = null;
-        Connection con = null;
-        try {
-            con = datasource.getConnection();
-            
-            String sql = "SELECT l.ID_LOCALIDAD as ID,l.descripcion as DESCRIPCION,l.CODIGOPOSTAL FROM LOCALIDADES l WHERE l.id_provincia = "+idprovincia+" order by l.id_localidad";
-            
-            oxq = new OracleXMLQuery(con, sql);
-            
-              oxq.setRowTag("Item");
-              oxq.setRowsetTag("Lista");
-              oxq.setEncoding("ISO-8859-1");
-              resultado = oxq.getXMLString();
-              oxq.close();
-
-            if (resultado.contains("<Lista/>")) {
-                resultado = "La Consulta no arrojó resultados!!!";
-            }
-            
-        } catch (Exception e) {
-            logger.error("Error en metodo searchalllocalidadesbyidprov "+e);
-        }finally{
-            try {
-                
-                if(con!=null)
-                    con.close();
-                if(oxq!=null)
-                    oxq.close();
-               
-            } catch (SQLException ex) {
-                    logger.error("Error cerrando conexiones en metodo searchalllocalidadesbyidprov "+ex);
-            }finally{
-             return resultado;
-            }
-        }*/
     }
-    
-    
-
-
-
-
-   
- 
 }

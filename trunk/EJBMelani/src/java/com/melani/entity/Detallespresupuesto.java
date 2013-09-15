@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -16,7 +14,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  *
  * @author Edgardo
@@ -45,102 +42,74 @@ public class Detallespresupuesto implements Serializable {
     private BigDecimal precioDesc;
     @Column(name = "CANTIDAD")
     private Short cantidad;
-    
     @JoinColumn(name = "ID_DP_FK", referencedColumnName = "ID_PRESUPUESTO", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Presupuestos presupuestos;
     @JoinColumn(name = "FK_PRODUCTO", referencedColumnName = "SID", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Productos productos;
-
-
     public Detallespresupuesto() {
     }
-
     public Detallespresupuesto(DetallespresupuestoPK detallespresupuestoPK) {
         this.detallespresupuestoPK = detallespresupuestoPK;
     }
-
     public Detallespresupuesto(int idDpFk, int fkProducto) {
         this.detallespresupuestoPK = new DetallespresupuestoPK(idDpFk, fkProducto);
     }
-
     public DetallespresupuestoPK getDetallespresupuestoPK() {
         return detallespresupuestoPK;
     }
-
     public void setDetallespresupuestoPK(DetallespresupuestoPK detallespresupuestoPK) {
         this.detallespresupuestoPK = detallespresupuestoPK;
     }
-
     public BigDecimal getSubtotal() {
         return subtotal;
     }
-
     public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
     }
-
     public BigDecimal getDescuento() {
         return descuento;
     }
-
     public void setDescuento(BigDecimal descuento) {
         this.descuento = descuento;
     }
-
     public BigDecimal getPrecio() {
         return precio;
     }
-
     public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
-
     public BigDecimal getPrecioDesc() {
         return precioDesc;
     }
-
     public void setPrecioDesc(BigDecimal precioDesc) {
         this.precioDesc = precioDesc;
     }
-
-    
-
     public Short getCantidad() {
         return cantidad;
     }
-
     public void setCantidad(Short cantidad) {
         this.cantidad = cantidad;
     }
-
     public Presupuestos getPresupuestos() {
         return presupuestos;
     }
-
     public void setPresupuestos(Presupuestos presupuestos) {
         this.presupuestos = presupuestos;
     }
-
     public Productos getProductos() {
         return productos;
     }
-
     public void setProductos(Productos productos) {
         this.productos = productos;
     }
-
-    
-    
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (detallespresupuestoPK != null ? detallespresupuestoPK.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -153,7 +122,6 @@ public class Detallespresupuesto implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "entity.Detallespresupuesto[detallespresupuestoPK=" + detallespresupuestoPK + "]";
@@ -170,8 +138,6 @@ public class Detallespresupuesto implements Serializable {
                 "<subtotal>"+this.getSubtotal().toString()+"</subtotal>\n" +
                 "<cantidad>"+this.getCantidad()+"</cantidad>\n"+
                 "</itemdetallepresupuesto>\n";
-
         return xml;
     }
-
 }

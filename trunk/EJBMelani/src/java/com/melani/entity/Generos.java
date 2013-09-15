@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -16,7 +14,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 /**
  * A Entity Generos
  *@version
@@ -38,45 +35,35 @@ public class Generos implements Serializable {
     private String descripcion;
     @OneToMany(mappedBy = "generos",fetch=FetchType.LAZY)
     private Collection<Personas> personasCollection;
-
     public Generos() {
     }
-
     public Generos(Short idGenero) {
         this.idGenero = idGenero;
     }
-
     public Short getIdGenero() {
         return idGenero;
     }
-
     public void setIdGenero(Short idGenero) {
         this.idGenero = idGenero;
     }
-
     public String getDescripcion() {
         return descripcion;
     }
-
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
     public Collection<Personas> getPersonasCollection() {
         return personasCollection;
     }
-
     public void setPersonasCollection(Collection<Personas> personasCollection) {
         this.personasCollection = personasCollection;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (idGenero != null ? idGenero.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -89,10 +76,8 @@ public class Generos implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "entity.Generos[idGenero=" + idGenero + "]";
     }
-
 }

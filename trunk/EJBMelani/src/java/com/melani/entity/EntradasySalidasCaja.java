@@ -3,7 +3,6 @@
  * and open the template in the editor.
  */
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,7 +19,6 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  *
  * @author Edgardo
@@ -67,101 +65,77 @@ public class EntradasySalidasCaja implements Serializable {
     @JoinColumn(name = "ID_TARJETA_FK", referencedColumnName = "IDTARJETA")
     @ManyToOne(optional = false)
     private TarjetasCreditoDebito idTarjetaFk;
-
     public EntradasySalidasCaja() {
     }
-
     public EntradasySalidasCaja(Integer id) {
         this.id = id;
     }
-
     public Integer getId() {
         return id;
     }
-
     public void setId(Integer id) {
         this.id = id;
     }
-
     public String getDetalles() {
         return detalles;
     }
-
     public void setDetalles(String detalles) {
         this.detalles = detalles;
     }
-
     public Date getFecha() {
         return fecha;
     }
-
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
     public Long getEntradas() {
         return entradas;
     }
-
     public void setEntradas(Long entradas) {
         this.entradas = entradas;
     }
-
     public Long getSalidas() {
         return salidas;
     }
-
     public void setSalidas(Long salidas) {
         this.salidas = salidas;
     }
-
     public Integer getIdUsuario() {
         return idUsuario;
     }
-
     public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
-
     public String getNumerocupon() {
         return numerocupon;
     }
-
     public void setNumerocupon(String numerocupon) {
         this.numerocupon = numerocupon;
     }
-
     public Character getEnefectivo() {
         return enefectivo;
     }
-
     public void setEnefectivo(Character enefectivo) {
         this.enefectivo = enefectivo;
     }
-
     public Date getHora() {
         return hora;
     }
-
     public void setHora(Date hora) {
         this.hora = hora;
     }
-
     public TarjetasCreditoDebito getIdTarjetaFk() {
         return idTarjetaFk;
     }
-
     public void setIdTarjetaFk(TarjetasCreditoDebito idTarjetaFk) {
         this.idTarjetaFk = idTarjetaFk;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -174,7 +148,6 @@ public class EntradasySalidasCaja implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "com.melani.entity.EntradasySalidasCaja[ id=" + id + " ]";
@@ -182,7 +155,6 @@ public class EntradasySalidasCaja implements Serializable {
 public String toXML(){
     SimpleDateFormat sdf =new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat sdfh = new SimpleDateFormat("HH:mm:ss");
-    
     String item="<item>\n"
             + "<id>"+this.getId()+"</id>\n"
             + "<detalles>"+this.getDetalles()+"</detalles>\n"
@@ -195,7 +167,6 @@ public String toXML(){
             + "<idusuario>"+this.getIdUsuario()+"</idusuario>\n"
             + "<salidas>"+this.getSalidas()+"</salidas>\n"
             + "</item>\n";
-            
 return item;
 }    
 }

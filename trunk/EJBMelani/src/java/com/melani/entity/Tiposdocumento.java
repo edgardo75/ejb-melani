@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -16,7 +14,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 /**
  * A Entity TiposDocumentos
  *@version 1.0
@@ -38,7 +35,6 @@ public class Tiposdocumento implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipodocumento",fetch=FetchType.LAZY)
     private List<Personas> personasList;
     public Tiposdocumento(){}
-    
     public String getDescripcion() {
         return descripcion;
     }
@@ -48,26 +44,21 @@ public class Tiposdocumento implements Serializable {
     public Short getId() {
         return id;
     }
-
     public void setId(Short id) {
         this.id = id;
     }
-
     public List<Personas> getPersonasList() {
         return personasList;
     }
-
     public void setPersonasList(List<Personas> personasList) {
         this.personasList = personasList;
     }
-    
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -80,10 +71,8 @@ public class Tiposdocumento implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "com.melani.entity.TiposDocumento[id=" + id + "]";
     }
-
 }

@@ -2,17 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  * A Entity Localidades
  *@version 1.0
@@ -55,61 +50,47 @@ public class Localidades implements Serializable {
     @JoinColumn(name = "ID_PROVINCIA", referencedColumnName = "ID_PROVINCIA")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Provincias provincias;
-
     public Localidades() {
     }
-
     public Localidades(Long idLocalidad) {
         this.idLocalidad = idLocalidad;
     }
-
     public Long getIdLocalidad() {
         return idLocalidad;
     }
-
     public void setIdLocalidad(Long idLocalidad) {
         this.idLocalidad = idLocalidad;
     }
-
     public String getDescripcion() {
         return descripcion;
     }
-
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
     public Integer getCodigopostal() {
         return codigopostal;
     }
-
     public void setCodigopostal(Integer codigopostal) {
         this.codigopostal = codigopostal;
     }
-
     public List<Domicilios> getDomiciliosList() {
         return domiciliosList;
     }
-
     public void setDomiciliosList(List<Domicilios> domiciliosList) {
         this.domiciliosList = domiciliosList;
     }
-
     public Provincias getProvincias() {
         return provincias;
     }
-
     public void setProvincias(Provincias provincias) {
         this.provincias = provincias;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (idLocalidad != null ? idLocalidad.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -122,7 +103,6 @@ public class Localidades implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "entity.Localidades[idLocalidad=" + idLocalidad + "]";
@@ -134,7 +114,5 @@ public class Localidades implements Serializable {
                 + "<codigopostal>"+this.getCodigopostal()+"</codigopostal>\n"
                 + "</localidades>\n";
         return item;
-
     }
-
 }

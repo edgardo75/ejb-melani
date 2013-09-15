@@ -2,15 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
 /**
  *
  * @author Admin
@@ -23,31 +19,24 @@ public class TelefonosPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_PREFIJO", nullable = false)
     private long idPrefijo;
-
     public TelefonosPK() {
     }
-
     public TelefonosPK(long numero, long idPrefijo) {
         this.numero = numero;
         this.idPrefijo = idPrefijo;
     }
-
     public Long getNumero() {
         return numero;
     }
-
     public void setNumero(long numero) {
         this.numero = numero;
     }
-
     public long getIdPrefijo() {
         return idPrefijo;
     }
-
     public void setIdPrefijo(long idPrefijo) {
         this.idPrefijo = idPrefijo;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -55,7 +44,6 @@ public class TelefonosPK implements Serializable {
         hash += (int) idPrefijo;
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -67,17 +55,14 @@ public class TelefonosPK implements Serializable {
                 return false;
            if(this.numero != other.numero) {
                return false;
-            
         }
         if (this.idPrefijo != other.idPrefijo) {
             return false;
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "com.tarjetadata.dao.entidades.TelefonosPK[numero=" + numero + ", idPrefijo=" + idPrefijo + "]";
     }
-
 }

@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
@@ -27,10 +25,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import org.apache.commons.lang3.StringEscapeUtils;
-
-
-
-
 /**
  * A Entity Personas
  *@version 1.0
@@ -81,112 +75,79 @@ public abstract class Personas implements Serializable {
     @ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
     private Generos generos;        
     public Personas(){
-
     }
-
     public Long getIdPersona() {
         return idPersona;
     }
-
     public void setIdPersona(Long idPersona) {
         this.idPersona = idPersona;
     }
-
-   
-
     public Integer getNrodocumento() {
         return nrodocumento;
     }
-
     public void setNrodocumento(Integer nrodocumento) {
         this.nrodocumento = nrodocumento;
     }
-
     public String getApellido() {
         return apellido;
     }
-
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
-
     public String getPertype() {
         return pertype;
     }
-
     public Tiposdocumento getTipodocumento() {
         return tipodocumento;
     }
-
     public void setTipodocumento(Tiposdocumento tipodocumento) {
         this.tipodocumento = tipodocumento;
     }
-
-  
-
-    
     public void setPertype(String pertype) {
         this.pertype = pertype;
     }
-
-    
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
-   
-
     public List<PersonasDomicilios> getPersonasDomicilioss() {
         return personasDomicilioss;
     }
-
     public void setPersonasDomicilioss(List<PersonasDomicilios> personasDomicilioss) {
         this.personasDomicilioss = personasDomicilioss;
     }
-
     public String getObservaciones() {
         return observaciones;
     }
-
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
-
     public List<Personastelefonos> getPersonastelefonoss() {
         return personastelefonoss;
     }
-
     public void setPersonastelefonoss(List<Personastelefonos> personastelefonoss) {
         this.personastelefonoss = personastelefonoss;
     }
-
     public Generos getGeneros() {
         return generos;
     }
-
     public void setGeneros(Generos generos) {
         this.generos = generos;
-    }  
-    
+    }
      @Override
     public int hashCode() {
         int hash = 0;
         hash += (idPersona != null ? idPersona.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -199,12 +160,10 @@ public abstract class Personas implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "entity.Personas[idPersona=" + idPersona + "]";
     }
-   
     public String toXML(){
         String item= "<id>"+this.getIdPersona()+"</id>\n"
                 + "<apellido>"+this.getApellido()+"</apellido>\n"
@@ -222,36 +181,23 @@ public abstract class Personas implements Serializable {
                         item+="</personadomicilio>\n";
                     else{
                         List<PersonasDomicilios>lista = this.getPersonasDomicilioss();
-                        
                         for (Iterator<PersonasDomicilios> it = lista.iterator(); it.hasNext();) {
                             PersonasDomicilios personasDomicilios = it.next();
                             item+=personasDomicilios.toXML();
-                            
                         }
                         item+="</personadomicilio>\n";
-                    
-                    
                     }
                 item+="<personatelefono>\n";
                     if(this.getPersonastelefonoss().isEmpty())
                         item+="</personatelefono>\n";
                     else{
                         List<Personastelefonos>lista=this.getPersonastelefonoss();
-                        
                         for (Iterator<Personastelefonos> it = lista.iterator(); it.hasNext();) {
                             Personastelefonos personastelefonos = it.next();
                             item+=personastelefonos.toXML();                            
                         }
                         item+="</personatelefono>\n";
-                    
                     }
-                        
-               
-    
                 return item;
     }
-    
-
-
-
 }

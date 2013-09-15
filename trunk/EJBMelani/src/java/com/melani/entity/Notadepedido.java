@@ -3,19 +3,15 @@
  * and open the template in the editor.
  */
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +27,6 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  *
  * @author Edgardo
@@ -124,7 +119,6 @@ public class Notadepedido implements Serializable {
     private List<Detallesnotadepedido> detallesnotadepedidoList;
     @OneToMany(mappedBy = "fkidnotapedido",cascade={CascadeType.ALL})
     private List<Historiconotapedido> historiconotapedidoList;
-    
     @JoinColumn(name = "IDTARJETAFK_IDTARJETA", referencedColumnName = "IDTARJETA")
     @ManyToOne
     private TarjetasCreditoDebito idTarjetaFk;
@@ -134,7 +128,6 @@ public class Notadepedido implements Serializable {
     @JoinColumn(name = "FKIDPORCENTAJENOTA_ID", referencedColumnName = "ID_PORCENTAJES")
     @ManyToOne
     private Porcentajes fkidporcentajenotaId;
-
     @Column(name="CANCELADO",length=1)
     private Character cancelado;
     @Column(name="FECANCELADO")
@@ -148,308 +141,219 @@ public class Notadepedido implements Serializable {
     private BigDecimal montototalapagar;
     @Column(name = "PORCDESCTOTAL",precision=12,scale=2)
     private BigDecimal porcdesctotal;
-    
     @Column(name = "PORCRECARGO",precision=12,scale=2)
     private BigDecimal porcrecargo;
-
-
     public Notadepedido() {
     }
-
     public Notadepedido(Long id) {
         this.id = id;
     }
-
-   
-
-    
-   
-
     public BigDecimal getAnticipo() {
         return anticipo;
     }
-
     public void setAnticipo(BigDecimal anticipo) {
         this.anticipo = anticipo;
     }
-
     public BigDecimal getSaldo() {
         return saldo;
     }
-
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
-
     public Date getHoracompra() {
         return horacompra;
     }
-
     public void setHoracompra(Date horacompra) {
         this.horacompra = horacompra;
     }
-
     public Character getEntregado() {
         return entregado;
     }
-
     public void setEntregado(Character entregado) {
         this.entregado = entregado;
     }
-
     public Integer getIdUsuarioExpidioNota() {
         return idUsuarioExpidioNota;
     }
-
     public void setIdUsuarioExpidioNota(Integer idUsuarioExpidioNota) {
         this.idUsuarioExpidioNota = idUsuarioExpidioNota;
     }
-
     public Integer getStockfuturo() {
         return stockfuturo;
     }
-
     public void setStockfuturo(Integer stockfuturo) {
         this.stockfuturo = stockfuturo;
     }
-
     public Date getFechaAnulado() {
         return fechaAnulado;
     }
-
     public BigDecimal getDescuentonota() {
         return descuentoNota;
     }
-
     public void setDescuentonota(BigDecimal descuentonota) {
         this.descuentoNota = descuentonota;
     }
-
     public BigDecimal getDescuentoPesos() {
         return descuentoPesos;
     }
-
     public void setDescuentoPesos(BigDecimal descuentoPesos) {
         this.descuentoPesos = descuentoPesos;
     }
-
-   
-
-    
     public void setFechaAnulado(Date fechaAnulado) {
         this.fechaAnulado = fechaAnulado;
     }
-
     public Integer getIdusuarioEntregado() {
         return idusuarioEntregado;
     }
-
     public void setIdusuarioEntregado(Integer idusuarioEntregado) {
         this.idusuarioEntregado = idusuarioEntregado;
     }
-
     public Character getAnulado() {
         return anulado;
     }
-
     public void setAnulado(Character anulado) {
         this.anulado = anulado;
     }
-
-  
-
     public String getObservaciones() {
         return observaciones;
     }
-
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
-
     public Character getPendiente() {
         return pendiente;
     }
-
     public void setPendiente(Character pendiente) {
         this.pendiente = pendiente;
     }
-
     public BigDecimal getMontoiva() {
         return montoiva;
     }
-
     public void setMontoiva(BigDecimal montoiva) {
         this.montoiva = montoiva;
     }
-
     public BigDecimal getRecargo() {
         return recargo;
     }
-
     public void setRecargo(BigDecimal recargo) {
         this.recargo = recargo;
     }
-
     public Integer getIdusuarioAnulado() {
         return idusuarioAnulado;
     }
-
     public void setIdusuarioAnulado(Integer idusuarioAnulado) {
         this.idusuarioAnulado = idusuarioAnulado;
     }
-
     public BigDecimal getTotal() {
         return total;
     }
-
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
-
     public Porcentajes getFkidporcentajenotaId() {
         return fkidporcentajenotaId;
     }
-
     public void setFkidporcentajenotaId(Porcentajes fkidporcentajenotaId) {
         this.fkidporcentajenotaId = fkidporcentajenotaId;
     }
-
     public String getNumerodecupon() {
         return numerodecupon;
     }
-
     public void setNumerodecupon(String numerodecupon) {
         this.numerodecupon = numerodecupon;
     }
-
     public Character getEnefectivo() {
         return enefectivo;
     }
-
     public void setEnefectivo(Character enefectivo) {
         this.enefectivo = enefectivo;
     }
-
     @XmlTransient
     public List<Detallesnotadepedido> getDetallesnotadepedidoList() {
         return detallesnotadepedidoList;
     }
-
     public void setDetallesnotadepedidoList(List<Detallesnotadepedido> detallesnotadepedidoList) {
         this.detallesnotadepedidoList = detallesnotadepedidoList;
     }
-
-    
-
     public Date getFechaentrega() {
         return fechaentrega;
     }
-
     public void setFechaentrega(Date fechaentrega) {
         this.fechaentrega = fechaentrega;
     }
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-    
-
     @XmlTransient
     public List<Historiconotapedido> getHistoriconotapedidoList() {
         return historiconotapedidoList;
     }
-
     public void setHistoriconotapedidoList(List<Historiconotapedido> historiconotapedidoList) {
         this.historiconotapedidoList = historiconotapedidoList;
     }
-    
-
     public TarjetasCreditoDebito getIdTarjetaFk() {
         return idTarjetaFk;
     }
-
     public void setIdTarjetaFk(TarjetasCreditoDebito idTarjetaFk) {
         this.idTarjetaFk = idTarjetaFk;
     }
-
     public Personas getFkIdcliente() {
         return fkIdcliente;
     }
-
     public void setFkIdcliente(Personas fkIdcliente) {
         this.fkIdcliente = fkIdcliente;
     }
-
     public Date getFechadecompra() {
         return fechadecompra;
     }
-
     public void setFechadecompra(Date fechadecompra) {
         this.fechadecompra = fechadecompra;
     }
-
     public Character getCancelado() {
         return cancelado;
     }
-
     public void setCancelado(Character cancelado) {
         this.cancelado = cancelado;
     }
-
     public Date getFecancelado() {
         return fecancelado;
     }
-
     public void setFecancelado(Date fecancelado) {
         this.fecancelado = fecancelado;
     }
-
     public Integer getIdusuariocancelo() {
         return idUsuarioCancelo;
     }
-
     public void setIdusuariocancelo(Integer idusuariocancelo) {
         this.idUsuarioCancelo = idusuariocancelo;
     }
-
     public BigDecimal getMontototalapagar() {
         return montototalapagar;
     }
-
     public void setMontototalapagar(BigDecimal montototalapagar) {
         this.montototalapagar = montototalapagar;
     }
-
     public BigDecimal getPorcdesctotal() {
         return porcdesctotal;
     }
-
     public void setPorcdesctotal(BigDecimal porcdesctotal) {
         this.porcdesctotal = porcdesctotal;
     }
-
     public BigDecimal getPorcrecargo() {
         return porcrecargo;
     }
-
     public void setPorcrecargo(BigDecimal porcrecargo) {
         this.porcrecargo = porcrecargo;
     }
-
-  
-
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -462,18 +366,15 @@ public class Notadepedido implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "com.melani.entity.Notadepedido[ id=" + id + " ]";
     }
     public String toXML(){
-        
         //---------------------------------------------------------------------
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdfh = new SimpleDateFormat("HH:mm:ss");
         //---------------------------------------------------------------------
-
         String fechanulado="";
         if (this.getFechaAnulado()!=null)
             fechanulado=sdf.format(this.getFechaAnulado());
@@ -490,13 +391,8 @@ public class Notadepedido implements Serializable {
         if(this.getFecancelado()!=null)
             fecancel=sdf.format(this.getFecancelado());
         //--------------------------------------------------------------------
-
         String item ="";
-       
-            
-            
             item+="<item>\n"
-
                 + "<id>"+this.getId()+"</id>\n"
                 + "<numerocupon>"+this.getNumerodecupon().toString()+"</numerocupon>\n"
                 + "<tarjetadecredito>"+this.getIdTarjetaFk().getDescripcion()+"</tarjetadecredito>\n" +
@@ -542,38 +438,25 @@ public class Notadepedido implements Serializable {
                     if(this.getDetallesnotadepedidoList().isEmpty())
                         item+="</detallenota>\n";
                     else{
-
                         Iterator iter = this.getDetallesnotadepedidoList().iterator();
                         while (iter.hasNext()) {
                             Detallesnotadepedido detallenota = (Detallesnotadepedido) iter.next();
                             item+=detallenota.toXML();
-
                         }
-                    
-                    
-                        
                         item+="</detallenota>\n";
-                    
-                    
                     }
                     item+="<detallehistorico>\n";
                     if(this.getHistoriconotapedidoList().isEmpty())
                         item+="</detallehistorico>\n";
                     else{
                      Iterator iter = this.getHistoriconotapedidoList().iterator();
-                     
                         while(iter.hasNext()){
                             Historiconotapedido historico = (Historiconotapedido) iter.next();
                             item+=historico.toXML();
-                        
                         }
                         item+="</detallehistorico>\n";
-                    
                     }
-                 item+="</item>\n";   
-            
-      
-        
+                 item+="</item>\n";
         return item;
     }
 }

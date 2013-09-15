@@ -2,17 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package cm.melani.utils;
-
 /**
  *
  * @author Edgardo™
  * @version 1.0 Build 5600 Feb 20, 2013
  */
-
 public class DatosDomicilios {
-
     private long domicilioId;
     private String piso;
     private String manzana;
@@ -28,8 +24,6 @@ public class DatosDomicilios {
     private Integer numdepto;
     private Localidadess localidad;
     private String det1ails_homes;
-
-
     ////////-------------GETTERS AND SETTERS----------------
     ////----------------------------------
     //Constructor
@@ -52,14 +46,12 @@ public class DatosDomicilios {
     public String getObservaciones() {
         return det1ails_homes;
     }
-
     /**
         * @return Este metodo setea los datos de observaciones de domicilio
     */
     public void setObservaciones(String det1ails_homes) {
         this.det1ails_homes = det1ails_homes;
     }
-
     /**
         * @return Este metodo retorna el numero de departamento del domicilio
     */
@@ -78,7 +70,6 @@ public class DatosDomicilios {
     public String getEntrecalleycalle(){
         return entrecalleycalle;
     }
-
     /**
         * @return Este metodo retorna sector del domicilio
     */
@@ -97,48 +88,34 @@ public class DatosDomicilios {
     public String getArea() {
         return area;
     }
-
     public void setArea(String area) {
         this.area = area;
     }
-
-
-
     public void setNumdepto(Integer numdepto) {
         this.numdepto = numdepto;
     }
-
     /**
         * @return Este metodo retorna el monoblock del domicilio
     */
     public String getMonoblock(){
         return monoblock;
     }
-
     /**
         * @return Este metodo retorna el número del domicilio
     */
     public int getNumero(){
         return numero;
     }
-
-
     ////----------------------------------
-
     public Barrioss getBarrio(){
-
         return barrios;
     }
     public Calless getCalle(){
         return calles;
     }
-
     public Orientacions getOrientacion(){
         return orientacion;
     }
-
-
-
     /////////////////////--------------------------------------------------
     public class Barrioss{
         private int barrioId;
@@ -146,36 +123,26 @@ public class DatosDomicilios {
         public int getBarrioId(){
             return barrioId;
         }
-
-
     }
     public class Calless{
-
         public Calless(){}
         public Calless(int calleId) {
             this.calleId = calleId;
         }
-        
         private int calleId;
-
         public int getCalleId(){
             return calleId;
         }
         public void setCalleId(int calleId){
             this.calleId = calleId;
         }
-
     }
     public class Orientacions{
-
         private long idOrientacion;
-
         public Orientacions(){}
         public Orientacions(long idOrientacion) {
             this.idOrientacion = idOrientacion;
         }
-        
-
         public long getOrientacion(){
             return idOrientacion;
         }
@@ -184,7 +151,6 @@ public class DatosDomicilios {
         }
     }
     /////////////////////--------------------------------------------------
-
     public Localidadess getLocalidad(){
         return localidad;
     }
@@ -193,45 +159,32 @@ public class DatosDomicilios {
         private long idlocalidad;
         private short idProvincia;
         private int codigoPostal;
-
         public Localidadess(){}
-        
         public Localidadess(long idlocalidad, short idProvincia, int codigoPostal) {
             this.idlocalidad = idlocalidad;
             this.idProvincia = idProvincia;
             this.codigoPostal = codigoPostal;
         }
-
         public int getCodigoPostal(){
                 return codigoPostal;
         }
        public void setCodigoPostal(int codigopostal){
             this.codigoPostal = codigopostal;
         }
-
         public long getIdLocalidad() {
             return idlocalidad;
         }
-
         public void setIdLocalidad(long idlocalidad) {
             this.idlocalidad = idlocalidad;
         }
-
         public short getIdProvincia() {
             return idProvincia;
         }
-
         public void setIdProvincia(short idProvincia) {
             this.idProvincia = idProvincia;
         }
-
-       
-
-
     }
-
     ///----------  --- --------- ----- ----------------------   ------
-
     public void setDomicilioId(int domicilioId){
         this.domicilioId = domicilioId;
     }
@@ -253,7 +206,4 @@ public class DatosDomicilios {
    public void setMonoblock(String monoblock){
         this.monoblock = monoblock;
    }
-
-
-
 }
