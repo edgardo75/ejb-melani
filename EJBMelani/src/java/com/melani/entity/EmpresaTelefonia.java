@@ -2,12 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
-
 import java.io.Serializable;
-
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -17,10 +13,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 /**
  * A Entity EmpresaTelefonia
  *@version 1.0
@@ -42,45 +36,35 @@ public class EmpresaTelefonia implements Serializable {
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpresatelefonia",fetch=FetchType.LAZY)
     private List<Telefonos> telefonosList;
-
     public EmpresaTelefonia() {
     }
-
     public EmpresaTelefonia(Short idEmpTelefonia) {
         this.idEmpTelefonia = idEmpTelefonia;
     }
-
     public Short getidEmpTelefonia() {
         return idEmpTelefonia;
     }
-
     public void setidEmpTelefonia(Short idEmpTelefonia) {
         this.idEmpTelefonia = idEmpTelefonia;
     }
-
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
     public List<Telefonos> getTelefonosList() {
         return telefonosList;
     }
-
     public void setTelefonosList(List<Telefonos> telefonosList) {
         this.telefonosList = telefonosList;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (idEmpTelefonia != null ? idEmpTelefonia.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -93,8 +77,6 @@ public class EmpresaTelefonia implements Serializable {
         }
         return true;
     }
-
-    
     public String toXML(){
         String item = "<item>\n" +
                             "<id>"+this.getidEmpTelefonia()+"</id>\n" +
@@ -102,5 +84,4 @@ public class EmpresaTelefonia implements Serializable {
                        "</item>\n";
          return item;
     }
-
 }

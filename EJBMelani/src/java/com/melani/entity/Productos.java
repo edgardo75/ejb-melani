@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -29,7 +27,6 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  * A Entity Productos
  *@version 1.0
@@ -77,9 +74,7 @@ public class Productos implements Serializable {
     private List<Detallesnotadepedido> detallesnotadepedidoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productos")
     private List<Detallespresupuesto> detallepresupuestosList;
-
     public Productos(){}
-    
     public Productos(Long sid) {
         this.sid = sid;
     }
@@ -89,96 +84,72 @@ public class Productos implements Serializable {
     public void setSid(Long sid) {
         this.sid = sid;
     }
-
     public BigInteger getCantidadDisponible() {
         return cantidadDisponible;
     }
-
     public void setCantidadDisponible(BigInteger cantidadDisponible) {
         this.cantidadDisponible = cantidadDisponible;
     }
-
     public BigInteger getCantidadInicial() {
         return cantidadInicial;
     }
-
     public void setCantidadInicial(BigInteger cantidadInicial) {
         this.cantidadInicial = cantidadInicial;
     }
-
     public String getDescripcion() {
         return descripcion;
     }
-
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
     public List<ExistenciasProductos> getExistenciasProductoss() {
         return existenciasProductoss;
     }
-
     public String getCodproducto() {
         return codproducto;
     }
-
     public void setCodproducto(String codproducto) {
         this.codproducto = codproducto;
     }
-    
     public void setExistenciasProductoss(List<ExistenciasProductos> existenciasProductoss) {
         this.existenciasProductoss = existenciasProductoss;
     }
-
     public Date getFecha() {
         return fecha;
     }
-
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
     public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
-
     public void setPrecioUnitario(BigDecimal precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
-
     public byte[] getImg() {
         return img;
     }
-
     public void setImg(byte[] img) {
         this.img = img;
     }
-
     public List<Detallespresupuesto> getDetallepresupuestosList() {
         return detallepresupuestosList;
     }
-
     public void setDetallepresupuestosList(List<Detallespresupuesto> detallepresupuestosList) {
         this.detallepresupuestosList = detallepresupuestosList;
     }
-
     public List<Detallesnotadepedido> getDetallesnotadepedidoList() {
         return detallesnotadepedidoList;
     }
-
     public void setDetallesnotadepedidoList(List<Detallesnotadepedido> detallesnotadepedidoList) {
         this.detallesnotadepedidoList = detallesnotadepedidoList;
     }
-
-
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (sid != null ? sid.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -191,7 +162,6 @@ public class Productos implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "com.melani.entity.Productos[id=" + sid + "]";
@@ -213,13 +183,10 @@ public class Productos implements Serializable {
                         for (Iterator<ExistenciasProductos> it = lista.iterator(); it.hasNext();) {
                             ExistenciasProductos existenciasProductos = it.next();
                             item+=existenciasProductos.toXML();
-
                         }
                         item+="</existencias>\n";
-
                     }
         item+=        "</producto>";
     return item;
     }
-
 }

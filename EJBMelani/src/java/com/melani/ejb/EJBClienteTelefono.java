@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.ejb;
-
 import com.melani.entity.Clientes;
 import com.melani.entity.Personastelefonos;
 import com.melani.entity.PersonastelefonosPK;
@@ -15,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
-
 /**
  *
  * @author Edgardo
@@ -25,11 +22,9 @@ public class EJBClienteTelefono implements EJBClienteTelefonoRemote {
     private static Logger logger = Logger.getLogger(EJBClienteTelefono.class);
     @PersistenceContext
     private EntityManager em;
-
     public String addClienteTelefono(String numero, String prefijo, long idcliente) {
         String retorno = "NADA";
         try {
-            
             PersonastelefonosPK persotelpk = new PersonastelefonosPK(Long.valueOf(numero), Long.valueOf(prefijo), idcliente);
             TelefonosPK telepk = new TelefonosPK(Long.valueOf(numero), Long.valueOf(prefijo));
             Query consulta = em.createQuery("SELECT p FROM Personastelefonos p WHERE p.personastelefonosPK.prefijo = :prefijo and " +
@@ -37,8 +32,6 @@ public class EJBClienteTelefono implements EJBClienteTelefonoRemote {
             consulta.setParameter("prefijo", Long.valueOf(prefijo.trim()));
             consulta.setParameter("numerotel", Long.valueOf(numero.trim()));
             consulta.setParameter("idPersona", idcliente);
-
-
             if(consulta.getResultList().size()==1)
                 retorno ="RelacionTelefonoExistente";
             else{
@@ -51,10 +44,7 @@ public class EJBClienteTelefono implements EJBClienteTelefonoRemote {
                     em.persist(personatel);
                     em.flush();
                     retorno = "InyectoRelacionClienteTelefono";
-                    
-
             }
-
         } catch (Exception e) {
             retorno = "Error";
             logger.error("Error en metodo addClienteTelefono "+e);
@@ -62,8 +52,4 @@ public class EJBClienteTelefono implements EJBClienteTelefonoRemote {
             return retorno;
         }
     }
-
-
-
- 
 }

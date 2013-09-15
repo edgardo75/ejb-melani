@@ -2,14 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
 /**
  *
  * @author Edgardo
@@ -22,31 +19,24 @@ public class DetallesnotadepedidoPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "FK_IDPRODUCTO")
     private long fkIdproducto;
-
     public DetallesnotadepedidoPK() {
     }
-
     public DetallesnotadepedidoPK(long fkIdnota, long fkIdproducto) {
         this.fkIdnota = fkIdnota;
         this.fkIdproducto = fkIdproducto;
     }
-
     public long getFkIdnota() {
         return fkIdnota;
     }
-
     public void setFkIdnota(long fkIdnota) {
         this.fkIdnota = fkIdnota;
     }
-
     public long getFkIdproducto() {
         return fkIdproducto;
     }
-
     public void setFkIdproducto(int fkIdproducto) {
         this.fkIdproducto = fkIdproducto;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -54,7 +44,6 @@ public class DetallesnotadepedidoPK implements Serializable {
         hash += (int) fkIdproducto;
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -70,10 +59,8 @@ public class DetallesnotadepedidoPK implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "entity.DetallesnotadepedidoPK[fkIdnota=" + fkIdnota + ", fkIdproducto=" + fkIdproducto + "]";
     }
-
 }

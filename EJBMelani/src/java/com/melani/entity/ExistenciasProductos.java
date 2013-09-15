@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -25,7 +23,6 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 /**
  * A Entity ExistenciasProductos
  *@version 1.0
@@ -63,78 +60,59 @@ public class ExistenciasProductos implements Serializable {
     @JoinColumn(name = "PRODUCTOS_SID", referencedColumnName = "SID")
     @ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
     private Productos productos;
-
     public ExistenciasProductos() {
     }
-
     public ExistenciasProductos(Integer idExistencias) {
         this.idExistencias = idExistencias;
     }
-
     public Integer getCantidadactual() {
         return cantidadactual;
     }
-
     public void setCantidadactual(Integer cantidadactual) {
         this.cantidadactual = cantidadactual;
     }
-
     public Integer getIdUsuario() {
         return idUsuario;
     }
-
     public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
-
-
     public Date getFechaagregado() {
         return fechaagregado;
     }
-
     public void setFechaagregado(Date fechaagregado) {
         this.fechaagregado = fechaagregado;
     }
-
     public Integer getIdExistencias() {
         return idExistencias;
     }
-
     public void setIdExistencias(Integer idExistencias) {
         this.idExistencias = idExistencias;
     }
-
     public Productos getProductos() {
         return productos;
     }
-
     public void setProductos(Productos productos) {
         this.productos = productos;
     }
-
     public Integer getCantidadinicial() {
         return cantidadinicial;
     }
-
     public void setCantidadinicial(Integer cantidadinicial) {
         this.cantidadinicial = cantidadinicial;
     }
-
     public BigDecimal getPreciounitario() {
         return preciounitario;
     }
-
     public void setPreciounitario(BigDecimal preciounitario) {
         this.preciounitario = preciounitario;
     }
-    
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (idExistencias != null ? idExistencias.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -147,12 +125,10 @@ public class ExistenciasProductos implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "entity.ExistenciasProductos[idExistencias=" + idExistencias + "]";
     }
-
     public String toXML(){
          SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String item = "<item>\n" +
@@ -165,6 +141,5 @@ public class ExistenciasProductos implements Serializable {
                 "<id_usuario>"+this.getIdUsuario()+"</id_usuario>\n"+
                 "</item>\n";
     return item;
-
     }
 }

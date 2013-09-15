@@ -2,13 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
-
-
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -18,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-
 /**
  *
  * @author Edgardo
@@ -67,132 +62,98 @@ public class Detallesnotadepedido implements Serializable {
     private Character anulado;
     @Column(name="PRECIO_DESC",precision=15,scale=2)
     private BigDecimal preciocondescuento;
-
     public Detallesnotadepedido() {
     }
-
     public Detallesnotadepedido(DetallesnotadepedidoPK detallesnotadepedidoPK) {
         this.detallesnotadepedidoPK = detallesnotadepedidoPK;
     }
-
     public Detallesnotadepedido(int fkIdnota, int fkIdproducto) {
         this.detallesnotadepedidoPK = new DetallesnotadepedidoPK(fkIdnota, fkIdproducto);
     }
-
     public DetallesnotadepedidoPK getDetallesnotadepedidoPK() {
         return detallesnotadepedidoPK;
     }
-
     public void setDetallesnotadepedidoPK(DetallesnotadepedidoPK detallesnotadepedidoPK) {
         this.detallesnotadepedidoPK = detallesnotadepedidoPK;
     }
-
     public Integer getCantidad() {
         return cantidad;
     }
-
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
-
     public BigDecimal getPrecio() {
         return precio;
     }
-
     public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
-
     public BigDecimal getSubtotal() {
         return subtotal;
     }
-
     public BigDecimal getPreciocondescuento() {
         return preciocondescuento;
     }
-
     public void setPreciocondescuento(BigDecimal preciocondescuento) {
         this.preciocondescuento = preciocondescuento;
     }
-
-    
-
     public Character getAnulado() {
         return anulado;
     }
-
     public void setAnulado(Character anulado) {
         this.anulado = anulado;
     }
-    
-
     public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
     }
-
     public Character getEntregado() {
         return entregado;
     }
-
     public void setEntregado(Character entregado) {
         this.entregado = entregado;
     }
-
     public Character getCancelado() {
         return cancelado;
     }
-
     public void setCancelado(Character cancelado) {
         this.cancelado = cancelado;
     }
-
     public Character getPendiente() {
         return pendiente;
     }
-
     public void setPendiente(Character pendiente) {
         this.pendiente = pendiente;
     }
-
     public BigDecimal getDescuento() {
         return descuento;
     }
-
     public void setDescuento(BigDecimal descuento) {
         this.descuento = descuento;
     }
-
     public BigDecimal getIva() {
         return iva;
     }
-
     public void setIva(BigDecimal iva) {
         this.iva = iva;
     }
-
     public Notadepedido getNotadepedido() {
         return notadepedido;
     }
-
     public void setNotadepedido(Notadepedido notadepedido) {
         this.notadepedido = notadepedido;
     }
-
     public Productos getProductos() {
         return productos;
     }
-
     public void setProductos(Productos productos) {
         this.productos = productos;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (detallesnotadepedidoPK != null ? detallesnotadepedidoPK.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -205,14 +166,11 @@ public class Detallesnotadepedido implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "entity.Detallesnotadepedido[detallesnotadepedidoPK=" + detallesnotadepedidoPK + "]";
     }
-
     public String toXML(){
-
     String item="<itemdetalle>\n" +
                   "<idnota>"+this.getNotadepedido().getId()+"</idnota>\n"
                                     + "<producto>\n" +
@@ -229,12 +187,7 @@ public class Detallesnotadepedido implements Serializable {
                                     "<iva>"+this.getIva()+"</iva>\n" +
                                     "<cancelado>"+this.getCancelado()+"</cancelado>\n" +
                                     "<anulado>"+this.getAnulado()+"</anulado>\n"
-
-
                                     + "</itemdetalle>\n";
-
-
     return item;
     }
-
 }

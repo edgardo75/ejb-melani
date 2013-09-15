@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -24,7 +22,6 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  *
  * @author Edgardo
@@ -108,219 +105,158 @@ public class Historiconotapedido implements Serializable {
     private Character anulado;
     @Column(name = "PORCDESC",precision=15,scale=3)
     private BigDecimal porcdesc;
-
     @JoinColumn(name="FKIDNOTAPEDIDO_ID",referencedColumnName="ID")
     @ManyToOne
     private Notadepedido fkidnotapedido;
-
     public Notadepedido getFkidnotapedido() {
         return fkidnotapedido;
     }
-
     public void setFkidnotapedido(Notadepedido fkidnotapedido) {
         this.fkidnotapedido = fkidnotapedido;
     }
-
-
-    
-
     public Historiconotapedido() {
     }
-
     public Historiconotapedido(Integer idhistorico) {
         this.idhistorico = idhistorico;
     }
-
     public BigDecimal getPorcentajedesc() {
         return porcdesc;
     }
-
     public void setPorcentajedesc(BigDecimal porcentajedesc) {
         this.porcdesc = porcentajedesc;
     }
-
-   
-
     public Short getPorcentajeaplicado() {
         return porcentajeaplicado;
     }
-
     public void setPorcentajeaplicado(Short porcentajeaplicado) {
         this.porcentajeaplicado = porcentajeaplicado;
     }
-
     public Character getPendiente() {
         return pendiente;
     }
-
     public String getAccion() {
         return accion;
     }
-
     public void setAccion(String accion) {
         this.accion = accion;
-    }
-
-    
+    }   
     public void setPendiente(Character pendiente) {
         this.pendiente = pendiente;
     }
-
     public Character getEntregado() {
         return entregado;
     }
-
     public void setEntregado(Character entregado) {
         this.entregado = entregado;
     }
-
     public BigDecimal getTotal() {
         return total;
     }
-
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
-
     public Integer getIdusuarioexpidio() {
         return idusuarioexpidio;
     }
-
     public void setIdusuarioexpidio(Integer idusuarioexpidio) {
         this.idusuarioexpidio = idusuarioexpidio;
     }
-
     public BigDecimal getSaldo() {
         return saldo;
     }
-
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
-
     public Integer getIdusuarioentrega() {
         return idusuarioentrega;
     }
-
     public void setIdusuarioentrega(Integer idusuarioentrega) {
         this.idusuarioentrega = idusuarioentrega;
     }
-
     public Date getFecharegistro() {
         return fecharegistro;
     }
-
     public Integer getIdusuariocancelo() {
         return idusuariocancelo;
     }
-
     public void setIdusuariocancelo(Integer idusuariocancelo) {
         this.idusuariocancelo = idusuariocancelo;
-    }
-    
+    }    
     public void setFecharegistro(Date fecharegistro) {
         this.fecharegistro = fecharegistro;
     }
-
     public String getObservaciones() {
         return observaciones;
     }
-
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
-
     public BigDecimal getAnticipo() {
         return anticipo;
     }
-
     public Date getHoraregistro() {
         return horaregistro;
     }
-
     public void setHoraregistro(Date horaregistro) {
         this.horaregistro = horaregistro;
     }
-
     public void setAnticipo(BigDecimal anticipo) {
         this.anticipo = anticipo;
     }
-
-   
-
     public Integer getIdhistorico() {
         return idhistorico;
     }
-
     public void setIdhistorico(Integer idhistorico) {
         this.idhistorico = idhistorico;
     }
-
     public Integer getIdusuarioanulo() {
         return idusuarioanulo;
     }
-
     public void setIdusuarioanulo(Integer idusuarioanulo) {
         this.idusuarioanulo = idusuarioanulo;
     }
-
     public BigDecimal getDescuento() {
         return descuento;
     }
-
     public void setDescuento(BigDecimal descuento) {
         this.descuento = descuento;
     }
-
     public BigDecimal getPorcrecargo() {
         return porcrecargo;
     }
-
     public void setPorcrecargo(BigDecimal porcrecargo) {
         this.porcrecargo = porcrecargo;
     }
-
     public BigDecimal getRecargo() {
         return recargo;
     }
-
     public void setRecargo(BigDecimal recargo) {
         this.recargo = recargo;
     }
-
     public BigDecimal getTotalapagar() {
         return totalapagar;
     }
-
     public void setTotalapagar(BigDecimal totalapagar) {
         this.totalapagar = totalapagar;
     }
-
     public Character getCancelado() {
         return cancelado;
     }
-
     public void setCancelado(Character cancelado) {
         this.cancelado = cancelado;
     }
-
     public Character getAnulado() {
         return anulado;
     }
-
     public void setAnulado(Character anulado) {
         this.anulado = anulado;
     }
-
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (idhistorico != null ? idhistorico.hashCode() : 0);
         return hash;
     }
-
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -333,7 +269,6 @@ public class Historiconotapedido implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "com.melani.entidades.Historiconotapedido[idhistorico=" + idhistorico + "]";
@@ -348,14 +283,10 @@ public class Historiconotapedido implements Serializable {
         if(this.getHoraregistro()!=null)
             hourreg=sdf.format(this.getHoraregistro());
         //-------------------------------------------------------------------------------------
-
             String item = "";
         try {
-          
-              
-            item+="<item>\n"
-                           + "<idhistorico>"+this.getIdhistorico()+"</idhistorico>\n"
-                           
+              item+="<item>\n"
+                           + "<idhistorico>"+this.getIdhistorico()+"</idhistorico>\n"                          
                            + "<anticipo>"+this.getAnticipo().toString()+"</anticipo>\n"
                            + "<entregado>"+this.getEntregado().toString()+"</entregado>\n"
                            + "<fecharegistro>"+fereg+"</fecharegistro>\n"
@@ -371,25 +302,15 @@ public class Historiconotapedido implements Serializable {
                            "<totalapagar>"+this.getTotalapagar().toString()+"</totalapagar>\n" +
                            "<porcrecargo>"+this.getPorcrecargo().toString()+"</porcrecargo>\n" +
                            "<porcentajedescuento>"+this.getPorcentajedesc().toString()+"</porcentajedescuento>\n" +
-                          
-
                            "<descuento>"+this.getDescuento().toString()+"</descuento>\n" +
                            "<accion>"+StringEscapeUtils.escapeXml(this.getAccion())+"</accion>\n"
-
                            + "<saldo>"+this.getSaldo().toString()+"</saldo>\n"
                            + "<total>"+this.getTotal().toString()+"</total>\n" +
                    "</item>\n";
-
-
-
-
         } catch (Exception e) {
             e.getMessage();
         }finally{
                     return item;
         }
-       
-
     }
-
 }

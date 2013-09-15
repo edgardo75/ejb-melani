@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -18,7 +16,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  *A Entity Provincias
  * @version 1.0
@@ -43,53 +40,41 @@ public class Provincias implements Serializable {
     private Character codigo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "provincias", fetch = FetchType.LAZY)
     private List<Localidades> localidadesList;
-
     public Provincias() {
     }
-
     public Provincias(Short idProvincia) {
         this.idProvincia = idProvincia;
     }
-
     public Short getIdProvincia() {
         return idProvincia;
     }
-
     public void setIdProvincia(Short idProvincia) {
         this.idProvincia = idProvincia;
     }
-
     public String getProvincia() {
         return provincia;
     }
-
     public void setProvincia(String provincia) {
         this.provincia = provincia;
     }
-
     public Character getCodigo() {
         return codigo;
     }
-
     public void setCodigo(Character codigo) {
         this.codigo = codigo;
     }
-
     public List<Localidades> getLocalidadesList() {
         return localidadesList;
     }
-
     public void setLocalidadesList(List<Localidades> localidadesList) {
         this.localidadesList = localidadesList;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (idProvincia != null ? idProvincia.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -102,7 +87,6 @@ public class Provincias implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "entity.Provincias[idProvincia=" + idProvincia + "]";
@@ -113,8 +97,6 @@ public class Provincias implements Serializable {
             "<descripcion>"+StringEscapeUtils.escapeXml(this.getProvincia())+"</descripcion>\n" +
             "<codigo>"+this.getCodigo()+"</codigo>\n" +
             "</provincia>\n";
-
     return xml;
     }
-
 }

@@ -2,17 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
-
-
 /**
  *
  * @author Edgardo
@@ -22,35 +16,26 @@ public class PersonasdomiciliosPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "IDDOMICILIO", nullable = false)
     private Long iddomicilio;
-   
     @Basic(optional = false)
     @Column(name = "ID_PERSONA",precision = 16)
     protected Long idPersona;
-
     public PersonasdomiciliosPK(){}
-
     public PersonasdomiciliosPK(Long idDomicilio,Long idPersona){
         this.iddomicilio=idDomicilio;
         this.idPersona = idPersona;
-
     }
-
     public Long getId() {
         return iddomicilio;
     }
-
     public void setId(Long idDomicilio) {
         this.iddomicilio = idDomicilio;
     }
-
     public Long getIdPersona() {
         return idPersona;
     }
-
     public void setIdPersona(Long idPersona) {
         this.idPersona = idPersona;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -58,7 +43,6 @@ public class PersonasdomiciliosPK implements Serializable {
         hash += (long) idPersona;
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -74,12 +58,8 @@ public class PersonasdomiciliosPK implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "entity.PersonasdomiciliosPK[iddomicilio=" + iddomicilio + ", idPersona=" + idPersona + "]";
     }
-    
-
-
 }

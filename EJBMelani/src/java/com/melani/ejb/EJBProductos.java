@@ -2,11 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.ejb;
-
-
-
 import cm.melani.utils.DatosProductos;
 import com.melani.entity.ExistenciasProductos;
 import com.melani.entity.Productos;
@@ -21,7 +17,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
-
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -59,23 +54,16 @@ public class EJBProductos implements EJBProductosRemote {
         InputStream is = null;
         Productos producto = null;
         try {
-
             // Read from an input stream
              String pathActual = System.getProperty("user.dir") + File.separatorChar + "Imagen" + File.separatorChar;
-           
                 is = new BufferedInputStream(
                         new FileInputStream(pathActual+"Megan-Fox-Wallpapers-WwW.LoMasInteresante.NeT.jpg"));
                        // new FileInputStream(pathActual+"Hola.jpg"));
                        // image = ImageIO.read(is);
                 //BufferedImage imagin = ImageIO.read(is);
-           
              // if(is.available()>65535)
-               
               //else{
-                
                 int formDataLength = is.available();
-                
-                
                 byte[] dataBytes = new byte[formDataLength];
                         int byteRead = 0;
                             int totalBytesRead = 0;
@@ -83,15 +71,7 @@ public class EJBProductos implements EJBProductosRemote {
                         byteRead = is.read(dataBytes, totalBytesRead, formDataLength);
                         totalBytesRead += byteRead;
                     }
-
-               
-
                retorno = agregarProducto (producto,null);
-                
-   
-
-            
-
         } catch (Exception e) {
             retorno = -1;
             logger.error("Error en metodo addProductoConImage ejbProductos "+e);
@@ -99,19 +79,14 @@ public class EJBProductos implements EJBProductosRemote {
             try {
                 if(is!=null)
                     is.close();
-                
             } catch (IOException ex) {
                 logger.error("error cerrando conexiones!!!"+ex);
             }
             return retorno;
-
         }
     }
-
 //------------------------------------------------------------------------------------------------------
-
     private static byte[] writtingImage(String fileLocation) throws IOException {
-     
       byte[] dataBytes = null;
       InputStream is = null;
         try {
@@ -119,11 +94,7 @@ public class EJBProductos implements EJBProductosRemote {
                         new FileInputStream("Megan-Fox-Wallpapers-WwW.LoMasInteresante.NeT.jpg"));
                        // image = ImageIO.read(is);
                 //BufferedImage imagin = ImageIO.read(is);
-     
-
                 int formDataLength = is.available();
-
-
                 dataBytes = new byte[formDataLength];
                         int byteRead = 0;
                             int totalBytesRead = 0;
@@ -131,7 +102,6 @@ public class EJBProductos implements EJBProductosRemote {
                         byteRead = is.read(dataBytes, totalBytesRead, formDataLength);
                         totalBytesRead += byteRead;
                     }
-
         } catch (IOException e) {
             e.getMessage();
         }
@@ -142,44 +112,27 @@ public class EJBProductos implements EJBProductosRemote {
     public long addExistenciasProducto(int idproducto, int cantidad,float precio,int idusuario) {
         long retorno = 0;
         try {
-
             GregorianCalendar gc = new GregorianCalendar(Locale.getDefault());
-            
-
             Productos producto =em.find(Productos.class,(long) idproducto);
-     
             producto.setCantidadDisponible(BigInteger.valueOf(producto.getCantidadDisponible().intValue()+cantidad));
-     
             ExistenciasProductos existencias = new ExistenciasProductos();
-     
             existencias.setCantidadactual(cantidad);
-     
             existencias.setCantidadinicial(0);
-
             existencias.setIdUsuario(idusuario);
-     
             existencias.setFechaagregado(gc.getTime());
-     
             existencias.setProductos(em.find(Productos.class, producto.getSid()));
-
             if(precio!=0){
                 producto.setPrecioUnitario(BigDecimal.valueOf(precio));
                 existencias.setPreciounitario(BigDecimal.valueOf(precio));
             }else
                 existencias.setPreciounitario(BigDecimal.valueOf(0));
-            
             Query consulta = em.createQuery("SELECT e FROM ExistenciasProductos e WHERE e.productos.sid = :sid");
             consulta.setParameter("sid", producto.getSid());
-
             List<ExistenciasProductos>lista = consulta.getResultList();
-
             producto.setExistenciasProductoss(lista);
-      
             retorno = producto.getSid();
-
             em.merge(producto);
             em.persist(existencias);
-
         } catch (Exception e) {
             retorno = -1;
             logger.error("Error en metodo addExistenciasProducto, ejbproductos "+e);
@@ -187,7 +140,6 @@ public class EJBProductos implements EJBProductosRemote {
             return retorno;
         }
     }
-
     public String leerImagenBaseDatos(int idProducto) {
         String result="NADA";
         ByteArrayInputStream is = null;
@@ -204,10 +156,7 @@ public class EJBProductos implements EJBProductosRemote {
               fos.write(buffer);
             }
             //----------------------------------------------------------------------------------
-
             result = "LEIDO";
-
-
         } catch (Exception e) {
             result = "ERROR";
             e.getMessage();
@@ -217,7 +166,6 @@ public class EJBProductos implements EJBProductosRemote {
                 fos.close();
                if(is!=null)
                     is.close();
-
            }catch(Exception e){
                 logger.error("Error leyendo imagen leerImagenBaseDatos, en ejbproductos "+e);
             }finally{
@@ -225,18 +173,12 @@ public class EJBProductos implements EJBProductosRemote {
            }
         }
     }
-
-
-
     public String addProducto(String xmlProducto) {
         String retorno = "0L";
         Productos producto = null;
         long idproduct;
         try {
-
-           
         idproduct =agregarProducto(producto, xmlProducto);
-
         if(idproduct>0){
             retorno=searchAllProductos();
         }else{
@@ -246,21 +188,15 @@ public class EJBProductos implements EJBProductosRemote {
                     "</producto>\n"+
                     "</Lista>\n";
         }
-
-
-
-
         } catch (Exception e) {
             logger.error("Error en metodo addProducto "+e);
         }finally{
         return retorno;
         }
     }
-
     private long agregarProducto(Productos producto, String xmlProducto) {
         long retorno = 0L;
         try {
-
             //-----------------------------------------------------------------------
              XStream xstream = new XStream();
                 xstream.alias("producto", DatosProductos.class);
@@ -269,35 +205,22 @@ public class EJBProductos implements EJBProductosRemote {
                 GregorianCalendar calendario = new GregorianCalendar(Locale.getDefault());
             //-----------------------------------------------------------------------
                 producto =em.find(Productos.class, datosprod.getIdproducto());
-
                 Query consulta1 = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.CODPRODUCTO) LIKE LOWER('"+datosprod.getCodproducto()+"%')");
                 Query consulta = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.DESCRIPCION) LIKE LOWER('"+datosprod.getDescripcion()+"%')");
-
                     if(consulta1.getResultList().isEmpty()){
                         if(consulta.getResultList().isEmpty()){
-
                             if(producto==null){
                             //----------------------------Producto Nuevo-------------------------------------------
                                     producto = new Productos();
-
                                     producto.setCantidadDisponible(BigInteger.valueOf(datosprod.getCantidaddisponible()));
-
                                     producto.setCantidadInicial(BigInteger.valueOf(datosprod.getCantidadinicial()));
-                                
                                     producto.setPrecioUnitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
-
                                     producto.setDescripcion(datosprod.getDescripcion().toUpperCase());
-
                                     producto.setFecha(calendario.getTime());
-
                                     producto.setImg(new byte[10000]);
-
                                     producto.setCodproducto(datosprod.getCodproducto().toUpperCase());
-
                                     em.persist(producto);
-
                                         ExistenciasProductos existencias = new ExistenciasProductos();
-
                                         existencias.setCantidadactual(Integer.valueOf(datosprod.getCantidaddisponible()));
                                         existencias.setCantidadinicial(datosprod.getCantidadinicial());
                                         existencias.setFechaagregado(calendario.getTime());
@@ -305,10 +228,8 @@ public class EJBProductos implements EJBProductosRemote {
                                         existencias.setIdUsuario(datosprod.getIdusuario());
                                         existencias.setProductos(em.find(Productos.class, producto.getSid()));
                                         em.persist(existencias);
-
                                     retorno = existencias(producto);
                         //-----------------------------------------------------------------------
-
             }else{
                             if(producto.getCantidadDisponible().intValue()!=datosprod.getCantidaddisponible()&&producto.getPrecioUnitario()!=BigDecimal.valueOf(datosprod.getPreciounitario())){
                 //--------------------------------Actualizo Producto Los CamposNecesarios-------------------------------
@@ -330,13 +251,11 @@ public class EJBProductos implements EJBProductosRemote {
                 //---------------------------------------------------------------------------------
                             }else
                                 retorno = producto.getSid();
-
             }
             }else
                 retorno = -5;
             }else
                 retorno = -6;
-
         } catch (Exception e) {
             retorno =-2;
             logger.error("Error en metodo agregarProducto, ejbProducto "+e);
@@ -344,15 +263,11 @@ public class EJBProductos implements EJBProductosRemote {
             return retorno;
         }
     }
-
     private long existencias(Productos producto) {
         long retorno = 0L;
         try {
             List<ExistenciasProductos>lista = em.createQuery("SELECT e FROM ExistenciasProductos e WHERE e.productos.sid = :sid")
-
                 .setParameter("sid", producto.getSid()).getResultList();
-
-                
                 producto.setExistenciasProductoss(lista);
                 em.merge(producto);
                 retorno = producto.getSid();
@@ -363,28 +278,22 @@ public class EJBProductos implements EJBProductosRemote {
             return retorno;
         }
     }
-
     public String selectoneproducto(long idproducto) {
         String result = "NADA";
         try {
             Productos producto = em.find(Productos.class, idproducto);
-
             result = producto.toXML();
-
         } catch (Exception e) {
             result = "ERROR";
             logger.error("Error en metodo selectoneproducto "+e);
         }finally{
-        
         return result;
         }
     }
-
     public Productos agregarProductos(Productos producto) {
         try {
             GregorianCalendar calendario = new GregorianCalendar(Locale.getDefault());
             Productos produ = em.find(Productos.class, producto.getSid());
-
             if(produ!=null){
               produ.setFecha(calendario.getTime());
               em.persist(producto);
@@ -392,22 +301,16 @@ public class EJBProductos implements EJBProductosRemote {
             {
               produ.setFecha(calendario.getTime());
               em.merge(producto);
-
             }
-
         } catch (Exception e) {
             logger.error("Error en metodo addProductos "+e);
         }finally{
         return producto;
         }
-
     }
-
     public String searchAllProductos() {
         String xml = "NADA";
-       
         try {
-         
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Query query = em.createNativeQuery("SELECT p.sid,p.DESCRIPCION,p.codproducto,p.PRECIOUNITARIO,p.CANTIDADINICIAL,p.CANTIDADDISPONIBLE,p.img" +
                     ",p.FECHA FROM PRODUCTOS p Order by p.sid", Productos.class);
@@ -417,7 +320,6 @@ public class EJBProductos implements EJBProductosRemote {
                     else{
                         Iterator iter = lista.iterator();
                         xml="<Lista>\n";
-
                         while(iter.hasNext()){
                             Productos prod = (Productos) iter.next();
                             xml+="<producto>\n"
@@ -428,47 +330,32 @@ public class EJBProductos implements EJBProductosRemote {
                                     + "<cantidadInicial>"+prod.getCantidadInicial()+"</cantidadInicial>\n"
                                     + "<fecha>"+sdf.format(prod.getFecha())+"</fecha>\n" 
                                     +"<precio>"+prod.getPrecioUnitario()+"</precio>\n" ;
-
                                     if(Arrays.equals(prod.getImg(),null))
                                         xml+="<img>0</img>\n";
                                     else
                                         xml+="<img>"+prod.getImg().length+"</img>\n";
                                     xml+="</producto>\n";
-                                    
                         List<ExistenciasProductos>lista1=prod.getExistenciasProductoss();
                             for (Iterator<ExistenciasProductos> it = lista1.iterator(); it.hasNext();) {
                                 ExistenciasProductos existenciasProductos = it.next();
-                                
                             }
-
-                        
                         }
                         xml+="</Lista>\n";
-
                     }
         }catch (Exception e) {
             logger.error("Error al buscar todos los producto EJBProducto", e);
         }finally{
-           
-            
             return xml;
-
         }
     }
-
     public int controlStockProducto(long idProducto, int cantidad, int idUsuario) {
         int resultado = 0;
         try {
-
-           
                         GregorianCalendar gc = new GregorianCalendar(Locale.getDefault());
-
                         Productos producto = em.find(Productos.class, idProducto);
                         producto.setCantidadDisponible(producto.getCantidadDisponible().subtract(BigInteger.valueOf(cantidad)));
-     
                         //-----------------------------------------------------------------------------------------------------
                             ExistenciasProductos existencias = new ExistenciasProductos();
-
                                     existencias.setCantidadactual(-cantidad);
                                     existencias.setCantidadinicial(0);
                                     existencias.setFechaagregado(gc.getTime());
@@ -476,82 +363,53 @@ public class EJBProductos implements EJBProductosRemote {
                                     existencias.setPreciounitario(producto.getPrecioUnitario());
                                     existencias.setProductos(em.find(Productos.class, idProducto));
                                     em.persist(existencias);
-
-
                                Query consulta = em.createQuery("SELECT e FROM ExistenciasProductos e WHERE e.productos.sid = :idproducto");
                                consulta.setParameter("idproducto", producto.getSid());
                                List<ExistenciasProductos>lista = consulta.getResultList();
-
                                    producto.setExistenciasProductoss(lista);
                                em.persist(producto);
-                                    
-
-
                                     resultado = (int) existencias(producto);
-
         } catch (Exception e) {
             logger.error("Error en metodo controlStockProducto", e.getCause());
             resultado = 1;
         } finally {
             return resultado;
         }
-
     }
-
     public String actualizarProducto(String xmlProducto) {
           String retorno = "0L";
         Productos producto = null;
         long idproduct;
         try {
-
-
         idproduct =updateProducto(producto, xmlProducto);
-
-        
             retorno="<Lista>\n" +
                     "<producto>\n" +
                     "<id>"+idproduct+"</id>\n" +
                     "</producto>\n"+
                     "</Lista>\n";
-        
-
-
-
-
         } catch (Exception e) {
             logger.error("Error en metodo addProducto "+e);
         }finally{
         return retorno;
         }
     }
-
     private long updateProducto(Productos producto, String xmlProducto) {
          long retorno = 0L;
         try {
-            
             //-----------------------------------------------------------------------
-           
              XStream xstream = new XStream();
-            
                 xstream.alias("producto", DatosProductos.class);
                 DatosProductos datosprod = (DatosProductos) xstream.fromXML(xmlProducto);
             //-----------------------------------------------------------------------
                 GregorianCalendar calendario = new GregorianCalendar(Locale.getDefault());
             //-----------------------------------------------------------------------
-            
                 if(datosprod.getIdproducto()>0)
                     producto =em.find(Productos.class, datosprod.getIdproducto());
-
-                   
-
                         //Query consulta1 = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.CODPRODUCTO) LIKE LOWER('"+datosprod.getCodproducto()+"%')");
                         //Query consulta = em.createNativeQuery("SELECT * FROM PRODUCTOS WHERE LOWER(PRODUCTOS.DESCRIPCION) LIKE LOWER('"+datosprod.getDescripcion()+"%')");
-                               
                 //--------------------------------Actualizo Producto Los CamposNecesarios-------------------------------
-
                                         producto.setCantidadDisponible(BigInteger.valueOf(producto.getCantidadDisponible().intValue()+datosprod.getCantidaddisponible()));
                                         producto.setPrecioUnitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
-                    
                                         em.persist(producto);
                                         em.flush();
                 //---------------------------------------------------------------------------------
@@ -562,25 +420,12 @@ public class EJBProductos implements EJBProductosRemote {
                                         existencias.setPreciounitario(BigDecimal.valueOf(datosprod.getPreciounitario()));
                                         existencias.setProductos(em.find(Productos.class, producto.getSid()));
                                         existencias.setIdUsuario(datosprod.getIdusuario());
-
                                         em.persist(existencias);
                                         em.flush();
                 //---------------------------------------------------------------------------------
-                                       
-
-                                       
-
-
-
                                     retorno = existencias(producto);
-            
                 //---------------------------------------------------------------------------------
-                          
                                 retorno = producto.getSid();
-
-                       
-
-
         } catch (Exception e) {
             retorno =-2;
             logger.error("Error en metodo updateProducto, ejbProducto "+e);
@@ -588,24 +433,19 @@ public class EJBProductos implements EJBProductosRemote {
             return retorno;
         }
     }
-
     public String ShowReportProduct() {
-
         String xml = "";
         OracleXMLQuery oxq = null;
         Connection con = null;
         try {
              try {
                 con = datasource.getConnection();
-
             } catch (Exception e) {
                 logger.error("Error al conectar a base de datos", e);
             }
             String consulta = "SELECT p.sid,p.DESCRIPCION,p.codproducto,p.PRECIOUNITARIO,p.CANTIDADINICIAL,p.CANTIDADDISPONIBLE" +
                     ",p.FECHA FROM PRODUCTOS p Order by p.sid";
-
             oxq = new OracleXMLQuery(con, consulta);
-
             oxq.setRowTag("producto");
             oxq.setRowsetTag("Lista");
             oxq.setEncoding("ISO-8859-1");
@@ -614,13 +454,10 @@ public class EJBProductos implements EJBProductosRemote {
             oxq.close();
     }catch(Exception e){
             logger.error("Error en metodo ShowReportProduct");
-
     }finally{
         try {
                         if (con != null) {
-
                                 con.close();
-
                         }
                         if (oxq != null) {
                             oxq.close();
@@ -631,18 +468,12 @@ public class EJBProductos implements EJBProductosRemote {
         return xml;
     }
     }
-
     public int grabarImagen(int id_producto, byte[] longitudImagen) {
         int retorno = 0;
         try {
-            
             Productos producto=em.find(Productos.class,(long) id_producto);
-            
             ByteArrayInputStream bis=new ByteArrayInputStream(longitudImagen);
-            
-
              int formDataLength = bis.available();
-            
             byte[] dataBytes = new byte[formDataLength];
                         int byteRead = 0;
                             int totalBytesRead = 0;
@@ -653,35 +484,24 @@ public class EJBProductos implements EJBProductosRemote {
             producto.setImg(dataBytes);
             em.persist(producto);
             retorno=1;
-
         } catch (Exception e) {
             retorno=-1;
             logger.error("Error al Almacenar Imagen en Base de Datos");
         }finally{
             return retorno;
         }
-
     }
-
     public byte[] obtenerImagenProducto(int idProducto) {
         byte[] retorno = null;
         try {
             Productos producto = em.find(Productos.class, (long)idProducto);
             retorno = producto.getImg();
-
         } catch (Exception e) {
-            
             logger.error("Error en metodo obtenerImagenProducto en EJBProductos",e.getCause());
         }finally{
         return retorno;
         }
     }
 //---------------------------------------------------------------------------------------------------
-
 //---------------------------------------------------------------------------------------------------
-
-
-
-
- 
 }

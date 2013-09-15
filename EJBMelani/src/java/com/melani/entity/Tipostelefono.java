@@ -3,7 +3,6 @@
  * and open the template in the editor.
  */
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -16,7 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
 /**
  *
  * @author Edgardo
@@ -38,46 +36,36 @@ public class Tipostelefono implements Serializable {
     private String descripcion;
     @OneToMany(mappedBy = "idTipotelefono")
     private List<Telefonos> telefonosList;
-
     public Tipostelefono() {
     }
-
     public Tipostelefono(Short idTipotel) {
         this.idTipotel = idTipotel;
     }
-
     public Short getIdTipotel() {
         return idTipotel;
     }
-
     public void setIdTipotel(Short idTipotel) {
         this.idTipotel = idTipotel;
     }
-
     public String getDescripcion() {
         return descripcion;
     }
-
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
     @XmlTransient
     public List<Telefonos> getTelefonosList() {
         return telefonosList;
     }
-
     public void setTelefonosList(List<Telefonos> telefonosList) {
         this.telefonosList = telefonosList;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (idTipotel != null ? idTipotel.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -90,10 +78,8 @@ public class Tipostelefono implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "com.melani.entity.Tipostelefono[ idTipotel=" + idTipotel + " ]";
     }
-    
 }

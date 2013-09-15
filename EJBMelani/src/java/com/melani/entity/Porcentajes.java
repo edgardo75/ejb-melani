@@ -3,7 +3,6 @@
  * and open the template in the editor.
  */
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -19,7 +18,6 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
 /**
  *
  * @author Edgardo
@@ -49,54 +47,42 @@ public class Porcentajes implements Serializable {
     private Double valor;
     @OneToMany(mappedBy = "fkidporcentajenotaId")
     private List<Notadepedido> notadepedidoList;
-
     public Porcentajes() {
     }
-
     public Porcentajes(Short idPorcentajes) {
         this.idPorcentajes = idPorcentajes;
     }
-
     public Short getIdPorcentajes() {
         return idPorcentajes;
     }
-
     public void setIdPorcentajes(Short idPorcentajes) {
         this.idPorcentajes = idPorcentajes;
     }
-
     public String getDescripcion() {
         return descripcion;
     }
-
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
     public Double getValor() {
         return valor;
     }
-
     public void setValor(Double valor) {
         this.valor = valor;
     }
-
     @XmlTransient
     public List<Notadepedido> getNotadepedidoList() {
         return notadepedidoList;
     }
-
     public void setNotadepedidoList(List<Notadepedido> notadepedidoList) {
         this.notadepedidoList = notadepedidoList;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (idPorcentajes != null ? idPorcentajes.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -109,10 +95,8 @@ public class Porcentajes implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "com.melani.entity.Porcentajes[ idPorcentajes=" + idPorcentajes + " ]";
     }
-    
 }

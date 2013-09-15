@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -14,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
-
 /**
  *
  * @author Edgardo
@@ -34,55 +31,42 @@ public class HistPersonasTelefonos implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechacambio;
     private Integer idusuario;
-
     public Long getIdhistperdom() {
         return idhistperdom;
     }
-
     public void setIdhistperdom(Long idhistperdom) {
         this.idhistperdom = idhistperdom;
     }
-
     public Date getFechacambio() {
         return fechacambio;
     }
-
     public void setFechacambio(Date fechacambio) {
         this.fechacambio = fechacambio;
     }
-
     public Long getIdpersona() {
         return idpersona;
     }
-
     public void setIdpersona(Long idpersona) {
-        this.idpersona = idpersona;
+       this.idpersona = idpersona;
     }
-
     public Integer getIdusuario() {
         return idusuario;
     }
-
     public void setIdusuario(Integer idusuario) {
         this.idusuario = idusuario;
     }
-
     public Long getNumerotel() {
         return numerotel;
     }
-
     public void setNumerotel(Long numerotel) {
         this.numerotel = numerotel;
     }
-
     public Long getPrefijo() {
         return prefijo;
     }
-
     public void setPrefijo(Long prefijo) {
         this.prefijo = prefijo;
     }
-
     public String toXML(){
         String item="<item>\n" +
                 "<id>"+this.getIdhistperdom()+"</id>\n" +
@@ -90,9 +74,7 @@ public class HistPersonasTelefonos implements Serializable {
                 "<numerotel>"+this.getNumerotel()+"</numerotel>\n" +
                 "<fecha>"+this.getFechacambio()+"</fecha>\n" +
                 "<idusuario>"+this.getIdusuario()+"</idusuario>\n" +
-                "</item>\n";
-
+               "</item>\n";
         return item;
     }
-
 }

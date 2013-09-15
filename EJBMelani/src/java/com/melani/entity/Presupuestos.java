@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -19,8 +17,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -29,14 +25,12 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  *
  * @author Edgardo
  */
 @Entity
 @Table(name="PRESUPUESTOS")
-
 @NamedQueries({@NamedQuery(name = "Presupuestos.findAll",
 query = "SELECT p FROM Presupuestos p"), @NamedQuery(name = "Presupuestos.findByIdPresupuesto",query = "SELECT p FROM Presupuestos p WHERE p.idPresupuesto = :idPresupuesto"), @NamedQuery(name = "Presupuestos.findByObservaciones",
         query = "SELECT p FROM Presupuestos p WHERE p.observaciones = :observaciones"), @NamedQuery(name = "Presupuestos.findByIdUsuarioExpidioPresupuesto",
@@ -92,155 +86,111 @@ public class Presupuestos implements Serializable {
     private BigDecimal descuentoresto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "presupuestos",fetch=FetchType.LAZY)
     private List<Detallespresupuesto> detallepresupuestosList;
-    
-    
-
     public Presupuestos() {
     }
-
     public Presupuestos(Integer idPresupuesto) {
         this.idPresupuesto = idPresupuesto;
     }
-
     public Presupuestos(Integer idPresupuesto, int idUsuarioFk) {
         this.idPresupuesto = idPresupuesto;
         this.idUsuarioFk = idUsuarioFk;
     }
-
     public Integer getIdPresupuesto() {
         return idPresupuesto;
     }
-
     public void setIdPresupuesto(Integer idPresupuesto) {
         this.idPresupuesto = idPresupuesto;
     }
-
     public Date getFechapresupuesto() {
         return fechapresupuesto;
     }
-
     public void setFechapresupuesto(Date fechapresupuesto) {
         this.fechapresupuesto = fechapresupuesto;
     }
-
     public Date getValidez() {
         return validez;
     }
-
     public void setValidez(Date validez) {
         this.validez = validez;
     }
-
     public BigDecimal getTotal() {
         return total;
     }
-
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
-
     public String getObservaciones() {
         return observaciones;
     }
-
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
-
     public int getIdUsuarioFk() {
         return idUsuarioFk;
     }
-
     public void setIdUsuarioFk(int idUsuarioFk) {
         this.idUsuarioFk = idUsuarioFk;
     }
-
     public List<Detallespresupuesto> getDetallepresupuestosList() {
         return detallepresupuestosList;
     }
-
     public void setDetallepresupuestosList(List<Detallespresupuesto> detallepresupuestosList) {
         this.detallepresupuestosList = detallepresupuestosList;
     }
-
-    
     public BigDecimal getTotalapagar() {
         return totalapagar;
     }
-
     public void setTotalapagar(BigDecimal totalapagar) {
         this.totalapagar = totalapagar;
     }
-
     public String getApellido() {
         return apellido;
     }
-
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
-
     public BigDecimal getIva() {
         return iva;
     }
-
     public void setIva(BigDecimal iva) {
         this.iva = iva;
     }
-
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
     public BigDecimal getPorcetajedescuentoTOTAL() {
         return porcetajedescuentoTOTAL;
     }
-
     public void setPorcetajedescuentoTOTAL(BigDecimal porcetajedescuento) {
         this.porcetajedescuentoTOTAL = porcetajedescuento;
     }
-
     public BigDecimal getDescuentoresto() {
         return descuentoresto;
     }
-
     public void setDescuentoresto(BigDecimal descuentoresto) {
         this.descuentoresto = descuentoresto;
     }
-
     public BigDecimal getPorcentajerecargo() {
         return porcentajerecargo;
     }
-
     public void setPorcentajerecargo(BigDecimal porcentajerecargo) {
         this.porcentajerecargo = porcentajerecargo;
     }
-
     public BigDecimal getRecargototal() {
         return recargototal;
     }
-
     public void setRecargototal(BigDecimal recargototal) {
         this.recargototal = recargototal;
     }
-
-    
-
-
-    
-
-    
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (idPresupuesto != null ? idPresupuesto.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -253,12 +203,10 @@ public class Presupuestos implements Serializable {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "entidades.Presupuestos[idPresupuesto=" + idPresupuesto + "]";
     }
-
     public String toXML(){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String xml ="<presupuesto>\n" +
@@ -278,7 +226,6 @@ public class Presupuestos implements Serializable {
                 "<recargototal>"+this.getRecargototal().toString()+"</recargototal>\n" +
                 "<porcentajerecargo>"+this.getPorcentajerecargo().toString()+"</porcentajerecargo>\n"+
                 "<detallepresupuesto>\n" ;
-
                 if(this.getDetallepresupuestosList().size()==0)
                         xml+=   "</detallepresupuesto>\n";
                 else{
@@ -286,18 +233,10 @@ public class Presupuestos implements Serializable {
                     for (Iterator<Detallespresupuesto> it = lista.iterator(); it.hasNext();) {
                         Detallespresupuesto detallespresupuesto = it.next();
                         xml+=detallespresupuesto.toXML();
-
                     }
-
-
                 }
             xml+=   "</detallepresupuesto>\n"+
-
                 "</presupuesto>\n";
-
-
-
     return xml;
     }
-
 }

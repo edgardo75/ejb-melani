@@ -2,11 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package cm.melani.utils;
-
-
-
 /**
  *Clase DatosCliente Utilizada para Instanciar mediante libreria Xstream, con
  * el objetivo de Producir una salida de un Objeto Cliente
@@ -24,21 +20,17 @@ public class DatosCliente {
     private int totalpuntos;//variable interna atribute totalpuntos
     private long idcliente;//variable interna atribute idcliente
     private Generos genero;//variable interna atribute genero
-
    //Constructor
     public DatosCliente(){}
-
  /**
      * @return Este metodo devuelve el apellido de un cliente
      */
     public String getApellido() {
         return apellido;
     }
-
     public String getObservaciones() {
         return observaciones;
     }
-
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
@@ -48,15 +40,12 @@ public class DatosCliente {
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
-
     /**
      * @return Este metodo devuelve el email del cliente
      */
     public String getEmail() {
         return email;
     }
-
-   
     /**
      * @return Este metodo "setea" el email del cliente
      */
@@ -99,7 +88,6 @@ public class DatosCliente {
     public void setNrodocu(Integer nrodocu) {
         this.nrodocu = nrodocu;
     }
-
 /**
  * @return Este metodo devuelve el total de compras
  */
@@ -136,11 +124,9 @@ public class DatosCliente {
     public void setIdcliente(long idcliente) {
         this.idcliente = idcliente;
     }
-
    /**
  * @return Este metodo trata a la clase Genero
  */
-
     public Generos getGeneros() {
         return genero;
     }
@@ -150,32 +136,19 @@ public class DatosCliente {
     public void setGeneros(Generos genero) {
         this.genero = genero;
     }
-
-   
-
 //Clase anónima Generos
 public class Generos{
     private short idgenero;
-
-   
     public Generos(){
-
     }
-
         public Generos(short idgenero) {
             this.idgenero = idgenero;
         }
-
         public short getIdgenero() {
             return idgenero;
         }
-
         public void setIdgenero(short idgenero) {
             this.idgenero = idgenero;
         }
-
-
 }
-    
-
 }

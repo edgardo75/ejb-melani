@@ -3,7 +3,6 @@
  * and open the template in the editor.
  */
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -19,7 +18,6 @@ import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  *
  * @author Edgardo
@@ -42,55 +40,43 @@ public class TarjetasCreditoDebito implements Serializable {
     private List<Notadepedido> notadepedidoList;
     @OneToMany(cascade= CascadeType.ALL,mappedBy="idTarjetaFk",fetch= FetchType.LAZY)
     private List<EntradasySalidasCaja>entradasysalidascajaList;
-    
 public TarjetasCreditoDebito() {
     }
-
     public TarjetasCreditoDebito(Integer idtarjeta) {
         this.idtarjeta = idtarjeta;
     }
-
     public Integer getIdtarjeta() {
         return idtarjeta;
     }
-
     public void setIdtarjeta(Integer idtarjeta) {
         this.idtarjeta = idtarjeta;
     }
-
     public String getDescripcion() {
         return descripcion;
     }
-
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
     @XmlTransient
     public List<Notadepedido> getNotadepedidoList() {
         return notadepedidoList;
     }
-
     public void setNotadepedidoList(List<Notadepedido> notadepedidoList) {
         this.notadepedidoList = notadepedidoList;
     }
-
     @XmlTransient
     public List<EntradasySalidasCaja> getEntradasysalidascajaList() {
         return entradasysalidascajaList;
     }
-
     public void setEntradasysalidascajaList(List<EntradasySalidasCaja> entradasysalidascajaList) {
         this.entradasysalidascajaList = entradasysalidascajaList;
     }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (idtarjeta != null ? idtarjeta.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -103,7 +89,6 @@ public TarjetasCreditoDebito() {
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "com.melani.entity.TarjetasCreditoDebito[ idtarjeta=" + idtarjeta + " ]";
@@ -113,9 +98,6 @@ public TarjetasCreditoDebito() {
                 "<id>"+this.getIdtarjeta()+"</id>\n" +
                 "<descripcion>"+StringEscapeUtils.escapeXml(this.getDescripcion())+"</descripcion>\n" +
                 "</item>\n";
-
-
     return item;
     }
-    
 }

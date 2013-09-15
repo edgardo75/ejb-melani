@@ -2,13 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.entity;
-
 import java.io.Serializable;
 import java.util.List;
-
-
 import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -18,11 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-
-
 import javax.persistence.Table;
 import org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  * A Entity Telefonos
  *@version 1.0
@@ -34,7 +27,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
     @NamedQuery(name = "Telefonos.findAll", query = "SELECT t FROM Telefonos t"),
     @NamedQuery(name = "Telefonos.findByIdPrefijo", query = "SELECT t FROM Telefonos t WHERE t.telefonosPK.idPrefijo = :idPrefijo"),
     @NamedQuery(name = "Telefonos.findByNumero", query = "SELECT t FROM Telefonos t WHERE t.telefonosPK.numero = :numero")})
-
     public class Telefonos implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -45,66 +37,46 @@ import org.apache.commons.lang3.StringEscapeUtils;
     @JoinColumn(name = "ID_TIPOTELEFONO", referencedColumnName = "ID_TIPOTEL")
     @ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
     private Tipostelefono idTipotelefono;
-
      @OneToMany(cascade = CascadeType.ALL, mappedBy = "telefonos")
     private List<Personastelefonos> personastelefonosCollection;
-    
-
-    
-
     public Telefonos() {
     }
-
     public Telefonos(TelefonosPK telefonosPK) {
         this.telefonosPK = telefonosPK;
     }
-
     public Telefonos(Integer numero, long idPrefijo) {
         this.telefonosPK = new TelefonosPK(numero, idPrefijo);
     }
-
     public TelefonosPK getTelefonosPK() {
         return telefonosPK;
     }
-
     public void setTelefonosPK(TelefonosPK telefonosPK) {
         this.telefonosPK = telefonosPK;
     }
-
     public EmpresaTelefonia getIdEmpresatelefonia() {
         return idEmpresatelefonia;
     }
-
     public void setIdEmpresatelefonia(EmpresaTelefonia idEmpresatelefonia) {
         this.idEmpresatelefonia = idEmpresatelefonia;
     }
-
     public Tipostelefono getIdTipotelefono() {
         return idTipotelefono;
     }
-
     public void setIdTipotelefono(Tipostelefono idTipotelefono) {
         this.idTipotelefono = idTipotelefono;
     }
-
     public List<Personastelefonos> getPersonastelefonosCollection() {
         return personastelefonosCollection;
     }
-
     public void setPersonastelefonosCollection(List<Personastelefonos> personastelefonosCollection) {
         this.personastelefonosCollection = personastelefonosCollection;
     }
-
-    
-
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (telefonosPK != null ? telefonosPK.hashCode() : 0);
         return hash;
     }
-
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -117,7 +89,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
         }
         return true;
     }
-
     @Override
     public String toString() {
         return "com.tarjetadata.dao.entidades.Telefonos[telefonosPK=" + telefonosPK + "]";
@@ -133,5 +104,4 @@ import org.apache.commons.lang3.StringEscapeUtils;
                       "</telefono>\n";
         return xml;
     }
-
 }

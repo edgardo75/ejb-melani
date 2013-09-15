@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melani.ejb;
-
 import cm.melani.utils.DatosTelefonos;
 import com.melani.entity.EmpresaTelefonia;
 import com.melani.entity.Telefonos;
@@ -15,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
-
 /**
  *
  * @author Edgardo
@@ -25,22 +22,17 @@ public class EJBTelefonos implements EJBTelefonosRemote {
     private static Logger logger = Logger.getLogger(EJBTelefonos.class);
     @PersistenceContext
     private EntityManager em;
-
     public long addTelefonos(DatosTelefonos datosTel) {
         long retorno =0;
         try {
             //-----------------------------------------------------------------------------
-           
             //-----------------------------------------------------------------------------
-
             TelefonosPK telepk = new TelefonosPK(Long.valueOf(datosTel.getNumero().trim()),Long.valueOf(datosTel.getPrefijo().trim()));
             //-----------------------------------------------------------------------------
-           
             Query consulta = em.createQuery("SELECT t FROM Telefonos t WHERE t.telefonosPK.idPrefijo = :idPrefijo and " +
                     "t.telefonosPK.numero = :numero");
             consulta.setParameter("idPrefijo", Long.valueOf(datosTel.getPrefijo().trim()));
             consulta.setParameter("numero", Long.valueOf(datosTel.getNumero().trim()));
-            
             if(consulta.getResultList().size()==1)
                 retorno = 1;
             else{
@@ -51,10 +43,8 @@ public class EJBTelefonos implements EJBTelefonosRemote {
                 em.persist(telefono);
                 em.flush();
                 retorno = 2;
-               
             }
             //--------------------------------------------------------------------------------------
-
         } catch (Exception e) {
             retorno = -1;
             logger.error("Error en metodo addTelefonos, EJBTelefonos "+e);
@@ -62,7 +52,4 @@ public class EJBTelefonos implements EJBTelefonosRemote {
             return retorno;
         }
     }
-
-
- 
 }
