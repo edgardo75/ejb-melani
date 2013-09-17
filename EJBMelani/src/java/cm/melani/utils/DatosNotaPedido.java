@@ -155,6 +155,7 @@ public class DatosNotaPedido {
     public Personas getPersonas() {
         return personas;
     }
+    //------------------------------------------------------------------------------------------
    public class Personas{
        private long id;
        private int numerodocu;

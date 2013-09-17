@@ -47,7 +47,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
       EJBProductosRemote producto;
     @EJB
     EJBPresupuestosRemote ejbpresupuesto;
-    DatosNotaPedido notadepedido;
+      DatosNotaPedido notadepedido;
     private DatosNotaPedido xestreaNotapedido(String xmlNotapedido){
             XStream xestream = new XStream();
             xestream.alias("notapedido", DatosNotaPedido.class);
@@ -95,8 +95,8 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                             notape.setIdusuarioAnulado(notadepedido.getId_usuario_anulado());
                                             notape.setIdusuarioEntregado(notadepedido.getUsuario_entregado());
                                             notape.setMontoiva(BigDecimal.valueOf(notadepedido.getMontoiva()));
-                                                notape.setNumerodecupon(notadepedido.getNumerodecupon());
-                                                notape.setObservaciones(notadepedido.getObservaciones());
+                                            notape.setNumerodecupon(notadepedido.getNumerodecupon());
+                                            notape.setObservaciones(notadepedido.getObservaciones());
                                             notape.setRecargo(BigDecimal.valueOf(notadepedido.getRecargo()));
                                             notape.setSaldo(BigDecimal.valueOf(notadepedido.getSaldo()));
                                             notape.setStockfuturo(notadepedido.getStockfuturo());
@@ -110,6 +110,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                             try {
                                                 notape.setMontototalapagar(BigDecimal.valueOf(notadepedido.getMontototalapagar()));
                                             } catch (Exception e) {
+                                                logger.error("Error en metodo almacenar nota, monto total a pagar",e.getCause());
                                             }
                                             notape.setPorcdesctotal(BigDecimal.valueOf(notadepedido.getPorc_descuento_total()));
                                             notape.setPorcrecargo(BigDecimal.valueOf(notadepedido.getPorcentajerecargo()));
@@ -123,16 +124,16 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                   long historico =0;
                                          switch(notadepedido.getStockfuturo()){
                                              case 0:{
-                                                 retorno = almacenardetallenotaconcontrolstock(notadepedido,notape);
+                                                 retorno = almacenarDetalleNotaConControlStock(notadepedido,notape);
                                                              /*Almacenar el historico en el método para que quede bien registrada la operacion*/
-                                                           historico =  almacenarhistorico(notadepedido,notape);
+                                                           historico =  almacenarHistorico(notadepedido,notape);
                                                     }
                                              break;
                                              default :
                                                     {
                                                         retorno = almacenardetallenota(notadepedido,notape);
                                                       /*Almacenar el historico en el método para que quede bien registrada la operacion*/
-                                                       historico =  almacenarhistorico(notadepedido,notape);
+                                                       historico =  almacenarHistorico(notadepedido,notape);
                                                     }
                                          }
                                          Query consulta =em.createQuery("SELECT n FROM Notadepedido n WHERE n.fkIdcliente.idPersona = :id");
@@ -199,35 +200,42 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
             return retorno;
         }
     }
-    private long almacenardetallenotaconcontrolstock(DatosNotaPedido notadepedido, Notadepedido notape) {
+    private long almacenarDetalleNotaConControlStock(DatosNotaPedido notadepedido, Notadepedido notape) {
         long retorno =0;
+        int stockDisponible=0;
         try{
 /* Idem metodo almacenar nota con la inclusion del metodo para controlar el stock llamando
  a metodo remoto de EJBPRoductosRemote, perdon por no usar reusabilidad de codigo fuente, no se me ocurria otra alternativa
  */
             List<Itemdetallesnota>lista = notadepedido.getDetallesnotapedido().getDetallesnota();
-            for (Iterator<Itemdetallesnota> it = lista.iterator(); it.hasNext();) {
-                Itemdetallesnota itemdetallesnota = it.next();
-                Productos productos = em.find(Productos.class,itemdetallesnota.getId_producto());
-                DetallesnotadepedidoPK detallespk = new DetallesnotadepedidoPK(notape.getId(), itemdetallesnota.getId_producto());
-                Detallesnotadepedido detalles = new Detallesnotadepedido();
-                detalles.setCancelado(Character.valueOf(itemdetallesnota.getCancelado()));
-                detalles.setCantidad(itemdetallesnota.getCantidad());
-                detalles.setDescuento(BigDecimal.valueOf(itemdetallesnota.getDescuento()));
-                detalles.setPreciocondescuento(BigDecimal.valueOf(itemdetallesnota.getPreciocondescuento()));
-                detalles.setEntregado(Character.valueOf(itemdetallesnota.getEntregado()));
-                detalles.setIva(BigDecimal.valueOf(itemdetallesnota.getIva()));
-                detalles.setNotadepedido(notape);
-                detalles.setPendiente(Character.valueOf(itemdetallesnota.getPendiente()));
-                detalles.setPrecio(BigDecimal.valueOf(itemdetallesnota.getPrecio()));
-                detalles.setProductos(productos);
-                detalles.setSubtotal(BigDecimal.valueOf(itemdetallesnota.getSubtotal()));
-                detalles.setDetallesnotadepedidoPK(detallespk);
-                em.persist(detalles);
+                for (Iterator<Itemdetallesnota> it = lista.iterator(); it.hasNext();) {
+                    Itemdetallesnota itemdetallesnota = it.next();
+                        Productos productos = em.find(Productos.class,itemdetallesnota.getId_producto());
+                            DetallesnotadepedidoPK detallespk = new DetallesnotadepedidoPK(notape.getId(), itemdetallesnota.getId_producto());
+                            Detallesnotadepedido detalles = new Detallesnotadepedido();
+                            detalles.setCancelado(Character.valueOf(itemdetallesnota.getCancelado()));
+                            detalles.setCantidad(itemdetallesnota.getCantidad());
+                            detalles.setDescuento(BigDecimal.valueOf(itemdetallesnota.getDescuento()));
+                            detalles.setPreciocondescuento(BigDecimal.valueOf(itemdetallesnota.getPreciocondescuento()));
+                            detalles.setEntregado(Character.valueOf(itemdetallesnota.getEntregado()));
+                            detalles.setIva(BigDecimal.valueOf(itemdetallesnota.getIva()));
+                            detalles.setNotadepedido(notape);
+                            detalles.setPendiente(Character.valueOf(itemdetallesnota.getPendiente()));
+                            detalles.setPrecio(BigDecimal.valueOf(itemdetallesnota.getPrecio()));
+                            detalles.setProductos(productos);
+                            detalles.setSubtotal(BigDecimal.valueOf(itemdetallesnota.getSubtotal()));
+                            detalles.setDetallesnotadepedidoPK(detallespk);
+                            em.persist(detalles);
                 Query consulta = em.createQuery("SELECT d FROM Detallesnotadepedido d WHERE d.detallesnotadepedidoPK.fkIdproducto = :fkIdproducto");
                 consulta.setParameter("fkIdproducto", itemdetallesnota.getId_producto());
-                productos.setDetallesnotadepedidoList(consulta.getResultList());
-                producto.controlStockProducto(itemdetallesnota.getId_producto(), itemdetallesnota.getCantidad(), notadepedido.getUsuario_expidio_nota());
+                            productos.setDetallesnotadepedidoList(consulta.getResultList());
+                            stockDisponible=producto.controlStockProducto(itemdetallesnota.getId_producto(), itemdetallesnota.getCantidad(), notadepedido.getUsuario_expidio_nota());
+                            if(stockDisponible<=50 &&stockDisponible>=0 )
+                                logger.info("El stock Disponible para el producto "+productos.getDescripcion()+" está bajando a nivel mínimo debe actualizar o agregar mas productos");
+                            else{
+                                if (stockDisponible<0)
+                                    logger.info("Ocurrió un Error o hay faltante de stock, valor devuelto por la función "+stockDisponible+" el producto es "+productos.getDescripcion()+" su stock disponible "+productos.getCantidadDisponible().intValue());
+                            }
             }
                                 Query consulta1 = em.createQuery("SELECT d FROM Detallesnotadepedido d WHERE d.detallesnotadepedidoPK.fkIdnota = :fkIdnota");
                                 consulta1.setParameter("fkIdnota", notape.getId());
@@ -235,13 +243,13 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                                 em.merge(notape);
                                 retorno = notape.getId();
         }catch(Exception e){
-            logger.error("Error en metodo almacenardetallenotaconcontrolstock ",e.getCause().fillInStackTrace());
+            logger.error("Error en metodo almacenarDetalleNotaConControlStock ",e.getCause().fillInStackTrace());
             retorno =-1;
         }finally{
             return retorno;
         }
     }
-    private long almacenarhistorico(DatosNotaPedido notadepedido,Notadepedido notape) {
+    private long almacenarHistorico(DatosNotaPedido notadepedido,Notadepedido notape) {
         long resultado =0L;
         //----------------------------------------------------------------------------------------
         try{
@@ -286,7 +294,7 @@ public class EJBNotaPedido implements EJBNotaPedidoRemote {
                         em.flush();
                resultado = historico.getIdhistorico();
         }catch(Exception e){
-            logger.error("Error en metodo almacenarhistorico", e.getCause());
+            logger.error("Error en metodo almacenarHistorico", e.getCause());
             resultado =-4;
         }finally{
             return resultado;
@@ -811,7 +819,7 @@ public StringBuilder parsearCaracteresEspecialesXML(String xmlNota){
                nota.setDetallesnotadepedidoList(listDNP);
               if(datosnotapedido.getAnticipoacum()!=nota.getAnticipo().doubleValue()){
                   nota.setAnticipo(BigDecimal.valueOf(datosnotapedido.getAnticipoacum()));
-                  result =  almacenarhistorico(datosnotapedido,nota);
+                  result =  almacenarHistorico(datosnotapedido,nota);
               }
               em.persist(nota);
               em.flush();
