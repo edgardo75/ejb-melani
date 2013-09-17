@@ -112,27 +112,27 @@ public class EJBProductos implements EJBProductosRemote {
     public long addExistenciasProducto(int idproducto, int cantidad,float precio,int idusuario) {
         long retorno = 0;
         try {
-            GregorianCalendar gc = new GregorianCalendar(Locale.getDefault());
-            Productos producto =em.find(Productos.class,(long) idproducto);
-            producto.setCantidadDisponible(BigInteger.valueOf(producto.getCantidadDisponible().intValue()+cantidad));
-            ExistenciasProductos existencias = new ExistenciasProductos();
-            existencias.setCantidadactual(cantidad);
-            existencias.setCantidadinicial(0);
-            existencias.setIdUsuario(idusuario);
-            existencias.setFechaagregado(gc.getTime());
-            existencias.setProductos(em.find(Productos.class, producto.getSid()));
-            if(precio!=0){
-                producto.setPrecioUnitario(BigDecimal.valueOf(precio));
-                existencias.setPreciounitario(BigDecimal.valueOf(precio));
-            }else
-                existencias.setPreciounitario(BigDecimal.valueOf(0));
+                GregorianCalendar gc = new GregorianCalendar(Locale.getDefault());
+                    Productos producto =em.find(Productos.class,(long) idproducto);
+                    producto.setCantidadDisponible(BigInteger.valueOf(producto.getCantidadDisponible().intValue()+cantidad));
+                        ExistenciasProductos existencias = new ExistenciasProductos();
+                            existencias.setCantidadactual(cantidad);
+                            existencias.setCantidadinicial(0);
+                            existencias.setIdUsuario(idusuario);
+                            existencias.setFechaagregado(gc.getTime());
+                            existencias.setProductos(em.find(Productos.class, producto.getSid()));
+                    if(precio!=0){
+                        producto.setPrecioUnitario(BigDecimal.valueOf(precio));
+                        existencias.setPreciounitario(BigDecimal.valueOf(precio));
+                    }else
+                        existencias.setPreciounitario(BigDecimal.valueOf(0));
             Query consulta = em.createQuery("SELECT e FROM ExistenciasProductos e WHERE e.productos.sid = :sid");
             consulta.setParameter("sid", producto.getSid());
-            List<ExistenciasProductos>lista = consulta.getResultList();
-            producto.setExistenciasProductoss(lista);
-            retorno = producto.getSid();
-            em.merge(producto);
-            em.persist(existencias);
+                        List<ExistenciasProductos>lista = consulta.getResultList();
+                    producto.setExistenciasProductoss(lista);
+                    retorno = producto.getSid();
+                    em.merge(producto);
+                    em.persist(existencias);
         } catch (Exception e) {
             retorno = -1;
             logger.error("Error en metodo addExistenciasProducto, ejbproductos "+e);
@@ -146,17 +146,17 @@ public class EJBProductos implements EJBProductosRemote {
         FileOutputStream fos = null;
         try {
             String pathActual = System.getProperty("user.dir") + File.separatorChar + "Imagen" + File.separatorChar;
-            Productos producto = em.find(Productos.class,(long) idProducto);
-            File file = new File(pathActual+"faro.jpg");
-            fos = new FileOutputStream(file);
-            byte[] buffer= producto.getImg();
-            is = new ByteArrayInputStream(buffer);
+                Productos producto = em.find(Productos.class,(long) idProducto);
+                    File file = new File(pathActual+"faro.jpg");
+                    fos = new FileOutputStream(file);
+                    byte[] buffer= producto.getImg();
+                    is = new ByteArrayInputStream(buffer);
             //----------------------------------------------------------------------------------
-            while (is.read(buffer) > 0) {
-              fos.write(buffer);
-            }
+                    while (is.read(buffer) > 0) {
+                      fos.write(buffer);
+                    }
             //----------------------------------------------------------------------------------
-            result = "LEIDO";
+                    result = "LEIDO";
         } catch (Exception e) {
             result = "ERROR";
             e.getMessage();
@@ -293,15 +293,14 @@ public class EJBProductos implements EJBProductosRemote {
     public Productos agregarProductos(Productos producto) {
         try {
             GregorianCalendar calendario = new GregorianCalendar(Locale.getDefault());
-            Productos produ = em.find(Productos.class, producto.getSid());
-            if(produ!=null){
-              produ.setFecha(calendario.getTime());
-              em.persist(producto);
-            }else
-            {
-              produ.setFecha(calendario.getTime());
-              em.merge(producto);
-            }
+                Productos produ = em.find(Productos.class, producto.getSid());
+                    if(produ!=null){
+                        produ.setFecha(calendario.getTime());
+                        em.persist(producto);
+                    }else{
+                          produ.setFecha(calendario.getTime());
+                          em.merge(producto);
+                    }
         } catch (Exception e) {
             logger.error("Error en metodo addProductos "+e);
         }finally{
@@ -368,10 +367,10 @@ public class EJBProductos implements EJBProductosRemote {
                                List<ExistenciasProductos>lista = consulta.getResultList();
                                    producto.setExistenciasProductoss(lista);
                                em.persist(producto);
-                                    resultado = (int) existencias(producto);
+                                    resultado = producto.getCantidadDisponible().intValue();
         } catch (Exception e) {
             logger.error("Error en metodo controlStockProducto", e.getCause());
-            resultado = 1;
+            resultado = -1;
         } finally {
             return resultado;
         }
