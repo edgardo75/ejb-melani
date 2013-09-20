@@ -71,8 +71,7 @@ public class EJBBarrios implements EJBBarriosRemote {
  */
 
     public String searchAllBarrios() {
-        String xml = "<?xml version = '1.0' encoding = 'iso-8859-1'?>\n" +
-                "<Lista>\n";        
+        String xml ="<Lista>\n";        
         try {
             Query consulta = em.createNamedQuery("Barrios.findAll");
             List<Barrios>lista = consulta.getResultList();
@@ -83,12 +82,11 @@ public class EJBBarrios implements EJBBarriosRemote {
                         Barrios barrios = it.next();
                         xml+=barrios.toXML();
                     }
-                    xml += "</Lista>\n";
-                }
-
+                    xml +="</Lista>";
+                }            
         //*********************************************************************
         } catch (Exception e) {
-            xml="error";
+            xml="error en metodo searchAllBarrios";
             logger.error("error en metodo searchallbarrios",e.getCause());
         } finally {
             return xml;
