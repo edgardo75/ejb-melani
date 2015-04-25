@@ -1,0 +1,2 @@
+Modulo EJB de Proyecto Web Melanie, el cual utiliza tecnologia JAVA JEE, EJB3, motor de persistencia toplink 1.0, librerias de terceros xstream, oraclequery, log4j, webservices, servidor de aplicaciones glassfish 2.1.1, base de datos firebird 2.5, haciendo algunos cambios se puede ejecutar el proyecto ejb en glassfish 3 usando como motor de persistencia eclipselink 2.0
+ORIGINAL VERSION PRIMERA DE MODULO EJB
